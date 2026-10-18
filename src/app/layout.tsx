@@ -57,7 +57,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://translate.googleapis.com" crossOrigin="anonymous" />
-        <Script id="splash-check" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: `
+        <script id="splash-check" dangerouslySetInnerHTML={{ __html: `
           try {
             if (sessionStorage.getItem('hasSeenSplash')) {
               document.documentElement.classList.add('hide-splash');

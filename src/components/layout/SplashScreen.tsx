@@ -1,28 +1,19 @@
 'use client';
 
-import { useState, useEffect, useSyncExternalStore } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const emptySubscribe = () => () => {};
-
 export default function SplashScreen() {
-  const hasSeenSplash = useSyncExternalStore(
-    emptySubscribe,
-    () => {
-      try {
-        return sessionStorage.getItem('hasSeenSplash') === 'true';
-      } catch {
-        return false;
-      }
-    },
-    () => true
-  );
-
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isRemoved, setIsRemoved] = useState(false);
 
   useEffect(() => {
-    if (hasSeenSplash) return;
+    try {
+      if (sessionStorage.getItem('hasSeenSplash') === 'true') {
+        setIsRemoved(true);
+        return;
+      }
+    } catch {}
 
     // Set a timer for the splash screen fade out
     const fadeTimer = setTimeout(() => {
@@ -30,24 +21,25 @@ export default function SplashScreen() {
       try {
         sessionStorage.setItem('hasSeenSplash', 'true');
       } catch {}
-    }, 1200);
+    }, 1100);
 
     // Set a timer to completely unmount after transition
     const removeTimer = setTimeout(() => {
       setIsRemoved(true);
-    }, 1700);
+    }, 1600);
 
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(removeTimer);
     };
-  }, [hasSeenSplash]);
+  }, []);
 
-  if (hasSeenSplash || isRemoved) return null;
+  if (isRemoved) return null;
 
   return (
     <div
       id="splash-container"
+      suppressHydrationWarning
       className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white overflow-hidden global-splash-screen transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
         isFadingOut ? 'opacity-0 -translate-y-5 blur-[5px] pointer-events-none' : 'opacity-100 translate-y-0 blur-none'
       }`}
