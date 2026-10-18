@@ -99,6 +99,13 @@ export default async function RootLayout({
         }} />
         <Script src="https://translate.googleapis.com/translate_a/element.js?cb=googleTranslateElementInit" strategy="afterInteractive" />
         
+        {/* Ahrefs Web Analytics */}
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="i1gVBXGaGQkbrtol03jXyQ"
+          strategy="afterInteractive"
+        />
+        
         <SplashScreen />
         <Navbar />
         <main className="flex-grow">
