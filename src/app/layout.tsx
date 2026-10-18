@@ -18,8 +18,25 @@ export const metadata: Metadata = {
   title: 'BRC Brake Chambers | Professional Factory Sales',
   description: 'Premium quality commercial brake chambers, spring brakes, service brakes, and parts. OEM Cross-Reference available.',
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'none',
+    },
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
   },
   openGraph: {
     title: 'BRC Brake Chambers | Professional Factory Sales',
@@ -28,20 +45,20 @@ export const metadata: Metadata = {
     siteName: 'BRC Brake Chambers',
     images: [
       {
-        url: 'https://www.brakechambers.com/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'BRC Brake Chambers - Heavy Duty Truck Parts',
+        url: 'https://www.brakechambers.com/images/logo-brc.png',
+        width: 800,
+        height: 800,
+        alt: 'BRC Brake Chambers Logo',
       },
     ],
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
     title: 'BRC Brake Chambers | Professional Factory Sales',
     description: 'Premium quality commercial brake chambers, spring brakes, service brakes, and parts.',
-    images: ['https://www.brakechambers.com/og-image.jpg'],
+    images: ['https://www.brakechambers.com/images/logo-brc.png'],
   },
 };
 
@@ -56,6 +73,11 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="48x48" />
+        <link rel="icon" href="/favicon-48x48.png" sizes="48x48" type="image/png" />
+        <link rel="icon" href="/favicon-96x96.png" sizes="96x96" type="image/png" />
+        <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="preconnect" href="https://translate.googleapis.com" crossOrigin="anonymous" />
         <script id="splash-check" dangerouslySetInnerHTML={{ __html: `
           try {
