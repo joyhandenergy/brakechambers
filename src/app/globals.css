@@ -219,23 +219,7 @@ body {
   }
 }
 
-/* ========================================================
-   TEMPORARY: Disable All Content Images & Background Photos
-   Hides all photos/illustrations until updated, while strictly
-   allowing only the company branding logos, icons, and text.
-   ======================================================== */
-img:not([alt*="logo" i]):not([src*="logo" i]):not([class*="logo" i]),
-picture:not(:has(img[src*="logo" i])),
-video {
-  display: none !important;
-}
 
-/* Suppress photo background images on headers and sections */
-[style*="background-image: url"],
-[style*="backgroundImage: url"],
-[style*="background: url"] {
-  background-image: none !important;
-}
 
 
 

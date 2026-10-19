@@ -43,6 +43,7 @@ export default function Footer() {
           src="/images/footer-sparks.jpg?v=3"
           alt="Manufacturing Brake Chambers"
           fill
+          sizes="100vw"
           unoptimized={true}
           className="object-cover object-center md:object-[75%_center]"
         />

@@ -99,7 +99,7 @@ export default function ProductionProcessClient() {
             <div key={idx} className={`flex flex-col ${idx % 2 !== 0 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-12`}>
               <div className="w-full md:w-1/2">
                 <div className="relative h-80 rounded-3xl overflow-hidden shadow-xl">
-                  <Image src={step.image} alt={step.title} fill className="object-cover" />
+                  <Image src={step.image} alt={step.title} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
                   <div className="absolute inset-0 bg-navy-900/20 mix-blend-multiply"></div>
                 </div>
               </div>

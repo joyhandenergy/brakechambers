@@ -53,6 +53,7 @@ export default function ProductDetailLayout({
                 src={product.galleryUrls?.[activeImage] || product.galleryUrls?.[0]}
                 alt={activeImage === 0 ? `${product.name} - Commercial Air Brake Chamber Photo` : `${product.name} - Technical Dimensions and Schematic Drawing`}
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain transition-transform duration-500 group-hover:scale-105"
               />
             </div>
@@ -67,7 +68,7 @@ export default function ProductDetailLayout({
                     className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${activeImage === idx ? 'border-amber-500 shadow-md' : 'border-transparent bg-slate-50 opacity-70 hover:opacity-100 shadow-sm'}`}
                     title={idx === 0 ? "View Product Photo" : "View Technical Drawing"}
                   >
-                    <Image src={url} alt={idx === 0 ? `${product.name} Thumbnail Photo` : `${product.name} Technical Drawing Thumbnail`} fill className="object-contain p-2" />
+                    <Image src={url} alt={idx === 0 ? `${product.name} Thumbnail Photo` : `${product.name} Technical Drawing Thumbnail`} fill sizes="96px" className="object-contain p-2" />
                   </button>
                 ))}
               </div>

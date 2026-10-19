@@ -76,6 +76,7 @@ export default function TrendingModelsMarquee() {
                         src={chamber.galleryUrls[0]}
                         alt={chamber.name}
                         fill
+                        sizes="288px"
                         className="object-contain transition-transform duration-700 group-hover/card:scale-110"
                       />
                     ) : (
@@ -120,6 +121,7 @@ export default function TrendingModelsMarquee() {
                         src={chamber.galleryUrls[0]}
                         alt={chamber.name}
                         fill
+                        sizes="288px"
                         className="object-contain transition-transform duration-700 group-hover/card:scale-110"
                       />
                     ) : (

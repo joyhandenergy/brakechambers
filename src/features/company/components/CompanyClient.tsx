@@ -65,7 +65,7 @@ export default function CompanyClient() {
               className="w-full lg:w-1/2 relative"
             >
               <div className="relative h-[400px] sm:h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-100">
-                <Image src="/images/manufacturing/brc3.jpg" alt="BRC Manufacturing Floor" fill className="object-cover transition-all duration-700 hover:scale-105" />
+                <Image src="/images/manufacturing/brc3.jpg" alt="BRC Manufacturing Floor" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105" />
                 <div className="absolute inset-0 bg-navy-900/10 mix-blend-overlay"></div>
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy-950/80 to-transparent h-48"></div>
 
@@ -222,7 +222,7 @@ export default function CompanyClient() {
               className="w-full lg:w-1/2 relative order-2 lg:order-1"
             >
               <div className="relative h-[400px] md:h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-100">
-                <Image src="/images/brc_aftermarket.jpg" alt="BRC Mission" fill className="object-cover" />
+                <Image src="/images/brc_aftermarket.jpg" alt="BRC Mission" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
                 <div className="absolute inset-0 bg-navy-900/40 mix-blend-multiply"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Target className="w-24 h-24 text-white/80" strokeWidth={1} />

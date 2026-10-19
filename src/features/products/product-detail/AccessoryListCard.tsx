@@ -20,6 +20,7 @@ export default function AccessoryListCard({ product, categoryPath }: { product: 
           src={product.galleryUrls[0]} 
           alt={product.name}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="object-contain p-2 sm:p-4 hover:scale-105 transition-transform duration-300"
         />
         <div className="absolute top-0 right-0 bg-navy-50 text-navy-600 text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-bl-lg border-b border-l border-navy-100 z-10">

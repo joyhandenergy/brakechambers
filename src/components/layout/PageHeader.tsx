@@ -26,6 +26,7 @@ export default function PageHeader({ badge, badgeIcon: BadgeIcon, title, descrip
             src={imageSrc}
             alt="Header Background"
             fill
+            sizes="100vw"
             unoptimized={imageSrc.startsWith('http')}
             className={`object-cover opacity-40 ${fullColorBackground ? '' : ' '}`}
             priority

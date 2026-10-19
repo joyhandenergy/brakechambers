@@ -68,6 +68,7 @@ export default async function RelatedProducts({ currentSlug, category, isAccesso
                           src={product.galleryUrls[0]} 
                           alt={product.name}
                           fill
+                          sizes="(max-width: 768px) 50vw, 25vw"
                           className="object-contain p-3 transition-transform duration-700 group-hover/card:scale-110"
                         />
                       ) : (

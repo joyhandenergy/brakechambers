@@ -14,6 +14,7 @@ export default function ProductListCard({ product, categoryPath }: { product: Br
           src={product.galleryUrls[0]} 
           alt={product.name}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="object-contain p-2 sm:p-4 group-hover:scale-105 transition-transform duration-300"
         />
         <div className="absolute top-0 right-0 bg-slate-100 text-slate-500 shadow-sm text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-bl-lg border-b border-l border-slate-200 z-10">

@@ -225,6 +225,7 @@ export default function ManufacturingClient() {
                   src="/images/just/Weixin Image_20261008105227_281_1.jpg"
                   alt="BRC Brake Chamber Factory Floor in Zhejiang, China"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />
               </div>

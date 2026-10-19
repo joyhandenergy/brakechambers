@@ -57,6 +57,7 @@ export default function BlogPostClient({ post, prevPost, nextPost }: BlogPostCli
             src="/images/brc-chamber-watermark.jpg.png" 
             alt="Brake Chamber Background"
             fill
+            sizes="100vw"
             className="object-contain object-right-top transform translate-x-12"
             priority
           />
