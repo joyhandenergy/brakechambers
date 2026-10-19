@@ -1,4 +1,4 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 import { getProducts, getBlogPosts } from '@/sanity/queries';
 import { BRAKE_CHAMBERS } from '@/lib/data';
 import { blogPosts as fallbackBlogPosts } from '@/data/blogPosts';

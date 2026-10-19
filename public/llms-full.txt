@@ -1,0 +1,95 @@
+# BRC Brake Chambers - Full Product & Technical Documentation
+
+> Zhejiang GAP Auto Parts Co., Ltd. (operating as BRC Brake Chambers). Large-scale manufacturing facility in Zhuji, Zhejiang, China. Specializing in aftermarket commercial vehicle brake chambers and air brake actuation systems for commercial trucks, trailers, and buses.
+
+## 1. Company Overview
+
+BRC Brake Chambers is an export-focused manufacturer with over 15 years of precision stamping, robotic welding, and automated assembly experience in the automotive air brake industry.
+- Quality Management: IATF 16949-aligned production and inspection protocols.
+- Testing: 100% pneumatic high/low pressure leak testing, cycle durability testing (>1,000,000 cycles for service diaphragms, >200,000 cycles for power springs), and 500-hour ASTM B117 salt spray corrosion testing.
+- Target Vehicle Applications: Class 6, 7, and 8 heavy-duty commercial vehicles, vocational trucks (refuse, dump, mixer), intermodal container chassis, long-haul trailers, transit coaches, and school buses.
+
+## 2. Spring Brake Chamber Product Line
+
+### Type 30/30 Spring Brakes
+- **Type 3030 Standard Stroke (2.5 in / 64 mm)**
+  - Service Size: Type 30 (30 sq in effective area)
+  - Emergency Size: Type 30
+  - Pushrod Thread: 5/8"-18 UNF
+  - Mounting Studs: 5/8"-11 UNC
+  - Ports: 3/8"-18 NPTF
+  - Common OEM Cross: Bendix NT3030STD, Haldex GC3030, MGM TR3030
+- **Type 3030 Long Stroke (3.0 in / 76 mm)**
+  - Square port boss identification marking
+  - Enhanced safety margin against brake fade and pushrod over-stroke
+  - Common OEM Cross: Bendix NT3030ELS, Haldex MA15400, MGM TR3030L
+
+### Type 24/30 Spring Brakes
+- Service Size: Type 24 (24 sq in)
+- Emergency Size: Type 30
+- Typical Applications: Steerable lift axles, European trailer configurations, select medium/heavy-duty truck drive axles.
+- Stroke Options: 2.5" Standard Stroke and 3.0" Long Stroke.
+
+### Type 20/24 & Type 24/24 Spring Brakes
+- Compact dual-diaphragm chambers engineered for tight wheel-end clearances in medium-duty and vocational trucks.
+
+### Type 36/36 Heavy-Haul Spring Brakes
+- Maximum braking force actuator for severe-duty mining, logging, and heavy specialized transport trailers.
+
+### Type 30/30 Piggyback Replacement Kits
+- Sealed emergency spring chamber replacement unit for field servicing without replacing the complete service base.
+- Pre-assembled with caged power spring for maximum mechanic safety.
+
+## 3. Service Brake Chamber Product Line
+
+### Type 30 Service Chambers
+- Pushrod Stroke: 2.5" (Standard) or 3.0" (Long Stroke)
+- Ports: Dual 3/8"-18 NPTF ports at 90° orientation
+- Welded mounting studs with grade-8 zinc-plated hardware.
+
+### Type 24 & Type 20 Service Chambers
+- Predominantly utilized on front steer axles.
+- Calibrated return spring rate for rapid brake release and even shoe wear.
+
+### Type 12 & Type 16 Service Chambers
+- Smaller effective area actuators for lightweight axles and hydraulic-to-air conversion systems.
+
+### Welded Clevis Brake Chambers
+- Factory welded clevis pushrod assemblies to exact OEM center-pin-to-face dimensions, eliminating on-site cutting and threading errors.
+
+## 4. Air Disc Brake (ADB) Actuators
+
+- Type 16/18, Type 20/24, Type 24/24, and Type 24/30 ADB Actuators
+- Direct flange mount compatibility with Knorr-Bremse SB/SN/SK series, Bendix ADB22X, and Meritor EX225 calipers.
+- Internal boot seal design preventing road debris, de-icing salt, and moisture intrusion into the caliper mechanism.
+
+## 5. Replacement Components & Hardware
+
+- **Rubber Diaphragms:** Fabric-reinforced natural and neoprene rubber diaphragms rated from -40°C to +80°C (-40°F to +176°F). Resists ozone degradation, oil mist, and cyclic fatigue.
+- **Clamp Bands:** High-tensile steel two-piece clamping bands with anti-vibration locking fasteners.
+- **Caging Bolts & Release Tools:** Manual mechanical release tool kit for roadside emergency caging and shop servicing.
+- **Slack Adjusters:** Automatic slack adjusters (clearance-sensing) and forged manual slack adjusters (10-spline, 28-spline, 37-spline).
+
+## 6. OEM Interchange & Cross-Reference Mapping
+
+BRC Brake Chambers provides equivalent cross-references to all major commercial brands:
+- **Bendix:** 5007130, 5007131, NT3030STD, NT3030ELS, 288813, 288815, 800827, 800829
+- **Haldex:** GC3030, MA15400, MA15401, 1314001, 1314002, 1324001
+- **Meritor / Rockwell:** 3222-P-1654, 3222-Q-1655, 3222-D-2110, 3222-E-2111
+- **Wabco:** 925 377 001 0, 925 377 002 0, 925 464 000 0, 925 464 010 0
+- **MGM Brakes:** TR3030, TR3030LP3, CS3030, TR2430
+
+## 7. Quality Inspection Procedures
+
+1. **Dimensional CMM Verification:** Pusher rod lengths, flange angles, and stud alignments checked against CAD blueprints.
+2. **Pneumatic Leak Testing:** Each chamber is submerged in water or tested with helium decay pressure at 100 PSI (6.9 bar) to verify zero seal leakage.
+3. **Power Spring Caging Safety Verification:** Ensures proper spring coil retention under maximum travel without binding.
+
+## 8. Export Logistics & Contact
+
+- **Incoterms:** FOB Ningbo/Shanghai, CIF, CFR, DDP.
+- **MOQ:** Flexible pallet quantities for mixed models; 20ft and 40ft container programs available.
+- **Direct Factory Inquiry:** sales@brakechambers.com
+- **Phone:** +86 13395856758 | **WhatsApp:** +852 53629718
+- **Address:** Block 3, No 55 Tianyang Rd, Fengqiao, Zhuji, Zhejiang, China 311811
+- **Website:** https://www.brakechambers.com

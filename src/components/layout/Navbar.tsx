@@ -186,9 +186,10 @@ export default function Navbar() {
               {/* Cart Button */}
               <Link
                 href={`/quote`}
+                aria-label={`Request Quote${mounted && cartCount > 0 ? ` (${cartCount} items)` : ''}`}
                 className={`${mounted && cartCount > 0 ? 'flex' : 'hidden'} lg:flex relative items-center justify-center md:px-5 md:py-2.5 w-10 h-10 md:w-auto md:h-auto md:bg-navy-900 md:hover:bg-navy-800 text-navy-950 md:text-white rounded-full font-black transition-all md:shadow-lg group md:gap-2.5`}
               >
-                <ShoppingBag className="h-6 w-6 md:h-5 md:w-5" />
+                <ShoppingBag className="h-6 w-6 md:h-5 md:w-5" aria-hidden="true" />
                 <span className="hidden md:inline text-[12px] uppercase tracking-widest">Request Quote</span>
                 {mounted && cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 md:-top-1.5 md:-right-1.5 bg-navy-950 md:bg-white text-white md:text-navy-950 text-[10px] font-extrabold w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center shadow-sm md:border-2 md:border-navy-950">
@@ -200,9 +201,11 @@ export default function Navbar() {
               {/* Mobile menu toggle */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-expanded={isMobileMenuOpen}
                 className="lg:hidden w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-navy-950 text-white hover:bg-navy-900 transition-transform hover:scale-105 shadow-md"
               >
-                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isMobileMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
               </button>
             </div>
           </div>

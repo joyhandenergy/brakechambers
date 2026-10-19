@@ -190,9 +190,10 @@ export default function GlobalSearchModal({ products }: GlobalSearchModalProps) 
                 <button
                   type="button"
                   onClick={handleClose}
+                  aria-label="Close search dialog"
                   className="absolute right-4 p-2 text-slate-400 hover:text-navy-900 hover:bg-slate-100 rounded-lg transition-colors"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5" aria-hidden="true" />
                 </button>
               </form>
 

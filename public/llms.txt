@@ -1,0 +1,71 @@
+# BRC Brake Chambers
+
+> Premium aftermarket manufacturer of heavy-duty commercial vehicle brake chambers, air disc brake actuators, and replacement components. Manufactured in Zhejiang, China with IATF 16949-aligned quality systems and distributed globally across 30+ countries.
+
+BRC Brake Chambers manufactures and supplies OEM-grade air brake actuators for heavy-duty semi-trucks, commercial trailers, vocational fleets, transit buses, and off-highway equipment. Direct interchange replacements available for Bendix, Meritor, Haldex, Wabco, and MGM Brakes.
+
+## Core Product Categories
+
+- [All Products](https://www.brakechambers.com/products): Complete online catalog of heavy-duty brake chambers, actuators, and hardware.
+- [Spring Brake Chambers](https://www.brakechambers.com/spring-brake-chambers): Double-diaphragm parking and emergency spring brakes.
+  - Type 30/30 Standard Stroke (2.5") and Long Stroke (3.0")
+  - Type 24/30 & Type 24/24 Spring Brakes
+  - Type 20/24 Vocational Spring Brakes
+  - Type 36/36 Heavy-Haul Spring Brakes
+  - Type 30/30 Piggyback Replacement Kits
+- [Service Brake Chambers](https://www.brakechambers.com/service-brake-chambers): Single-diaphragm service chambers for steer, drive, and trailer axles.
+  - Type 30 Service Chambers (Standard and Long Stroke)
+  - Type 24 & Type 20 Steer-Axle Chambers
+  - Type 12 & Type 16 Service Chambers
+  - Welded Clevis Brake Chambers
+- [Air Disc Brake Actuators](https://www.brakechambers.com/air-disc-brake-actuators): Advanced disc brake actuators for modern commercial vehicle ADB systems.
+  - Type 16/18 ADB Actuators
+  - Type 20/24 ADB Actuators
+  - Type 24/24 & 24/30 ADB Actuators
+- [Chamber Parts & Rebuild Kits](https://www.brakechambers.com/parts-and-kits): OEM-spec replacement diaphragms, clamp bands, caging tools, and hardware.
+  - Heavy-Duty Rubber Diaphragms (Type 30, Type 24, Type 20, Type 16)
+  - Air Brake Chamber Rebuild Kits
+  - Caging Bolts & Safety Release Tools
+  - Automatic & Manual Slack Adjusters
+
+## OEM Cross-Reference Database
+
+- [OEM Cross-Reference Hub](https://www.brakechambers.com/oem-cross-reference): Instant part number interchange and crossover tool.
+- Supported OEM Brands:
+  - Bendix / Bendix Spicer
+  - Meritor / Rockwell
+  - Haldex
+  - Wabco / ZF-Wabco
+  - MGM Brakes
+  - Automann
+  - TSE Brakes
+  - Dexter Axle
+
+## Manufacturing & Quality Standards
+
+- [Manufacturing Hub](https://www.brakechambers.com/manufacturing): Large-scale production facility in Zhuji, Zhejiang, China.
+- [Production Process](https://www.brakechambers.com/manufacturing/process): Deep-draw steel stamping, automated robotic welding, and e-coat corrosion protection.
+- [Quality Assurance](https://www.brakechambers.com/manufacturing/quality-assurance): 100% pneumatic leak testing, cyclic fatigue testing, burst pressure validation (FMVSS 121 compliance).
+- [Custom OEM & Private Label](https://www.brakechambers.com/manufacturing/custom-oem): Custom stroke specifications, port configurations, and branded packaging for wholesale distributors.
+
+## Technical Guides & Documentation
+
+- [Technical Resources Hub](https://www.brakechambers.com/technical-resources): Complete technical reference library.
+- [Installation Guide](https://www.brakechambers.com/technical-resources/installation): Step-by-step air brake chamber mounting and pushrod adjustment.
+- [Caging Safety Guide](https://www.brakechambers.com/technical-resources/caging): Safe spring brake caging and uncaging procedures.
+- [Brake Chamber Size Charts](https://www.brakechambers.com/technical-resources/size-charts): Diameter, stroke, and effective area reference table.
+- [Identification Guide](https://www.brakechambers.com/technical-resources/identification): Visual identification guide for standard vs. long-stroke chambers.
+
+## Commercial Inquiries & Distribution
+
+- [Request a Wholesale Quote](https://www.brakechambers.com/quote): Volume container and LCL quotes for distributors and fleets.
+- [Distributors Portal](https://www.brakechambers.com/distributors): Wholesale partner network information.
+- [Global Logistics](https://www.brakechambers.com/shipping): Worldwide shipping via Ningbo and Shanghai ports.
+- Email: sales@brakechambers.com
+- Factory Direct Line: +86 13395856758
+- WhatsApp: +852 53629718
+- Address: Block 3, No 55 Tianyang Rd, Fengqiao, Zhuji, Zhejiang, China 311811
+
+## Full Content Reference
+
+- For detailed specifications and complete product lists, see [llms-full.txt](https://www.brakechambers.com/llms-full.txt).

@@ -1,4 +1,6 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
+
+export const dynamic = 'force-static';
 
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.brakechambers.com';
@@ -8,6 +10,19 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
+        disallow: ['/studio/', '/api/'],
+      },
+      {
+        userAgent: [
+          'GPTBot',
+          'ChatGPT-User',
+          'ClaudeBot',
+          'Claude-Web',
+          'PerplexityBot',
+          'Google-Extended',
+          'Applebot-Extended',
+        ],
+        allow: ['/', '/llms.txt', '/llms-full.txt'],
         disallow: ['/studio/', '/api/'],
       },
       {
@@ -34,3 +49,4 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: `${baseUrl}/sitemap.xml`,
   };
 }
+

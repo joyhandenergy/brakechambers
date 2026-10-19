@@ -10,7 +10,9 @@ export default function SplashScreen() {
   useEffect(() => {
     try {
       if (sessionStorage.getItem('hasSeenSplash') === 'true') {
-        setIsRemoved(true);
+        requestAnimationFrame(() => {
+          setIsRemoved(true);
+        });
         return;
       }
     } catch {}
@@ -39,6 +41,7 @@ export default function SplashScreen() {
   return (
     <div
       id="splash-container"
+      aria-hidden="true"
       suppressHydrationWarning
       className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white overflow-hidden global-splash-screen transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
         isFadingOut ? 'opacity-0 -translate-y-5 blur-[5px] pointer-events-none' : 'opacity-100 translate-y-0 blur-none'

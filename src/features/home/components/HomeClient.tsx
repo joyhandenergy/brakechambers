@@ -124,9 +124,9 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
                   <div className="inline-block px-3 py-1 mb-4 md:px-4 md:py-1.5 md:mb-6 rounded-full bg-gradient-to-r from-navy-800 to-navy-900 border border-navy-700 text-amber-400 text-[10px] md:text-[11px] font-bold uppercase tracking-widest shadow-xl shadow-navy-950 whitespace-nowrap">
                     {slide.badgeIcon} {slide.badge}
                   </div>
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-4 md:mb-6 tracking-tight drop-shadow-2xl">
+                  <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-4 md:mb-6 tracking-tight drop-shadow-2xl">
                     {slide.title}
-                  </h1>
+                  </h2>
                   <p className="text-[15px] md:text-[16px] leading-[1.6] mb-8 md:mb-10 max-w-2xl font-normal text-navy-100">
                     {slide.description}
                   </p>
