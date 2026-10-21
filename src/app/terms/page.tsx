@@ -28,23 +28,23 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+import PageHeader from '@/components/layout/PageHeader';
+import { FileText } from 'lucide-react';
+
 export default function TermsPage() {
   return (
     <div className="bg-[#F8FAFC] pb-20">
-      <section className="bg-navy-950 relative pt-20 pb-36 border-b border-navy-800 overflow-hidden text-center px-4">
-        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(rgba(245, 158, 11, 0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[100px] -mr-40 -mt-40 mix-blend-screen pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] -ml-40 -mb-40 mix-blend-screen pointer-events-none"></div>
-        <div className="container mx-auto max-w-3xl relative z-10">
-          <div className="inline-block px-4 py-1.5 mb-6 rounded-full bg-navy-900 border border-navy-700 shadow-xl shadow-navy-950 text-amber-400 text-[11px] font-bold uppercase tracking-widest backdrop-blur-md">
-            Legal & Compliance
-          </div>
-          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 drop-shadow-lg leading-tight">Terms of Service</h1>
-          <p className="text-navy-200 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
-            Last Updated: July 2026. Terms and conditions for wholesale BRC Brake Chambers orders.
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        badge="Legal & Compliance"
+        badgeIcon={FileText}
+        title="Terms of Service"
+        description="Last Updated: July 2026. Terms and conditions for wholesale BRC Brake Chambers orders."
+        imageSrc="/images/brc_brakechamber_aftermarket.jpg"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Terms of Service' }
+        ]}
+      />
 
       <section className="container mx-auto px-4 lg:px-8 max-w-4xl -mt-20 relative z-20">
         <Card padding="lg" className="-navy-50 md: space-y-8 text-navy-600">

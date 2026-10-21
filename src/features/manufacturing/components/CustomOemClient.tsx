@@ -23,7 +23,7 @@ export default function CustomOemClient() {
         'DFM (Design for Manufacturing) Audits: Design reviewed against our production capability before tooling is cut.', 
         'Cost Engineering & Value Analysis: Cost-reduction opportunities identified without compromising performance.'
       ],
-      image: '/images/just/Weixin Image_20260930141018_143_3.jpg',
+      image: '/images/manufacturing/brc_brakechamber_design_review.jpg',
     },
     {
       phase: '02',
@@ -36,7 +36,7 @@ export default function CustomOemClient() {
         'Iterative Design Refinement: Every test result feeds back into the CAD model.', 
         'Customer Sign-Off Before Tooling: No volume tooling is committed until you approve the prototype.'
       ],
-      image: '/images/just/Weixin Image_20261008133817_323_1.jpg',
+      image: '/images/manufacturing/brc_brakechamber_cnc_machine.jpg',
     },
     {
       phase: '03',
@@ -49,7 +49,7 @@ export default function CustomOemClient() {
         'Defined Sign-Off Points: You approve each stage before we advance to the next.', 
         'Scale-Up Coordination: Production scaling from pilot runs to full program volumes coordinated by your dedicated account manager.'
       ],
-      image: '/images/just/Weixin Image_20261008133822_325_1.jpg',
+      image: '/images/manufacturing/brc_brakechamber_diecasting_machine.jpg',
       linkText: 'View High-Volume Orders →',
       linkHref: '/manufacturing/high-volume-orders'
     },
@@ -68,7 +68,7 @@ export default function CustomOemClient() {
         badge="Custom Engineering"
         title="Custom OEM Brake Chamber Manufacturing"
         description="BRC develops and manufactures custom brake chambers to buyer specifications, from initial CAD design to prototype validation and volume production. Bring your drawings, part numbers, or physical samples, and our engineering team will reverse-engineer or improve them at scale."
-        imageSrc="/images/manufacturing/brc-oem-custom-engineering.jpg"
+        imageSrc="/images/brc_brakechamber_aftermarket.jpg"
         breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Manufacturing', href: '/manufacturing' },
@@ -212,7 +212,7 @@ export default function CustomOemClient() {
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
             <div className="w-full lg:w-1/2">
               <div className="relative h-[300px] md:h-[400px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-200 group">
-                <Image src="/images/just/Weixin Image_20261008105223_279_1.jpg" alt="OEM IP Protection" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-[8s] " />
+                <Image src="/images/manufacturing/brc_brakechamber_ip_protection.jpg" alt="OEM IP Protection" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-[8s] " />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-900/50 to-transparent"></div>
               </div>
             </div>
@@ -261,8 +261,8 @@ export default function CustomOemClient() {
             <Link href="/contact" className="inline-flex items-center justify-center bg-amber-500 text-navy-950 font-extrabold px-4 py-3.5 sm:px-8 sm:py-4 rounded-xl hover:bg-amber-400 transition-all duration-300 shadow-xl shadow-amber-500/20 uppercase tracking-widest text-[11px] sm:text-[12px] md:text-[13px] whitespace-nowrap transform hover:-translate-y-1 w-full sm:w-auto">
               Request OEM Consultation <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
-            <Link href="/contact" className="inline-flex items-center justify-center bg-white border border-slate-200 text-navy-900 font-extrabold px-4 py-3.5 sm:px-8 sm:py-4 rounded-xl hover:border-amber-400 hover:text-amber-600 transition-all duration-300 shadow-sm uppercase tracking-widest text-[11px] sm:text-[12px] md:text-[13px] whitespace-nowrap transform hover:-translate-y-1 w-full sm:w-auto">
-              Contact Engineering
+            <Link href="/manufacturing/private-label" className="inline-flex items-center justify-center bg-white border border-slate-200 text-navy-900 font-extrabold px-4 py-3.5 sm:px-8 sm:py-4 rounded-xl hover:border-amber-400 hover:text-amber-600 transition-all duration-300 shadow-sm uppercase tracking-widest text-[11px] sm:text-[12px] md:text-[13px] whitespace-nowrap transform hover:-translate-y-1 w-full sm:w-auto">
+              Explore Private Label <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </div>
         </div>

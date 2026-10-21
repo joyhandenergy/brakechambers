@@ -36,7 +36,7 @@ export const SEO_DATA: Record<string, { metaTitle: string; metaDescription: stri
 
 export const TECHNICAL_RESOURCES_DATA: Record<string, any> = {
   'size-charts': {
-    imageSrc: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80',
+    imageSrc: '/images/brc_brakechamber_aftermarket.jpg',
     title: "Brake Chamber Size & Dimension Charts - Type 12 through Type 36",
     category: 'Specifications & Sizing',
     description: "Complete dimension tables for BRC spring brake and service brake chambers. Includes outside diameter, mounting stud centers, push-rod thread, and approximate weight - verified to SAE J1469 compliance standards.",
@@ -96,7 +96,7 @@ export const TECHNICAL_RESOURCES_DATA: Record<string, any> = {
   },
 
   'stroke-length': {
-    imageSrc: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1920&q=80',
+    imageSrc: '/images/brc_brakechamber_aftermarket.jpg',
     title: "Brake Chamber Stroke Length Guide - Limits, Measurement & CVSA Criteria",
     category: 'Specifications & Sizing',
     description: "Complete guide to brake chamber stroke length. Covers standard vs. long-stroke, how to measure stroke correctly, CVSA out-of-service limits, and how to fix failing brakes before they cause a violation.",
@@ -158,7 +158,7 @@ export const TECHNICAL_RESOURCES_DATA: Record<string, any> = {
   },
 
   'installation': {
-    imageSrc: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1920&q=80',
+    imageSrc: '/images/brc_brakechamber_aftermarket.jpg',
     title: "Brake Chamber Installation Guide - Step-by-Step Procedures",
     category: 'Installation & Maint.',
     description: "Complete installation instructions for standard and long-stroke air brake chambers. Includes pre-installation diagnostics, push-rod cutting formulas, torque specifications, and safe uncaging procedures.",
@@ -221,7 +221,7 @@ export const TECHNICAL_RESOURCES_DATA: Record<string, any> = {
   },
 
   'identification': {
-    imageSrc: 'https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&w=1920&q=80',
+    imageSrc: '/images/brc_brakechamber_aftermarket.jpg',
     title: "Brake Chamber Visual Identification Guide - Size, Stroke & Type",
     category: 'Specifications & Sizing',
     description: "Identify brake chamber size, stroke type, and manufacturer without a part number. Field-tested methods for technicians working on rusted, corroded, or unmarked chambers in severe-duty environments.",
@@ -282,7 +282,7 @@ export const TECHNICAL_RESOURCES_DATA: Record<string, any> = {
   },
 
   'selection-guides': {
-    imageSrc: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1920&q=80',
+    imageSrc: '/images/brc_brakechamber_aftermarket.jpg',
     title: "Brake Chamber Selection Guide - Choose by Vocation",
     category: 'Specifications & Sizing',
     description: "A step-by-step guide to choosing the correct brake chamber series for your specific vocation - linehaul, severe-duty, transit, or heavy haul. Match the chamber to the operating environment to extend service life and reduce maintenance cost.",
@@ -325,7 +325,7 @@ export const TECHNICAL_RESOURCES_DATA: Record<string, any> = {
   },
 
   'caging': {
-    imageSrc: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?auto=format&fit=crop&w=1920&q=80',
+    imageSrc: '/images/brc_brakechamber_aftermarket.jpg',
     title: "Brake Chamber Caging Procedure - Safe Manual Caging for Spring Brakes",
     category: 'Installation & Maint.',
     description: "Step-by-step safety procedures for manually caging spring brake chambers during roadside maintenance and shop repairs. Covers when to cage, how to cage, and how to avoid the most common caging injuries.",

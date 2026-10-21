@@ -123,7 +123,7 @@ export default async function TechnicalResourcePage(props: { params: Promise<{ r
           badge="Engineering Documentation"
           title={data.title}
           description={data.description}
-          imageSrc={data.imageSrc}
+          imageSrc="/images/brc_brakechamber_aftermarket.jpg"
           breadcrumbs={[
             { label: 'Home', href: '/' },
             { label: 'Technical Resources', href: '/technical-resources' },

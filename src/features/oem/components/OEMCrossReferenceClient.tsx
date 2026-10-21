@@ -154,7 +154,7 @@ export default function OEMCrossReferenceClient() {
               >
                 <div className="space-y-4">
                   <img src="/images/home/service-brakes-bg.jpg" alt="Commercial Brake Chamber Axle Testing" className="rounded-2xl shadow-lg w-full h-40 sm:h-48 object-cover transition-all duration-500" />
-                  <img src="/images/home/brc_quality_factory_worker.jpg" alt="Factory Brake Chamber Assembly & Quality Control" className="rounded-2xl shadow-lg w-full h-48 sm:h-64 object-cover object-top transition-all duration-500" />
+                  <img src="/images/home/brc_quality_factory_worker.jpg?v=3" alt="Factory Brake Chamber Assembly & Quality Control" className="rounded-2xl shadow-lg w-full h-48 sm:h-64 object-cover object-top transition-all duration-500" />
                 </div>
                 <div className="pt-8">
                   <img src="/images/brc7.jpg" alt="Commercial Truck Brake Chamber Production Line" className="rounded-2xl shadow-lg w-full h-64 sm:h-80 object-cover object-center bg-slate-100 transition-all duration-500" />

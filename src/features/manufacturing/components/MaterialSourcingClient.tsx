@@ -144,7 +144,7 @@ export default function MaterialSourcingClient() {
         badgeIcon={Factory}
         title="Brake Chamber Material Sourcing: Steel, Rubber & Aluminum"
         description="Brake chamber lifespan starts with material quality. BRC sources 8-gauge steel, high-strength neoprene rubber compounds, and ADC12 aluminum ingots, and qualifies every batch before it enters production."
-        imageSrc="/images/brc_aftermarket.jpg"
+        imageSrc="/images/brc_brakechamber_aftermarket.jpg"
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Manufacturing", href: "/manufacturing" },

@@ -16,18 +16,21 @@ interface PageHeaderProps {
 }
 
 export default function PageHeader({ badge, badgeIcon: BadgeIcon, title, description, children, imageSrc, breadcrumbs, fullColorBackground = false }: PageHeaderProps) {
+  const isUnsplash = typeof imageSrc === 'string' && imageSrc.includes('unsplash.com');
+  const activeImage = (!imageSrc || isUnsplash) ? '/images/brc_brakechamber_aftermarket.jpg' : imageSrc;
+
   return (
     <header className="relative pt-8 md:pt-10 lg:pt-12 pb-24 md:pb-32 lg:pb-40 border-b border-navy-800 overflow-hidden px-4 sm:px-6 lg:px-8 bg-navy-950">
       
-      {/* Background Image (Only renders if an imageSrc is provided) */}
+      {/* Background Image (Defaults to brc_brakechamber_aftermarket.jpg) */}
       <div className="absolute inset-0 z-0">
-        {imageSrc && (
+        {activeImage && (
           <Image
-            src={imageSrc}
+            src={activeImage}
             alt="Header Background"
             fill
             sizes="100vw"
-            unoptimized={imageSrc.startsWith('http')}
+            unoptimized={activeImage.startsWith('http')}
             className={`object-cover opacity-40 ${fullColorBackground ? '' : ' '}`}
             priority
           />

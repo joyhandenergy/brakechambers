@@ -291,7 +291,7 @@ export default function BlogPostClient({ post, prevPost, nextPost }: BlogPostCli
                       <span className="text-sm font-bold">Factory & Manufacturing</span>
                       <ChevronRight className="w-4 h-4 text-navy-300 group-hover:text-amber-400 transform group-hover:translate-x-1 transition-transform" />
                     </Link>
-                    <Link href="/company" className="flex items-center justify-between p-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-amber-500/50 transition-all text-navy-100 hover:text-amber-400 group">
+                    <Link href="/our-story" className="flex items-center justify-between p-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-amber-500/50 transition-all text-navy-100 hover:text-amber-400 group">
                       <span className="text-sm font-bold">About the Company</span>
                       <ChevronRight className="w-4 h-4 text-navy-300 group-hover:text-amber-400 transform group-hover:translate-x-1 transition-transform" />
                     </Link>
@@ -347,7 +347,7 @@ export default function BlogPostClient({ post, prevPost, nextPost }: BlogPostCli
 
                 {/* Banner CTA */}
                 <Link href="/oem-cross-reference" className="block relative h-48 rounded-3xl overflow-hidden group shadow-xl">
-                  <img src="/images/brc_aftermarket.jpg" alt="OEM Cross Reference" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <img src="/images/brc_brakechamber_aftermarket.jpg" alt="OEM Cross Reference" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-navy-950/80 group-hover:bg-navy-950/70 transition-colors"></div>
                   <div className="absolute inset-0 p-8 flex flex-col justify-end">
                     <span className="text-amber-500 text-[10px] font-black uppercase tracking-widest mb-1">Database</span>

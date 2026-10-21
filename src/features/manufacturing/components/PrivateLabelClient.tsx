@@ -64,7 +64,7 @@ export default function PrivateLabelClient() {
         badge="Brand Building"
         title="Private Label & White Label Brake Chambers From China"
         description="Launch your own aftermarket brake chamber brand without building a factory. BRC manufactures, brands, packages, and ships from Zhejiang, China, you sell under your name with full factory-direct margins."
-        imageSrc="/images/brc_aftermarket.jpg"
+        imageSrc="/images/brc_brakechamber_aftermarket.jpg"
         breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Manufacturing', href: '/manufacturing' },
@@ -283,8 +283,8 @@ export default function PrivateLabelClient() {
             <Link href="/contact" className="inline-flex items-center justify-center bg-amber-500 text-navy-950 font-extrabold px-4 py-3.5 sm:px-8 sm:py-4 rounded-xl hover:bg-amber-400 transition-all duration-300 shadow-xl shadow-amber-500/20 uppercase tracking-widest text-[11px] sm:text-[12px] md:text-[13px] whitespace-nowrap transform hover:-translate-y-1 w-full sm:w-auto">
               Start Brand Consultation <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
-            <Link href="/manufacturing/custom-oem" className="inline-flex items-center justify-center bg-white border border-slate-200 text-navy-900 font-extrabold px-4 py-3.5 sm:px-8 sm:py-4 rounded-xl hover:border-amber-400 hover:text-amber-600 transition-all duration-300 shadow-sm uppercase tracking-widest text-[11px] sm:text-[12px] md:text-[13px] whitespace-nowrap transform hover:-translate-y-1 w-full sm:w-auto">
-              Explore Custom OEM Manufacturing
+            <Link href="/manufacturing/high-volume-orders" className="inline-flex items-center justify-center bg-white border border-slate-200 text-navy-900 font-extrabold px-4 py-3.5 sm:px-8 sm:py-4 rounded-xl hover:border-amber-400 hover:text-amber-600 transition-all duration-300 shadow-sm uppercase tracking-widest text-[11px] sm:text-[12px] md:text-[13px] whitespace-nowrap transform hover:-translate-y-1 w-full sm:w-auto">
+              Explore High-Volume Orders <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
           </div>
         </div>

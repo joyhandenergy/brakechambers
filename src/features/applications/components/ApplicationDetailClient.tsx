@@ -13,6 +13,8 @@ import { fadeInUp, staggerContainer } from '@/lib/animations';
 import { APPLICATION_DATA } from '@/data/applicationsData';
 import { notFound } from 'next/navigation';
 
+import PageHeader from '@/components/layout/PageHeader';
+
 export default function ApplicationDetailClient({ appSlug }: { appSlug: string }) {
   const data = APPLICATION_DATA[appSlug];
 
@@ -22,49 +24,17 @@ export default function ApplicationDetailClient({ appSlug }: { appSlug: string }
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
-      {/* Premium Hero Section */}
-      <section className="relative pt-6 md:pt-10 lg:pt-12 pb-16 lg:pb-24 overflow-hidden bg-navy-950">
-        <AnimatedGridBackground />
-
-        {/* Background image blending - increased opacity to be visible */}
-        {data.heroImage && (
-          <div className="absolute inset-0 z-0">
-            <img src={data.heroImage} alt={data.title} className="w-full h-full object-cover opacity-40" />
-            <div className="absolute inset-0 bg-gradient-to-b from-navy-950/80 via-navy-950/60 to-navy-950" />
-          </div>
-        )}
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
-
-          {/* TOP LEFT BREADCRUMB - Standardized Position */}
-          <nav aria-label="Breadcrumb" className="mb-12 md:mb-16 mt-2">
-            <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-navy-300 font-medium">
-              <li><Link href="/" className="hover:text-amber-400 transition-colors">Home</Link></li>
-              <li><span className="text-navy-600">/</span></li>
-              <li><Link href="/applications" className="hover:text-amber-400 transition-colors">Applications</Link></li>
-              <li><span className="text-navy-600">/</span></li>
-              <li className="text-white" aria-current="page">{data.title}</li>
-            </ol>
-          </nav>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-            className="max-w-4xl text-left"
-          >
-            <motion.div variants={fadeInUp} className="inline-block px-3 py-1 mb-4 md:px-4 md:py-1.5 md:mb-6 rounded-full bg-gradient-to-r from-navy-800 to-navy-900 border border-navy-700 text-amber-400 text-[10px] md:text-[11px] font-bold uppercase tracking-widest shadow-xl shadow-navy-950 whitespace-nowrap">
-              Application Profile
-            </motion.div>
-            <motion.h1 variants={fadeInUp} className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-white leading-[1.15] mb-4 md:mb-6 tracking-tight drop-shadow-2xl">
-              {data.title}
-            </motion.h1>
-            <motion.p variants={fadeInUp} className="text-[15px] md:text-[16px] leading-[1.6] mb-8 md:mb-10 max-w-2xl font-normal text-navy-100">
-              {data.desc}
-            </motion.p>
-          </motion.div>
-        </div>
-      </section>
+      <PageHeader
+        badge="Application Profile"
+        title={data.title}
+        description={data.desc}
+        imageSrc="/images/brc_brakechamber_aftermarket.jpg"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Applications', href: '/applications' },
+          { label: data.title }
+        ]}
+      />
 
       {/* The Challenge Section - White with Central Red Blend */}
       <section className="py-16 md:py-20 bg-white relative overflow-hidden border-b border-slate-200">

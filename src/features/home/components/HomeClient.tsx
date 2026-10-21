@@ -317,14 +317,14 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
           <div className="flex flex-col lg:flex-row gap-12 items-center">
             {/* Image Grid / Factory Floor */}
             <div className="w-full lg:w-1/2 grid grid-cols-2 gap-5">
-              <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="col-span-2 rounded-2xl overflow-hidden h-64 md:h-80 shadow-lg">
-                <img src="/images/brc7.jpg" alt="Brake Chamber Assembly Line" className="w-full h-full object-cover  hover:scale-105 transition-transform duration-700" />
+              <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="col-span-2 rounded-2xl overflow-hidden h-80 sm:h-96 md:h-[420px] shadow-lg">
+                <img src="/images/home/brc-brake-chamber-assembly.jpg?v=3" alt="BRC Brake Chamber Assembly Line Workers" className="w-full h-full object-cover object-[center_15%] hover:scale-105 transition-transform duration-700" />
               </motion.div>
               <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="rounded-2xl overflow-hidden h-40 md:h-48 shadow-lg">
-                <img src="/images/home/brc_quality_control_factory_worker.jpg?v=2" alt="Quality Control Testing" className="w-full h-full object-cover  hover:scale-105 transition-transform duration-700" />
+                <img src="/images/home/brc_quality_control_factory_worker.jpg?v=3" alt="Quality Control Testing" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
               </motion.div>
               <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="rounded-2xl overflow-hidden h-40 md:h-48 shadow-lg">
-                <img src="/images/home/brc_quality_factory_worker.jpg?v=1" alt="Factory Machining Center" className="w-full h-full object-cover  hover:scale-105 transition-transform duration-700" />
+                <img src="/images/home/brc_quality_factory_punching_machine.jpg" alt="Factory Punching Machine" className="w-full h-full object-cover object-[center_35%] hover:scale-105 transition-transform duration-700" />
               </motion.div>
             </div>
 
@@ -372,7 +372,7 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
 
       {/* NEW: Aftermarket Brands Showcase */}
       <section className="py-16 md:py-24 bg-slate-100 relative overflow-hidden border-y border-slate-300">
-        <div className="absolute inset-0 bg-[url('/images/brc_aftermarket.jpg')] bg-cover bg-center opacity-[0.15] grayscale"></div>
+        <div className="absolute inset-0 bg-[url('/images/brc_brakechamber_aftermarket.jpg')] bg-cover bg-center opacity-[0.15] grayscale"></div>
 
         {/* Subtle Modern Dot Grid Background */}
         <AnimatedGridBackground opacity={0.03} />

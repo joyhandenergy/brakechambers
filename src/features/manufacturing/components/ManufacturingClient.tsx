@@ -98,7 +98,7 @@ export default function ManufacturingClient() {
       <section className="pb-0 sm:pb-12 md:pb-32 relative z-10 bg-navy-900 border-t border-transparent">
         <div
           className="hidden md:block absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: 'url("/images/brc_aftermarket.jpg")' }}
+          style={{ backgroundImage: 'url("/images/brc_brackchamber_factory_foreground.jpg")' }}
         />
         <div className="hidden md:block absolute inset-0 z-0 bg-navy-950/60" />
 
@@ -222,7 +222,7 @@ export default function ManufacturingClient() {
             <div className="w-full lg:w-1/2">
               <div className="relative rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl h-[400px] lg:h-[600px] border border-slate-100">
                 <Image
-                  src="/images/just/Weixin Image_20261008105227_281_1.jpg"
+                  src="/images/manufacturing/brc_brakechamber_inside_manufacturing.jpg"
                   alt="BRC Brake Chamber Factory Floor in Zhejiang, China"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"

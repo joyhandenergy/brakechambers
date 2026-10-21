@@ -65,16 +65,30 @@ export default function CompanyClient() {
               className="w-full lg:w-1/2 relative"
             >
               <div className="relative h-[400px] sm:h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-100">
-                <Image src="/images/manufacturing/brc3.jpg" alt="BRC Manufacturing Floor" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105" />
-                <div className="absolute inset-0 bg-navy-900/10 mix-blend-overlay"></div>
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy-950/80 to-transparent h-48"></div>
+                <Image src="/images/brc_brakechamber_building.jpg" alt="BRC Manufacturing Building" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105" />
+                {/* Subtle vignette gradient only at bottom edge */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy-950/60 to-transparent h-28 pointer-events-none"></div>
 
-                <div className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8">
-                  <div className="bg-white/95 backdrop-blur-md p-5 sm:p-6 rounded-2xl shadow-xl border border-white relative overflow-hidden">
+                {/* Location Pill Tag (Top Right) */}
+                <div className="absolute top-4 right-4 sm:top-5 sm:right-5 z-10">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/90 backdrop-blur-md text-navy-950 border border-white/60 shadow-lg">
+                    <MapPin className="w-3.5 h-3.5 text-amber-500" /> Zhejiang, China
+                  </span>
+                </div>
+
+                {/* Compact Floating Capsule (Bottom Left) in former white UI */}
+                <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-10 max-w-[calc(100%-2rem)] sm:max-w-xs">
+                  <div className="bg-white/95 backdrop-blur-md p-3.5 sm:p-4 pl-5 rounded-2xl shadow-xl border border-white relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-amber-400 to-amber-600"></div>
-                    <h3 className="text-navy-900 font-extrabold text-lg sm:text-xl mb-2">Built by Engineers. Trusted by Fleets.</h3>
-                    <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                      Precision engineering ensures every brake chamber delivers uncompromising safety on global freight routes.
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                      </span>
+                      <span className="text-[11px] font-extrabold tracking-wider uppercase text-navy-900">BRC Production Facility</span>
+                    </div>
+                    <p className="text-xs text-slate-600 font-medium leading-snug">
+                      Vertically integrated manufacturing & testing center for OEM-spec brake chambers.
                     </p>
                   </div>
                 </div>
@@ -196,7 +210,7 @@ export default function CompanyClient() {
               className="w-full rounded-[2.5rem] overflow-hidden shadow-2xl relative group border border-slate-200"
             >
               <img
-                src="/images/brc_aftermarket.jpg"
+                src="/images/brc_brakechamber_aftermarket.jpg"
                 alt="BRC Leadership Team on the manufacturing floor"
                 className="w-full h-[300px] md:h-[500px] object-cover transition-transform duration-[10s] group-hover:scale-110 ease-out"
               />
@@ -222,7 +236,7 @@ export default function CompanyClient() {
               className="w-full lg:w-1/2 relative order-2 lg:order-1"
             >
               <div className="relative h-[400px] md:h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-100">
-                <Image src="/images/brc_aftermarket.jpg" alt="BRC Mission" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+                <Image src="/images/brc_brakechamber_aftermarket.jpg" alt="BRC Mission" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
                 <div className="absolute inset-0 bg-navy-900/40 mix-blend-multiply"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Target className="w-24 h-24 text-white/80" strokeWidth={1} />

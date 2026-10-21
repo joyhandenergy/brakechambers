@@ -172,7 +172,7 @@ export default function TechnicalResourcesClient() {
                     </Link>
                   </div>
                   <div className="w-full lg:w-1/2 relative min-h-[250px] md:min-h-[300px] lg:min-h-full overflow-hidden rounded-b-[2rem] lg:rounded-bl-none lg:rounded-r-[2rem] m-[2px]">
-                    <img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=800&q=80" alt="BRC Brake Chamber Video Training - Installation and Caging Procedures" className="absolute inset-0 w-full h-full object-cover grayscale mix-blend-luminosity opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                    <img src="/images/brc_brakechamber_aftermarket.jpg" alt="BRC Brake Chamber Video Training - Installation and Caging Procedures" className="absolute inset-0 w-full h-full object-cover grayscale mix-blend-luminosity opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <div className="w-16 h-16 md:w-20 md:h-20 bg-amber-500/10 backdrop-blur-md rounded-full flex items-center justify-center shadow-inner border border-amber-500/50 group-hover:bg-amber-500/20 group-hover:scale-110 transition-all duration-300">
                         <div className="w-0 h-0 border-t-[8px] md:border-t-[12px] border-t-transparent border-l-[14px] md:border-l-[20px] border-l-amber-500 border-b-[8px] md:border-b-[12px] border-b-transparent ml-1 md:ml-2"></div>

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Ship, Anchor, Package, CheckCircle2, MapPin, Globe2, ShieldCheck, ArrowRight, Truck } from 'lucide-react';
 import Card from '@/components/ui/Card';
@@ -152,8 +153,14 @@ export default function ShippingClient() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
             {/* Image */}
             <div className="order-2 lg:order-1 relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-navy-900/10 border border-slate-200 group">
-              <div className="absolute inset-0 bg-[url('/images/brc_aftermarket.jpg')] bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"></div>
-              <div className="absolute inset-0 bg-navy-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              <Image
+                src="/images/shiping/brc_brakechamber_fcl_and_lcl.jpg"
+                alt="BRC Brake Chamber FCL and LCL Container Shipping from China"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-navy-900/10 group-hover:bg-transparent transition-colors duration-500 pointer-events-none"></div>
             </div>
             
             {/* Content */}
@@ -226,8 +233,14 @@ export default function ShippingClient() {
 
             {/* Image */}
             <div className="order-2 lg:order-2 relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-navy-900/10 border border-slate-200 group">
-              <div className="absolute inset-0 bg-[url('/images/brc_aftermarket.jpg')] bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"></div>
-              <div className="absolute inset-0 bg-navy-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              <Image
+                src="/images/shiping/brc_brakchamber_export_packaging_standard.jpg"
+                alt="BRC Export Packaging Standard for Brake Chambers"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-navy-900/10 group-hover:bg-transparent transition-colors duration-500 pointer-events-none"></div>
             </div>
           </div>
 
@@ -235,8 +248,14 @@ export default function ShippingClient() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
              {/* Image */}
              <div className="order-2 lg:order-1 relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-navy-900/10 border border-slate-200 group">
-              <div className="absolute inset-0 bg-[url('/images/brc_aftermarket.jpg')] bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"></div>
-              <div className="absolute inset-0 bg-navy-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+              <Image
+                src="/images/shiping/brc_brakechambers_shipping_exw_fob.jpg"
+                alt="BRC Global Shipping Trade Terms EXW FOB CIF DDP"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-navy-900/10 group-hover:bg-transparent transition-colors duration-500 pointer-events-none"></div>
             </div>
 
             {/* Content */}

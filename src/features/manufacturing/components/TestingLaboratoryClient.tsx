@@ -105,10 +105,11 @@ export default function TestingLaboratoryClient() {
         badge="Quality Assurance"
         title="Brake Chamber Quality Assurance: Inside Our Testing Lab"
         description="Every BRC brake chamber is pressure-tested, cycle-tested, and corrosion-tested before it ships. Our in-house lab validates each unit under our IATF 16949-aligned quality system, because a brake chamber that fails on the road is not an option."
+        imageSrc="/images/brc_brakechamber_aftermarket.jpg"
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Manufacturing", href: "/manufacturing" },
-          { label: "Quality Assurance", href: "/manufacturing/quality" },
+          { label: "Quality Assurance" },
         ]}
       />
       <div className="space-y-0">

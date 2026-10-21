@@ -97,7 +97,7 @@ export const MANUFACTURING_MENU: MegaMenuConfig = {
       links: [
         { label: 'Brake R&D', href: '/manufacturing/research-development' },
         { label: 'Quality Assurance & Lab', href: '/manufacturing/quality-assurance' },
-
+        { label: 'Inside Our Factory', href: '/manufacturing' },
       ]
     },
     {

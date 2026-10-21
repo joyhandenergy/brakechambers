@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { PhoneCall, Mail, Phone, MapPin, Clock, Send, Globe, Truck, MessageCircle, ArrowRight, CheckCircle, CheckCircle2, ShieldCheck, User, Building, HelpCircle, AlertCircle } from 'lucide-react';
+import { PhoneCall, Mail, Phone, MapPin, Clock, Send, Globe, Truck, MessageCircle, ArrowRight, CheckCircle, CheckCircle2, ShieldCheck, User, Building, HelpCircle, AlertCircle, ExternalLink } from 'lucide-react';
 import PageHeader from '@/components/layout/PageHeader';
 import SectionHeader from '@/components/ui/SectionHeader';
 import GlobalFAQAccordion from '@/components/ui/GlobalFAQAccordion';
@@ -145,13 +145,28 @@ export default function ContactClient() {
       setIsSubmitting(false);
     }
   };
+  const mapRef = useRef<HTMLDivElement>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const el = mapRef.current;
+    if (!el) return;
+
+    if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0]?.isIntersecting) {
+            setIsMapLoaded(true);
+            observer.disconnect();
+          }
+        },
+        { rootMargin: '300px' }
+      );
+      observer.observe(el);
+      return () => observer.disconnect();
+    } else {
       setIsMapLoaded(true);
-    }, 500);
-    return () => clearTimeout(timer);
+    }
   }, []);
   const faqs = [
     {
@@ -628,7 +643,7 @@ export default function ContactClient() {
         className="mt-16 sm:mt-20 lg:mt-24 bg-white border-y border-slate-200 overflow-hidden relative w-full"
       >
         {/* Main Map Container */}
-        <div id="map-section" className="relative w-full h-[350px] sm:h-[450px] lg:h-[550px] group bg-slate-100">
+        <div id="map-section" ref={mapRef} className="relative w-full h-[350px] sm:h-[450px] lg:h-[550px] group bg-slate-100">
           {/* Amber Duotone Overlay - covers the entire map seamlessly */}
           <div className="absolute inset-0 bg-amber-500/15 mix-blend-color z-10 pointer-events-none group-hover:opacity-0 transition-opacity duration-1000 ease-out"></div>
 
@@ -644,8 +659,8 @@ export default function ContactClient() {
             ></iframe>
           ) : (
             <div className="absolute inset-0 w-full h-full bg-slate-200 flex flex-col items-center justify-center text-slate-400 z-0 animate-pulse">
-              <MapPin className="w-8 h-8 mb-2 opacity-50" />
-              <span className="text-sm font-medium">Loading Map...</span>
+              <MapPin className="w-8 h-8 mb-2 opacity-50 text-amber-500" />
+              <span className="text-sm font-medium text-slate-600">Loading Map...</span>
             </div>
           )}
 
@@ -662,6 +677,17 @@ export default function ContactClient() {
                     Block 3, No 55 Tianyang Rd, Fengqiao,<br className="hidden sm:block" />
                     Zhuji, Zhejiang. China 311811
                   </p>
+                  <div className="mt-3 pointer-events-auto">
+                    <a
+                      href="https://maps.google.com/?q=29.878345,121.463371"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy-900 hover:text-amber-600 transition-colors"
+                    >
+                      <span>Open in Google Maps</span>
+                      <ExternalLink className="w-3.5 h-3.5 text-amber-500" />
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

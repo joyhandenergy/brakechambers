@@ -25,8 +25,8 @@ export default function WarrantyClient() {
         ]}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl -mt-16 relative z-30 mb-20">
-        <div className="grid grid-cols-1 gap-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl -mt-16 relative z-30 mb-12 md:mb-16">
+        <div className="grid grid-cols-1 gap-8 md:gap-12">
 
           {/* Section 1: Standard Warranty */}
           <motion.section
@@ -110,53 +110,53 @@ export default function WarrantyClient() {
               </motion.div>
             </div>
           </section>
-
-          {/* Section 2: Quality Control Grid */}
-          <section className="py-16 md:py-24 relative overflow-hidden bg-slate-50 border-y border-slate-200 mt-12 mb-12 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
-            <RotatingWatermark />
-            <div className="relative z-10">
-              <SectionHeader
-              badge="Quality Verification"
-              title="How BRC Verifies Every Brake Chamber Before Shipment"
-              description="Every BRC brake chamber is verified before shipment under our IATF 16949-aligned quality system. These tests confirm warranty coverage applies to products built to specification."
-              accentColor="amber"
-              plainText={true}
-            />
-
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-            >
-              {[
-                { icon: Zap, title: "100% Pneumatic Leak Testing", desc: "Every unit is pressure-tested using automated equipment to detect microscopic air loss before packaging. Failing units are scrapped.", color: "emerald" },
-                { icon: Settings, title: "Full Stroke Validation", desc: "Push-rods are cycled to verify spring force and return consistency across the full stroke range.", color: "amber" },
-                { icon: ShieldCheck, title: "Burst Pressure Testing", desc: "Random batch sampling subjects housings to burst pressure testing above the rated operating pressure, validating structural integrity.", color: "navy" }
-              ].map((test, i) => (
-                <motion.div key={i} variants={scaleIn} className="bg-white rounded-2xl p-8 border border-slate-100 shadow-md hover:shadow-lg transition-shadow text-center group">
-                  <div className={"w-16 h-16 mx-auto bg-" + test.color + "-50 text-" + test.color + "-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm"}>
-                    <test.icon className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-xl font-extrabold text-navy-900 mb-3">{test.title}</h3>
-                  <p className="text-[14px] md:text-[15px] leading-[1.6] text-slate-600 font-normal">{test.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-            <div className="text-center mt-8">
-              <Link href="/manufacturing/quality-assurance" className="inline-flex items-center gap-2 text-navy-600 font-bold hover:text-emerald-500 transition-colors">
-                View Full Quality Assurance Process <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-            </div>
-          </section>
         </div>
       </div>
 
+      {/* Section 2: Quality Control Grid */}
+      <section className="py-12 md:py-20 relative overflow-hidden bg-slate-50 border-y border-slate-200">
+        <RotatingWatermark />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
+          <SectionHeader
+            badge="Quality Verification"
+            title="How BRC Verifies Every Brake Chamber Before Shipment"
+            description="Every BRC brake chamber is verified before shipment under our IATF 16949-aligned quality system. These tests confirm warranty coverage applies to products built to specification."
+            accentColor="amber"
+            plainText={true}
+          />
+
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          >
+            {[
+              { icon: Zap, title: "100% Pneumatic Leak Testing", desc: "Every unit is pressure-tested using automated equipment to detect microscopic air loss before packaging. Failing units are scrapped.", color: "emerald" },
+              { icon: Settings, title: "Full Stroke Validation", desc: "Push-rods are cycled to verify spring force and return consistency across the full stroke range.", color: "amber" },
+              { icon: ShieldCheck, title: "Burst Pressure Testing", desc: "Random batch sampling subjects housings to burst pressure testing above the rated operating pressure, validating structural integrity.", color: "navy" }
+            ].map((test, i) => (
+              <motion.div key={i} variants={scaleIn} className="bg-white rounded-2xl p-8 border border-slate-100 shadow-md hover:shadow-lg transition-shadow text-center group">
+                <div className={"w-16 h-16 mx-auto bg-" + test.color + "-50 text-" + test.color + "-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm"}>
+                  <test.icon className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-extrabold text-navy-900 mb-3">{test.title}</h3>
+                <p className="text-[14px] md:text-[15px] leading-[1.6] text-slate-600 font-normal">{test.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+          <div className="text-center mt-8">
+            <Link href="/manufacturing/quality-assurance" className="inline-flex items-center gap-2 text-navy-600 font-bold hover:text-emerald-500 transition-colors">
+              View Full Quality Assurance Process <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Section 3: Claims Process Timeline */}
-      <section className="py-16 md:py-24 bg-navy-950 relative overflow-hidden border-y border-navy-800 mt-12">
-        <div className="absolute inset-0 bg-[url('/images/home/quality-control.jpg')] bg-cover bg-center opacity-5"></div>
+      <section className="py-12 md:py-20 bg-navy-950 relative overflow-hidden border-b border-navy-800">
+        <div className="absolute inset-0 bg-[url('/images/brc_equipment_background.jpg')] bg-cover bg-center opacity-10"></div>
         <AnimatedGridBackground opacity={0.08} />
         <div className="absolute inset-0 bg-gradient-to-b from-navy-950 via-transparent to-navy-950 pointer-events-none"></div>
 

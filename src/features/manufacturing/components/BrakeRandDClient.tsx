@@ -23,7 +23,7 @@ export default function BrakeRandDClient() {
       title: '3D CAD Modeling & Design',
       description: 'Every new BRC brake chamber begins as a parametric 3D CAD model. Our engineers iterate housing wall thickness, diaphragm geometry, push-rod stroke length, and port location digitally, before any physical tooling is cut. This reduces tooling cost and shortens development time.',
       icon: <PenTool className="w-8 h-8 text-amber-500" />,
-      image: "/images/just/Weixin Image_20260930141016_141_3.jpg",
+      image: "/images/manufacturing/brc_brakechambers_3d_cd_modeling_design.jpg",
       bullets: [
         { title: 'SolidWorks & Pro/E Parametric Design', text: 'Full parametric models allow fast design iteration without re-drawing.' },
         { title: 'Full Assembly Interference Checks', text: 'Every internal component validated for clearance before prototyping.' },
@@ -37,7 +37,7 @@ export default function BrakeRandDClient() {
       title: 'Finite Element Analysis (FEA)',
       description: 'We digitally simulate real-world brake chamber operating conditions: pneumatic burst pressure, torsional vibration from rough roads, and -40°F thermal shock, to identify stress concentrations before a physical prototype is built. Every BRC design is FEA-validated.',
       icon: <BarChart3 className="w-8 h-8 text-navy-500" />,
-      image: "/images/just/Weixin Image_20260930141017_142_3.jpg",
+      image: "/images/manufacturing/bre_brakechamber_finite_element_analysis.jpg",
       bullets: [
         { title: 'Burst Pressure Simulation', text: 'Chamber housings simulated up to 200 PSI to validate burst margin.' },
         { title: 'Thermal Cycling & Fatigue Analysis', text: 'Cycles simulated across -40°F to 200°F to predict service life.' },
@@ -51,7 +51,7 @@ export default function BrakeRandDClient() {
       title: 'Rapid Prototyping',
       description: 'Once the digital design passes FEA validation, BRC produces functional prototypes using 3D printing and low-volume CNC machining. Prototypes undergo bench testing before volume tooling is committed.',
       icon: <Microscope className="w-8 h-8 text-amber-500" />,
-      image: "/images/just/Weixin Image_20261008133829_328_1.jpg",
+      image: "/images/manufacturing/brc_simulation_prototype.jpg",
       bullets: [
         { title: 'Functional Metal Prototypes', text: 'In-house CNC machining center produces working prototypes for bench validation.' },
         { title: 'In-House Prototype Lab', text: 'Rapid iteration without outsourcing: designs tested in days, not weeks.' },
@@ -66,7 +66,7 @@ export default function BrakeRandDClient() {
       description: 'Every BRC brake chamber design is first built as a digital model in 3D CAD. Using Finite Element Analysis (FEA), we simulate pneumatic bursts, torsional vibration, and thermal shock, identifying stress points and optimizing housing geometry before any physical tooling is committed.',
       caption: 'ACTIVE SIMULATION: Computer-modeled stress on a Type 30/30 housing under 150 PSI test load, validating zero micro-fractures under extreme braking events.',
       icon: <MonitorPlay className="w-8 h-8 text-navy-500" />,
-      image: "/images/just/Weixin Image_20261008105234_284_1.jpg",
+      image: "/images/manufacturing/brc_simulation_and_digital_Prototyping.jpg",
       bullets: [
         { title: 'Predictive Modeling', text: 'Design decisions validated before physical tooling.' },
         { title: 'Optimized Geometries', text: 'Housing shapes refined to reduce stress points.' },
@@ -91,7 +91,7 @@ export default function BrakeRandDClient() {
         badgeIcon={PenTool}
         title="Brake Chamber R&D: Engineering the Next Generation of Air Brake Chambers"
         description="BRC's in-house R&D team combines advanced CAD modeling, FEA simulation, rapid prototyping, and metallurgical science to engineer heavy-duty brake chambers. Every design is validated before it reaches the production line."
-        imageSrc="/images/brc_aftermarket.jpg"
+        imageSrc="/images/brc_brakechamber_aftermarket.jpg"
         breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Manufacturing', href: '/manufacturing' },
