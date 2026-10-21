@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { getProducts, getBlogPosts } from '@/sanity/queries';
 import { BRAKE_CHAMBERS } from '@/lib/data';
 import { blogPosts as fallbackBlogPosts } from '@/data/blogPosts';
+import { APPLICATION_DATA } from '@/data/applicationsData';
 
 export const revalidate = 3600; // revalidate sitemap every hour
 
@@ -130,18 +131,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }));
 
-  // Applications
-  const applicationRoutes = [
-    'long-haul-semi-trucks',
-    'heavy-duty-trailer',
-    'medium-duty-trucks',
-    'garbage-refuse',
-    'mining-construction',
-    'ag-trailers',
-    'transit-buses',
-    'school-buses',
-    'shuttle-vans',
-  ].map((slug) => ({
+  // Applications (Dynamically pulls all 13 application and regional routes)
+  const applicationRoutes = Object.keys(APPLICATION_DATA).map((slug) => ({
     url: `${baseUrl}/applications/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
