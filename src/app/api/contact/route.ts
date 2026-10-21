@@ -23,8 +23,18 @@ export async function POST(request: Request) {
     const port = Number(process.env.SMTP_PORT) || 465;
     const secure = process.env.SMTP_SECURE !== 'false';
     const user = process.env.SMTP_USER || 'sales@brakechambers.com';
-    const pass = process.env.SMTP_PASS;
-    const recipient = process.env.SALES_EMAIL || 'sales@brakechambers.com';
+    const pass = (process.env.SMTP_PASS || '').trim();
+    
+    // Support multiple comma-separated inboxes (sales@brakechambers.com, brcbrakechambers@gmail.com)
+    const rawRecipients = process.env.SALES_EMAIL || 'sales@brakechambers.com, brcbrakechambers@gmail.com';
+    const recipients = Array.from(
+      new Set(
+        rawRecipients
+          .split(',')
+          .map((e) => e.trim())
+          .filter(Boolean)
+      )
+    );
 
     // Format all submitted fields into a clean HTML table (excluding complex objects)
     const detailRows = Object.entries(data)
@@ -173,17 +183,17 @@ export async function POST(request: Request) {
 
       await transporter.sendMail({
         from: `"BRC Website Lead" <${user}>`,
-        to: recipient,
+        to: recipients,
         replyTo: clientEmail,
         subject: emailSubject,
         html: htmlContent,
       });
 
-      console.log(`[SMTP SUCCESS] Sent email to ${recipient} via ${host}:${port}`);
+      console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${host}:${port}`);
     } else {
       // In development or if password is not set yet in .env.local
       console.log('--- [DEV MODE] NEW LEAD RECEIVED (SMTP_PASS not yet set) ---');
-      console.log(`Target Inbox: ${recipient}`);
+      console.log(`Target Inboxes (will receive email once SMTP_PASS is set): ${recipients.join(', ')}`);
       console.log(`Subject: ${emailSubject}`);
       console.log('Data:', data);
       console.log('------------------------------------------------------------');

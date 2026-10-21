@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  compress: true,
   images: {
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 2592000, // 30 days
     remotePatterns: [
       {
         protocol: 'https',
@@ -65,6 +68,28 @@ const nextConfig = {
       // Accessories
       { source: '/diaphragm-type-30-rubber-diaphragm-a1', destination: '/chamber-parts-kits/diaphragm-type-30-rubber-diaphragm', permanent: true },
       { source: '/diaphragm-type-24-rubber-diaphragm-a2', destination: '/chamber-parts-kits/diaphragm-type-24-rubber-diaphragm', permanent: true },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: '/:all*(svg|jpg|jpeg|png|webp|avif|ico|woff|woff2)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/image/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2592000, stale-while-revalidate=86400',
+          },
+        ],
+      },
     ];
   },
 };

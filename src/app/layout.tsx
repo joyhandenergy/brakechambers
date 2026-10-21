@@ -10,8 +10,8 @@ import GlobalSearchModal from '@/components/ui/GlobalSearchModal';
 import Script from 'next/script';
 import NextTopLoader from 'nextjs-toploader';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.brakechambers.com'),
@@ -110,7 +110,7 @@ export default async function RootLayout({
         />
         {/* Hidden Google Translate Element */}
         <div id="google_translate_element" style={{ display: 'none' }}></div>
-        <Script id="google-translate-init" strategy="afterInteractive" dangerouslySetInnerHTML={{
+        <Script id="google-translate-init" strategy="lazyOnload" dangerouslySetInnerHTML={{
           __html: `
             window.googleTranslateElementInit = function() {
               new google.translate.TranslateElement({
@@ -121,13 +121,13 @@ export default async function RootLayout({
             };
           `
         }} />
-        <Script src="https://translate.googleapis.com/translate_a/element.js?cb=googleTranslateElementInit" strategy="afterInteractive" />
+        <Script src="https://translate.googleapis.com/translate_a/element.js?cb=googleTranslateElementInit" strategy="lazyOnload" />
         
         {/* Ahrefs Web Analytics */}
         <Script
           src="https://analytics.ahrefs.com/analytics.js"
           data-key="i1gVBXGaGQkbrtol03jXyQ"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         
         <SplashScreen />
