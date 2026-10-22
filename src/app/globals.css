@@ -219,6 +219,27 @@ body {
   }
 }
 
+/* =========================================================================
+   Large Screen (1920x1080 / 2K / 4K) Responsive Scaling
+   Ensure page content containers scale comfortably across the full 1920px canvas,
+   matching the 1920px navbar, mega menu, and footer layout without awkward gutters.
+   ========================================================================= */
+@media (min-width: 1536px) {
+  .container,
+  .max-w-7xl,
+  .max-w-6xl {
+    max-width: 1680px !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  .container,
+  .max-w-7xl,
+  .max-w-6xl {
+    max-width: 1920px !important;
+  }
+}
+
 
 
 

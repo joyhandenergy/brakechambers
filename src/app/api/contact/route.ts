@@ -1,4 +1,4 @@
-import { NextResponse, after } from 'next/server';
+import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { EMAIL_REGEX } from '@/lib/validation';
 
@@ -250,42 +250,43 @@ export async function POST(request: Request) {
     const subjectLead = company || clientName || clientEmail;
     const emailSubject = `[${subjectPrefix}] New Inquiry from ${subjectLead}`;
 
-    // If SMTP_PASS is configured, dispatch the email asynchronously via 163 Enterprise Mail
+    // If SMTP_PASS is configured, dispatch the email directly and ensure delivery
     if (pass) {
-      after(async () => {
-        try {
-          const transporter = nodemailer.createTransport({
-            host,
-            port,
-            secure, // true for port 465
-            auth: {
-              user,
-              pass,
-            },
-          });
+      try {
+        const transporter = nodemailer.createTransport({
+          host,
+          port,
+          secure, // true for port 465
+          auth: {
+            user,
+            pass,
+          },
+          connectionTimeout: 8000, // Fast connection timeout
+          greetingTimeout: 8000,
+          socketTimeout: 15000,
+        });
 
-          await transporter.sendMail({
-            from: `"BRC Website Lead" <${user}>`,
-            to: recipients,
-            replyTo: clientEmail,
-            subject: emailSubject,
-            html: htmlContent,
-            attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
-          });
+        await transporter.sendMail({
+          from: `"BRC Website Lead" <${user}>`,
+          to: recipients,
+          replyTo: clientEmail,
+          subject: emailSubject,
+          html: htmlContent,
+          attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
+        });
 
-          console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${host}:${port} (${emailAttachments.length} attachments)`);
-        } catch (smtpError: any) {
-          console.error('--- [SMTP SEND FAILURE IN BACKGROUND] ---');
-          console.error('Error:', smtpError?.message || smtpError);
-          console.error('Lead details preserved in server log:', JSON.stringify(data, null, 2));
-          if (String(smtpError?.message).includes('ERR.LOGIN.REQCODE')) {
-            console.error(
-              'CRITICAL NOTE: NetEase 163 Enterprise Mail requires an "App Authorization Code" (客户端专用授权码) rather than the web password.'
-            );
-          }
-          console.error('-----------------------------------------');
+        console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${host}:${port} (${emailAttachments.length} attachments)`);
+      } catch (smtpError: any) {
+        console.error('--- [SMTP SEND FAILURE] ---');
+        console.error('Error:', smtpError?.message || smtpError);
+        console.error('Lead details preserved in server log:', JSON.stringify(data, null, 2));
+        if (String(smtpError?.message).includes('ERR.LOGIN.REQCODE')) {
+          console.error(
+            'CRITICAL NOTE: NetEase 163 Enterprise Mail requires an "App Authorization Code" (客户端专用授权码) rather than the web password.'
+          );
         }
-      });
+        console.error('-----------------------------------------');
+      }
     } else {
       // In development or if password is not set yet in .env.local
       console.log('--- [DEV MODE] NEW LEAD RECEIVED (SMTP_PASS not yet set) ---');
