@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useSyncExternalStore } from 'react';
+import React, { useState, useMemo, useSyncExternalStore, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
@@ -42,14 +42,31 @@ export default function QuoteClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const successRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (isSuccess && successRef.current) {
+      const timer = setTimeout(() => {
+        if (successRef.current) {
+          const navHeight = window.innerWidth >= 1024 ? 130 : 85;
+          const targetY = successRef.current.getBoundingClientRect().top + window.pageYOffset - navHeight - 16;
+          window.scrollTo({
+            top: Math.max(0, targetY),
+            behavior: 'smooth'
+          });
+        }
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess]);
 
   const [formData, setFormData] = useState({
     name: '',
     companyName: '',
     email: '',
     phone: '',
-    volume: 'LCL (Less than Container Load - Pallet)',
-    incoterms: 'FOB (Free on Board - Ningbo / Shanghai)',
+    volume: 'LCL (Less than Container Load)',
+    incoterms: 'FOB (Free on Board)',
     destination: '',
     notes: ''
   });
@@ -60,9 +77,9 @@ export default function QuoteClient() {
     return items.reduce((sum, item) => sum + (item.quantity || 1), 0);
   }, [items]);
 
-  // CORE RULE: Without product selection the form cannot be active
+  // Products in cart (optional: users can also submit direct RFQs without cart items)
   const hasProducts = items.length > 0;
-  const isFormActive = hasProducts;
+  const isFormActive = true;
 
   const errors = useMemo(() => ({
     name: touched.name ? validateRequired(formData.name, 'Full name', 2) : null,
@@ -92,11 +109,6 @@ export default function QuoteClient() {
     e.preventDefault();
     setServerError(null);
 
-    // Guard: Form cannot be submitted without at least 1 product selected
-    if (!isFormActive || items.length === 0) {
-      setServerError('Please select at least one brake chamber from our catalog to activate and submit your quotation request.');
-      return;
-    }
 
     const allTouched = {
       name: true,
@@ -121,7 +133,7 @@ export default function QuoteClient() {
 
     setIsSubmitting(true);
     
-    // Prepare rich products data including image URLs for email and lead tracking
+    // Prepare rich products data if any selected, otherwise support direct custom RFQ
     const quoteProducts = items.map(i => {
       const rawImg = (i.product as any).imageUrl || (i.product as any).galleryUrls?.[0] || '/productsImage/brc-t16-single-brake-1.jpg';
       const fullImageUrl = rawImg.startsWith('http') 
@@ -139,18 +151,18 @@ export default function QuoteClient() {
       };
     });
 
-    const quoteItems = quoteProducts.map(p => 
-      `${p.name} (SKU: ${p.sku}, Qty: ${p.quantity}) - Image: ${p.imageUrl}`
-    );
+    const quoteItems = quoteProducts.length > 0
+      ? quoteProducts.map(p => `${p.name} (SKU: ${p.sku}, Qty: ${p.quantity}) - Image: ${p.imageUrl}`)
+      : [formData.notes ? `Custom RFQ / Specifications: ${formData.notes}` : 'Direct Container / Pallet Price Request'];
     
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          source: 'Brake Chamber Wholesale RFQ', 
+          source: hasProducts ? 'Brake Chamber Wholesale RFQ' : 'Direct Wholesale Price Request', 
           ...formData,
-          totalUnitsConfigured: totalUnits,
+          totalUnitsConfigured: hasProducts ? totalUnits : 'Custom / Unspecified',
           items: quoteItems,
           products: quoteProducts,
           productImages: quoteProducts.map(p => p.imageUrl)
@@ -192,19 +204,19 @@ export default function QuoteClient() {
       </div>
 
       {!hasProducts ? (
-        <div className="bg-slate-50/80 border border-dashed border-slate-200 rounded-2xl p-6 text-center">
-          <div className="w-12 h-12 bg-white rounded-xl shadow-2xs border border-slate-200/80 flex items-center justify-center mx-auto mb-3">
-            <Package className="w-6 h-6 text-slate-400" />
+        <div className="bg-slate-50/80 border border-slate-200/90 rounded-2xl p-5 text-center">
+          <div className="w-11 h-11 bg-white rounded-xl shadow-2xs border border-slate-200/80 flex items-center justify-center mx-auto mb-2.5">
+            <Package className="w-5 h-5 text-slate-400" />
           </div>
-          <h4 className="text-sm sm:text-base font-bold text-navy-900 mb-1">No Chambers Selected Yet</h4>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-xs mx-auto mb-4 font-normal leading-relaxed">
-            Browse our catalog to select your required brake chambers. The quotation form activates immediately upon selecting a product.
+          <h4 className="text-sm sm:text-base font-bold text-navy-900 mb-1">Direct RFQ Ready</h4>
+          <p className="text-xs sm:text-sm text-slate-500 max-w-xs mx-auto mb-3.5 font-normal leading-relaxed">
+            Fill out the form with your specifications, or browse our catalog to attach models.
           </p>
           <Link 
             href="/products" 
-            className="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-2xs transition-all group"
+            className="inline-flex items-center gap-2 bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-2xs transition-all group"
           >
-            Browse Product Catalog <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            Browse Catalog <ArrowRight className="w-3.5 h-3.5 text-amber-400 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       ) : (
@@ -329,30 +341,13 @@ export default function QuoteClient() {
             {selectedChambersContent}
           </div>
 
-          <div className="-mx-4 sm:mx-0 bg-white rounded-none sm:rounded-3xl shadow-[0_12px_36px_rgba(10,25,41,0.06)] border-y sm:border border-slate-200/90 overflow-hidden relative">
+          <div ref={successRef} className="-mx-4 sm:mx-0 bg-white rounded-none sm:rounded-3xl shadow-[0_12px_36px_rgba(10,25,41,0.06)] border-y sm:border border-slate-200/90 overflow-hidden relative">
             
             {/* Top Signature Brand Accent Line (Clean Navy & Amber - No harsh green borders) */}
             <div className="h-1.5 w-full bg-gradient-to-r from-navy-900 via-amber-500 to-navy-900" />
 
-            {/* Form Section Header Bar */}
-            <div className="p-4 sm:p-6 lg:p-7 bg-slate-50/70 border-b border-slate-200/80">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs sm:text-sm font-bold uppercase tracking-wider">
-                  <FileText className="w-4 h-4 text-amber-600" />
-                  Official Factory RFQ
-                </span>
-              </div>
-
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy-900 tracking-tight leading-tight">
-                Commercial Quotation & Shipping Details
-              </h2>
-              <p className="text-slate-600 text-sm sm:text-base mt-2 font-normal leading-relaxed">
-                Provide your fleet credentials and destination port below. Our sales engineering team will prepare an itemized proforma invoice with tiered container pricing.
-              </p>
-            </div>
-
-            {/* Success Overlay */}
-            {isSuccess && (
+            {/* Success State */}
+            {isSuccess ? (
               <div className="p-6 sm:p-12 text-center flex flex-col items-center justify-center">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mb-5 shadow-xs border border-emerald-100">
                   <CheckCircle2 className="w-9 h-9 sm:w-11 sm:h-11" />
@@ -393,27 +388,43 @@ export default function QuoteClient() {
                   </Link>
                 </div>
               </div>
-            )}
+            ) : (
+              <>
+                {/* Form Section Header Bar */}
+                <div className="p-4 sm:p-6 lg:p-7 bg-slate-50/70 border-b border-slate-200/80">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs sm:text-sm font-bold uppercase tracking-wider">
+                      <FileText className="w-4 h-4 text-amber-600" />
+                      Official Factory RFQ
+                    </span>
+                  </div>
 
-            {!isSuccess && (
-              <form onSubmit={handleSubmit} noValidate className="p-4 sm:p-6 lg:p-7 flex flex-col gap-5 sm:gap-6 relative">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy-900 tracking-tight leading-tight">
+                    Commercial Quotation & Shipping Details
+                  </h2>
+                  <p className="text-slate-600 text-sm sm:text-base mt-2 font-normal leading-relaxed">
+                    Provide your fleet credentials and destination port below. Our sales engineering team will prepare an itemized proforma invoice with tiered container pricing.
+                  </p>
+                </div>
+
+                <form onSubmit={handleSubmit} noValidate className="p-4 sm:p-6 lg:p-7 flex flex-col gap-5 sm:gap-6 relative">
                 
-                {/* CALL TO ACTION STATE: If no products selected, display prominent CTA guiding user to catalog */}
-                {!isFormActive ? (
-                  <div className="p-4 sm:p-5 bg-amber-50/70 border border-amber-200/90 rounded-2xl text-navy-950 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                {/* Form state banner */}
+                {!hasProducts ? (
+                  <div className="p-4 sm:p-5 bg-slate-50 border border-slate-200/90 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-start gap-3.5">
                       <div className="w-10 h-10 rounded-xl bg-amber-400 text-navy-950 flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
-                        <ShoppingCart className="w-5 h-5" />
+                        <FileText className="w-5 h-5" />
                       </div>
                       <div>
-                        <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-800 mb-1">
-                          <Lock className="w-3.5 h-3.5" /> Product Selection Required
+                        <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-800 mb-0.5">
+                          Direct Factory RFQ
                         </div>
-                        <h3 className="font-extrabold text-base sm:text-lg text-navy-900 leading-snug">
-                          Select a Brake Chamber from Our Catalog to Activate This Form
-                        </h3>
-                        <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-xl font-normal leading-relaxed">
-                          Wholesale quotes are custom-tailored to specific chamber stroke sizes, port threads, and order volumes. Please choose your product from our catalog to unlock this RFQ form.
+                        <h4 className="font-extrabold text-sm sm:text-base text-navy-900 leading-snug">
+                          Request Direct Container or Pallet Pricing
+                        </h4>
+                        <p className="text-xs sm:text-sm text-slate-600 mt-0.5 max-w-xl font-normal leading-relaxed">
+                          Enter your required part numbers or volume below, or attach specific models from our catalog.
                         </p>
                       </div>
                     </div>
@@ -436,7 +447,7 @@ export default function QuoteClient() {
                     </div>
                   </div>
                 ) : (
-                  /* Clean, understated active banner without harsh green borders */
+                  /* Clean active banner */
                   <div className="p-3.5 sm:p-4 bg-slate-50 border border-slate-200/90 rounded-2xl flex items-center justify-between gap-3 text-navy-900">
                     <div className="flex items-center gap-2.5 min-w-0">
                       <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
@@ -629,10 +640,10 @@ export default function QuoteClient() {
                         disabled={!isFormActive || isSubmitting}
                         className="w-full px-4 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-base text-navy-900 font-medium focus:outline-none transition-all shadow-2xs bg-white border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/10 disabled:bg-slate-50/70 disabled:text-slate-600 disabled:cursor-not-allowed cursor-pointer"
                       >
-                        <option value="LCL (Less than Container Load - Pallet)">LCL (Less than Container Load - Pallet)</option>
-                        <option value="20ft Container (FCL - Approx. 2,200 pcs)">20ft Container (FCL - Approx. 2,200 pcs)</option>
-                        <option value="40ft Container (FCL - Approx. 4,500 pcs)">40ft Container (FCL - Approx. 4,500 pcs)</option>
-                        <option value="Sample Order for Quality Testing">Sample Order for Testing & Verification</option>
+                        <option value="LCL (Less than Container Load)">LCL (Less than Container Load)</option>
+                        <option value="20ft Container (FCL)">20ft Container (FCL)</option>
+                        <option value="40ft Container (FCL / HQ)">40ft Container (FCL / HQ)</option>
+                        <option value="Sample Order for Testing & Verification">Sample Order for Testing & Verification</option>
                       </select>
                     </div>
 
@@ -646,10 +657,11 @@ export default function QuoteClient() {
                         disabled={!isFormActive || isSubmitting}
                         className="w-full px-4 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl text-base text-navy-900 font-medium focus:outline-none transition-all shadow-2xs bg-white border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/10 disabled:bg-slate-50/70 disabled:text-slate-600 disabled:cursor-not-allowed cursor-pointer"
                       >
-                        <option value="FOB (Free on Board - Ningbo / Shanghai)">FOB (Free on Board - Ningbo / Shanghai)</option>
-                        <option value="CIF (Cost, Insurance & Freight to Your Port)">CIF (Cost, Insurance & Freight to Your Port)</option>
-                        <option value="EXW (Ex Works Factory Floor - Zhuji)">EXW (Ex Works Factory Floor - Zhuji)</option>
-                        <option value="DDP (Delivered Duty Paid to Warehouse)">DDP (Delivered Duty Paid)</option>
+                        <option value="FOB (Free on Board)">FOB (Free on Board)</option>
+                        <option value="CIF (Cost, Insurance & Freight)">CIF (Cost, Insurance & Freight)</option>
+                        <option value="CFR (Cost & Freight)">CFR (Cost & Freight)</option>
+                        <option value="EXW (Ex Works)">EXW (Ex Works)</option>
+                        <option value="DDP (Delivered Duty Paid)">DDP (Delivered Duty Paid)</option>
                       </select>
                     </div>
                   </div>
@@ -683,42 +695,36 @@ export default function QuoteClient() {
                 <div className="pt-2">
                   <button
                     type="submit"
-                    disabled={!isFormActive || isSubmitting}
-                    className={`w-full font-black text-sm sm:text-base py-4 sm:py-4.5 px-6 rounded-2xl transition-all flex items-center justify-center gap-2.5 uppercase tracking-wider ${
-                      !isFormActive
-                        ? 'bg-slate-200 text-slate-500 cursor-not-allowed border border-slate-300 shadow-none'
-                        : isSubmitting
-                        ? 'bg-amber-300 text-navy-950 cursor-wait shadow-none'
-                        : 'bg-amber-500 hover:bg-amber-400 text-navy-950 shadow-xl shadow-amber-500/25 hover:shadow-amber-500/35 transform hover:-translate-y-0.5 cursor-pointer'
-                    }`}
+                    disabled={isSubmitting}
+                    className="w-full bg-amber-500 hover:bg-amber-400 disabled:bg-amber-300 disabled:cursor-not-allowed text-navy-950 font-black text-sm sm:text-base py-4 sm:py-4.5 px-6 rounded-2xl shadow-xl shadow-amber-500/25 hover:shadow-amber-500/35 transition-all flex items-center justify-center gap-2.5 uppercase tracking-wider transform hover:-translate-y-0.5 cursor-pointer"
                   >
-                    {!isFormActive ? (
-                      <span className="flex items-center gap-2 text-slate-600 font-bold">
-                        <Lock className="w-5 h-5 text-slate-500 shrink-0" />
-                        SELECT PRODUCT FROM CATALOG FIRST
-                      </span>
-                    ) : isSubmitting ? (
+                    {isSubmitting ? (
                       <span className="flex items-center gap-2.5">
                         GENERATING RFQ...
                         <div className="w-5 h-5 border-2 border-navy-950/30 border-t-navy-950 rounded-full animate-spin" />
                       </span>
                     ) : (
                       <span className="flex items-center gap-2.5">
-                        REQUEST QUOTATION
+                        {hasProducts ? 'REQUEST ITEMISED QUOTATION' : 'SUBMIT WHOLESALE RFQ'}
                         <ArrowRight className="w-5 h-5 shrink-0" />
                       </span>
                     )}
                   </button>
 
-                  {/* Trust markers under CTA */}
-                  <div className="mt-4 flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-500 font-medium text-center">
-                    <ShieldCheck className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
-                    <span>Direct Factory Pricing • Manufactured to IATF 16949 Standards • 24h Response</span>
+                  {/* Trust markers & speed guarantee */}
+                  <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-500 font-medium text-center">
+                    <span className="inline-flex items-center gap-1.5 text-emerald-700 font-semibold bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/60">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                      ⚡ Official Quote Response: Within 24 Hours
+                    </span>
+                    <span className="hidden sm:inline">•</span>
+                    <span>Direct Factory Pricing • IATF 16949 Standards</span>
                   </div>
                 </div>
 
               </form>
-            )}
+            </>
+          )}
 
           </div>
         </div>
@@ -751,7 +757,7 @@ export default function QuoteClient() {
               </div>
               <div className="flex items-start gap-2.5">
                 <Globe className="w-4.5 h-4.5 text-amber-400 shrink-0 mt-1" />
-                <span className="text-navy-200">EXW, FOB Ningbo/Shanghai, CIF, and DDP to warehouse.</span>
+                <span className="text-navy-200">Flexible trade terms: EXW, FOB, CFR, CIF, and DDP.</span>
               </div>
             </div>
 

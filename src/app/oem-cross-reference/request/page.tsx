@@ -121,10 +121,10 @@ export default function RequestMatchPage() {
                   href="https://wa.me/85253629718"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2.5 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-3.5 sm:py-4 px-5 rounded-xl sm:rounded-2xl text-sm sm:text-base transition-colors shadow-lg shadow-emerald-900/30"
+                  className="w-full inline-flex items-center justify-center gap-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm sm:text-base font-bold py-3.5 px-4 rounded-xl transition-all shadow-sm"
                 >
                   <MessageCircle className="w-5 h-5 shrink-0" />
-                  <span>Chat on WhatsApp (+852 53629718)</span>
+                  <span>WhatsApp Desk: +852 53629718</span>
                 </a>
               </div>
             </div>

@@ -42,10 +42,10 @@ export default function BlogTabs({
 }: BlogTabsProps) {
   return (
     <div className="w-full">
-      {/* Mobile: 2-column stacked grid. Desktop: Strictly ONE straight horizontal line */}
+      {/* Mobile: 2-column stacked grid. Tablet/Desktop: Responsive wrapped pill bar without truncation */}
       <nav 
         aria-label="Blog categories"
-        className="grid grid-cols-2 gap-2 w-full sm:flex sm:flex-nowrap sm:items-center sm:justify-center sm:gap-1.5 md:gap-2 lg:gap-3 overflow-x-auto lg:overflow-visible scrollbar-none py-0.5"
+        className="grid grid-cols-2 gap-2 w-full sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-2 md:gap-2.5 lg:gap-3 py-0.5"
       >
         {BLOG_CATEGORIES.map((tab) => {
           const isActive = activeCategory === tab.id;
@@ -58,18 +58,18 @@ export default function BlogTabs({
               onClick={() => onSelectCategory(tab.id)}
               aria-pressed={isActive}
               title={tab.label}
-              className={`inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 md:px-4 lg:px-5 py-2.5 sm:py-2.5 md:py-3 rounded-xl sm:rounded-full text-[11px] sm:text-[13px] md:text-sm lg:text-[15px] min-w-0 w-full sm:w-auto transition-all duration-200 cursor-pointer select-none text-center ${
+              className={`inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 md:px-4 lg:px-5 py-2.5 sm:py-2 md:py-2.5 rounded-xl sm:rounded-full text-xs sm:text-[13px] md:text-sm lg:text-[14.5px] w-full sm:w-auto sm:shrink-0 transition-all duration-200 cursor-pointer select-none text-center ${
                 isActive
-                  ? 'bg-amber-500 text-navy-950 font-black shadow-md shadow-amber-500/25 border-0 border-transparent outline-none ring-0 scale-[1.01]'
+                  ? 'bg-amber-500 text-navy-950 font-black shadow-md shadow-amber-500/25 border border-amber-500 scale-[1.01]'
                   : 'bg-white text-slate-700 border border-slate-200 hover:border-amber-400 hover:text-navy-950 hover:bg-amber-50/40 font-bold shadow-2xs'
               }`}
             >
-              <span className="truncate min-w-0">{tab.label}</span>
+              <span className="whitespace-normal sm:whitespace-nowrap">{tab.label}</span>
 
               {typeof count === 'number' && (
                 <span
-                  className={`text-[10px] sm:text-xs font-bold shrink-0 transition-colors ${
-                    isActive ? 'text-navy-950/75' : 'text-slate-400'
+                  className={`text-[11px] sm:text-xs font-bold shrink-0 transition-colors ${
+                    isActive ? 'text-navy-950/85 font-black' : 'text-slate-400'
                   }`}
                 >
                   ({count})

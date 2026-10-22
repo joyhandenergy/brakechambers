@@ -312,7 +312,7 @@ export default function DistributorsClient() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className={`relative z-10 w-full max-w-4xl flex flex-col ${activeModal === 'login' ? 'h-auto p-4 sm:p-0' : 'h-full sm:h-auto'}`}
+              className={`relative z-10 w-full ${activeModal === 'login' || (activeModal === 'register' && isSuccess) ? 'max-w-xl' : 'max-w-4xl'} flex flex-col ${activeModal === 'login' || (activeModal === 'register' && isSuccess) ? 'h-auto p-4 sm:p-0' : 'h-full sm:h-auto'}`}
             >
               {/* LOGIN MODAL */}
               {activeModal === 'login' && (
@@ -363,55 +363,64 @@ export default function DistributorsClient() {
 
               {/* REGISTER MODAL */}
               {activeModal === 'register' && (
-                <div className="w-full h-full sm:h-auto sm:max-h-[88vh] bg-white rounded-none sm:rounded-3xl shadow-2xl border-0 sm:border border-slate-200/90 relative flex flex-col overflow-hidden">
+                <div className={`w-full ${isSuccess ? 'h-auto sm:max-h-none' : 'h-full sm:h-auto sm:max-h-[88vh]'} bg-white rounded-2xl sm:rounded-3xl shadow-2xl border-0 sm:border border-slate-200/90 relative flex flex-col overflow-hidden`}>
                   {/* Signature top accent line */}
                   <div className="h-1.5 w-full bg-gradient-to-r from-navy-900 via-amber-500 to-navy-900 shrink-0" />
 
-                  {/* Fixed Header Bar with Badges & Close Button */}
-                  <div className="shrink-0 px-4 sm:px-6 lg:px-8 pt-5 sm:pt-6 pb-4 bg-slate-50/70 border-b border-slate-200/80 relative z-10 pr-14 sm:pr-16">
-                    <button 
-                      onClick={() => closeModal()}
-                      className="absolute top-4 sm:top-5 right-4 sm:right-5 w-8 h-8 bg-navy-900 hover:bg-navy-800 text-white shadow-md rounded-full flex items-center justify-center transition-transform hover:scale-105 z-20 cursor-pointer"
-                      aria-label="Close modal"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                    
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs sm:text-sm font-bold uppercase tracking-wider">
-                        <Globe className="w-4 h-4 text-amber-600" />
-                        Distributor Program
-                      </span>
-                    </div>
+                  {isSuccess ? (
+                    <div className="relative p-6 sm:p-10 text-center flex flex-col items-center">
+                      <button 
+                        onClick={() => closeModal()}
+                        className="absolute top-4 sm:top-5 right-4 sm:right-5 w-8 h-8 bg-slate-100 hover:bg-slate-200 text-slate-700 shadow-sm rounded-full flex items-center justify-center transition-all cursor-pointer"
+                        aria-label="Close modal"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
 
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy-900 tracking-tight leading-tight">
-                      Become an Authorized BRC Distributor
-                    </h2>
-                    <p className="text-slate-600 text-sm sm:text-base mt-2 max-w-2xl font-normal leading-relaxed">
-                      Join our international distribution network. Gain direct factory pricing, territory protection, priority manufacturing, and dedicated engineering support.
-                    </p>
-                  </div>
-
-                  {/* Scrollable Body */}
-                  <div className="modal-scroll flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
-                    {isSuccess ? (
-                      <div className="text-center py-10 px-4">
-                        <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-5 shadow-sm border border-emerald-100">
-                          <CheckCircle className="w-9 h-9 text-emerald-500" />
-                        </div>
-                        <h3 className="text-2xl sm:text-3xl font-extrabold text-navy-900 mb-2">Application Received!</h3>
-                        <p className="text-slate-600 text-sm sm:text-base max-w-md mx-auto mb-6 leading-relaxed">
-                          Thank you for your interest in becoming a BRC partner. Our distributor success team will review your application and contact you within 2-3 business days.
-                        </p>
-                        <button 
-                          onClick={closeModal}
-                          className="bg-navy-900 hover:bg-navy-800 text-white font-bold text-sm sm:text-base px-6 py-3 rounded-xl transition-all shadow-md hover:shadow-lg cursor-pointer"
-                        >
-                          Return to Distributors
-                        </button>
+                      <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-5 shadow-sm border border-emerald-100 mt-2">
+                        <CheckCircle className="w-9 h-9 text-emerald-500" />
                       </div>
-                    ) : (
-                      <form className="space-y-5 sm:space-y-6" onSubmit={handleRegisterSubmit} noValidate>
+                      <h3 className="text-2xl sm:text-3xl font-extrabold text-navy-900 mb-2">Application Received!</h3>
+                      <p className="text-slate-600 text-sm sm:text-base max-w-md mx-auto mb-6 leading-relaxed">
+                        Thank you for your interest in becoming a BRC partner. Our distributor success team will review your application and contact you within 2-3 business days.
+                      </p>
+                      <button 
+                        onClick={closeModal}
+                        className="bg-navy-900 hover:bg-navy-800 text-white font-bold text-sm sm:text-base px-6 py-3 rounded-xl transition-all shadow-md hover:shadow-lg cursor-pointer"
+                      >
+                        Return to Distributors
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Fixed Header Bar with Badges & Close Button */}
+                      <div className="shrink-0 px-4 sm:px-6 lg:px-8 pt-5 sm:pt-6 pb-4 bg-slate-50/70 border-b border-slate-200/80 relative z-10 pr-14 sm:pr-16">
+                        <button 
+                          onClick={() => closeModal()}
+                          className="absolute top-4 sm:top-5 right-4 sm:right-5 w-8 h-8 bg-navy-900 hover:bg-navy-800 text-white shadow-md rounded-full flex items-center justify-center transition-transform hover:scale-105 z-20 cursor-pointer"
+                          aria-label="Close modal"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                        
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs sm:text-sm font-bold uppercase tracking-wider">
+                            <Globe className="w-4 h-4 text-amber-600" />
+                            Distributor Program
+                          </span>
+                        </div>
+
+                        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy-900 tracking-tight leading-tight">
+                          Become an Authorized BRC Distributor
+                        </h2>
+                        <p className="text-slate-600 text-sm sm:text-base mt-2 max-w-2xl font-normal leading-relaxed">
+                          Join our international distribution network. Gain direct factory pricing, territory protection, priority manufacturing, and dedicated engineering support.
+                        </p>
+                      </div>
+
+                      {/* Scrollable Body */}
+                      <div className="modal-scroll flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
+                        <form className="space-y-5 sm:space-y-6" onSubmit={handleRegisterSubmit} noValidate>
                         {serverError && (
                           <div className="p-3.5 bg-rose-50/70 border border-rose-200 text-rose-800 rounded-xl text-sm flex items-start gap-2.5">
                             <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
@@ -669,10 +678,11 @@ export default function DistributorsClient() {
                           </div>
                         </div>
                       </form>
-                    )}
-                  </div>
-                </div>
-              )}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
             </motion.div>
           </div>
         )}

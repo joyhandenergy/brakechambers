@@ -1,12 +1,59 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, after } from 'next/server';
 import nodemailer from 'nodemailer';
 import { EMAIL_REGEX } from '@/lib/validation';
 
+// In-memory sliding-window rate limiter (cleans up automatically)
+const rateLimitMap = new Map<string, { count: number; expiresAt: number }>();
+
+function isRateLimited(identifier: string, limit = 6, windowMs = 10 * 60 * 1000): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(identifier);
+
+  if (record && now > record.expiresAt) {
+    rateLimitMap.delete(identifier);
+  }
+
+  const current = rateLimitMap.get(identifier);
+  if (!current) {
+    rateLimitMap.set(identifier, { count: 1, expiresAt: now + windowMs });
+    return false;
+  }
+
+  if (current.count >= limit) {
+    return true;
+  }
+
+  current.count++;
+  return false;
+}
+
 export async function POST(request: Request) {
+  let activePass = '';
   try {
     const data = await request.json();
 
-    // Basic server-side sanity checks
+    // 1. Anti-spam Honeypot: Automated spambots fill in hidden fields
+    if (data._honeypot || data.website_url || data.fax) {
+      console.warn('[SPAM BOT BLOCKED] Honeypot field triggered.');
+      // Return 200 silently so bots believe they succeeded and stop retrying
+      return NextResponse.json({ message: 'Inquiry received', success: true });
+    }
+
+    // 2. Cloudflare & Proxy IP Rate Limiting (Max 6 requests per 10 mins per IP)
+    const clientIp =
+      request.headers.get('cf-connecting-ip') ||
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      'anonymous';
+
+    if (clientIp !== 'anonymous' && isRateLimited(clientIp, 6, 10 * 60 * 1000)) {
+      console.warn(`[RATE LIMIT EXCEEDED] IP: ${clientIp}`);
+      return NextResponse.json(
+        { error: 'Too many submissions from this connection. Please wait 10 minutes or contact our WhatsApp desk directly.' },
+        { status: 429 }
+      );
+    }
+
+    // 3. Basic server-side sanity checks
     const source = data.source || 'Website Lead';
     const clientEmail = (data.email || '').trim();
     const clientName = (data.fullName || data.name || data.contactName || '').trim();
@@ -23,7 +70,8 @@ export async function POST(request: Request) {
     const port = Number(process.env.SMTP_PORT) || 465;
     const secure = process.env.SMTP_SECURE !== 'false';
     const user = process.env.SMTP_USER || 'sales@brakechambers.com';
-    const pass = (process.env.SMTP_PASS || '').trim();
+    activePass = (process.env.SMTP_PASS || '').trim();
+    const pass = activePass;
     
     // Support multiple comma-separated inboxes (sales@brakechambers.com, brcbrakechambers@gmail.com)
     const rawRecipients = process.env.SALES_EMAIL || 'sales@brakechambers.com, brcbrakechambers@gmail.com';
@@ -38,7 +86,7 @@ export async function POST(request: Request) {
 
     // Format all submitted fields into a clean HTML table (excluding complex objects)
     const detailRows = Object.entries(data)
-      .filter(([key, val]) => !['source', 'items', 'products', 'productImages'].includes(key) && val !== undefined && val !== '')
+      .filter(([key, val]) => !['source', 'items', 'products', 'productImages', 'attachment'].includes(key) && val !== undefined && val !== '')
       .map(([key, val]) => {
         const formattedKey = key
           .replace(/([A-Z])/g, ' $1')
@@ -51,6 +99,37 @@ export async function POST(request: Request) {
         `;
       })
       .join('');
+
+    // Handle any uploaded file/photo attachments
+    const emailAttachments: Array<{ filename: string; content: Buffer; contentType?: string }> = [];
+    let attachmentHtml = '';
+
+    if (data.attachment && typeof data.attachment === 'object' && data.attachment.data) {
+      try {
+        const fileBuffer = Buffer.from(data.attachment.data, 'base64');
+        const filename = data.attachment.filename || 'customer-brake-chamber-photo.jpg';
+        const contentType = data.attachment.contentType || 'image/jpeg';
+        
+        emailAttachments.push({
+          filename,
+          content: fileBuffer,
+          contentType,
+        });
+
+        attachmentHtml = `
+          <div style="margin-top: 20px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 14px 18px;">
+            <div style="font-weight: 700; color: #065f46; font-size: 14px; margin-bottom: 4px;">
+              📎 Customer Photo / Specification File Attached: ${filename}
+            </div>
+            <div style="font-size: 13px; color: #047857;">
+              The original file is attached to this email. You can preview or download it directly to inspect the data tag, casting stamps, or port layout.
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        console.error('Failed to parse attachment buffer', err);
+      }
+    }
 
     // Format products / items with images if quote request
     let itemsHtml = '';
@@ -143,6 +222,8 @@ export async function POST(request: Request) {
               ${detailRows}
             </table>
 
+            ${attachmentHtml}
+
             ${itemsHtml}
 
             <!-- Quick Reply CTA -->
@@ -169,27 +250,42 @@ export async function POST(request: Request) {
     const subjectLead = company || clientName || clientEmail;
     const emailSubject = `[${subjectPrefix}] New Inquiry from ${subjectLead}`;
 
-    // If SMTP_PASS is configured, send the real email via 163 Enterprise Mail
+    // If SMTP_PASS is configured, dispatch the email asynchronously via 163 Enterprise Mail
     if (pass) {
-      const transporter = nodemailer.createTransport({
-        host,
-        port,
-        secure, // true for port 465
-        auth: {
-          user,
-          pass,
-        },
-      });
+      after(async () => {
+        try {
+          const transporter = nodemailer.createTransport({
+            host,
+            port,
+            secure, // true for port 465
+            auth: {
+              user,
+              pass,
+            },
+          });
 
-      await transporter.sendMail({
-        from: `"BRC Website Lead" <${user}>`,
-        to: recipients,
-        replyTo: clientEmail,
-        subject: emailSubject,
-        html: htmlContent,
-      });
+          await transporter.sendMail({
+            from: `"BRC Website Lead" <${user}>`,
+            to: recipients,
+            replyTo: clientEmail,
+            subject: emailSubject,
+            html: htmlContent,
+            attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
+          });
 
-      console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${host}:${port}`);
+          console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${host}:${port} (${emailAttachments.length} attachments)`);
+        } catch (smtpError: any) {
+          console.error('--- [SMTP SEND FAILURE IN BACKGROUND] ---');
+          console.error('Error:', smtpError?.message || smtpError);
+          console.error('Lead details preserved in server log:', JSON.stringify(data, null, 2));
+          if (String(smtpError?.message).includes('ERR.LOGIN.REQCODE')) {
+            console.error(
+              'CRITICAL NOTE: NetEase 163 Enterprise Mail requires an "App Authorization Code" (客户端专用授权码) rather than the web password.'
+            );
+          }
+          console.error('-----------------------------------------');
+        }
+      });
     } else {
       // In development or if password is not set yet in .env.local
       console.log('--- [DEV MODE] NEW LEAD RECEIVED (SMTP_PASS not yet set) ---');
@@ -205,8 +301,13 @@ export async function POST(request: Request) {
     );
   } catch (error: any) {
     console.error('Error processing lead submission:', error);
+    const isReqCodeError = String(error?.message).includes('ERR.LOGIN.REQCODE');
+    const userMessage = isReqCodeError
+      ? 'Email server authorization required: NetEase Enterprise Mail requires a 16-character Client Authorization Code rather than the web password.'
+      : (error?.message || 'Failed to submit inquiry. Please try again or email us directly at sales@brakechambers.com');
+
     return NextResponse.json(
-      { error: error?.message || 'Failed to submit inquiry. Please try again or email us directly at sales@brakechambers.com' },
+      { error: userMessage },
       { status: 500 }
     );
   }

@@ -1,9 +1,86 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { User, Building, Mail, Phone, Camera, ArrowRight, CheckCircle, AlertCircle, FileText, X, Cpu, ShieldCheck } from 'lucide-react';
 import { validateEmail, validatePhone, validateRequired } from '@/lib/validation';
+
+async function processFileAttachment(file: File): Promise<{ filename: string; contentType: string; data: string; sizeKb: string }> {
+  // If it's an image, scale and compress for fast, lightweight email delivery
+  if (file.type.startsWith('image/')) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 2000;
+          let width = img.width;
+          let height = img.height;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+            const dataUrl = canvas.toDataURL(mimeType, 0.85);
+            const base64 = dataUrl.split(',')[1] || '';
+            resolve({
+              filename: file.name,
+              contentType: mimeType,
+              data: base64,
+              sizeKb: `${Math.round((base64.length * 0.75) / 1024)} KB`
+            });
+            return;
+          }
+          const rawResult = (e.target?.result as string) || '';
+          resolve({
+            filename: file.name,
+            contentType: file.type || 'image/jpeg',
+            data: rawResult.split(',')[1] || '',
+            sizeKb: `${(file.size / 1024).toFixed(1)} KB`
+          });
+        };
+        img.onerror = () => {
+          const rawResult = (e.target?.result as string) || '';
+          resolve({
+            filename: file.name,
+            contentType: file.type || 'image/jpeg',
+            data: rawResult.split(',')[1] || '',
+            sizeKb: `${(file.size / 1024).toFixed(1)} KB`
+          });
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Non-image file (e.g. PDF)
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve({
+        filename: file.name,
+        contentType: file.type || 'application/pdf',
+        data: result.split(',')[1] || '',
+        sizeKb: `${(file.size / 1024).toFixed(1)} KB`
+      });
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 export default function RequestForm() {
   const searchParams = useSearchParams();
@@ -13,6 +90,23 @@ export default function RequestForm() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const successRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (isSuccess && successRef.current) {
+      const timer = setTimeout(() => {
+        if (successRef.current) {
+          const navHeight = window.innerWidth >= 1024 ? 130 : 85;
+          const targetY = successRef.current.getBoundingClientRect().top + window.pageYOffset - navHeight - 16;
+          window.scrollTo({
+            top: Math.max(0, targetY),
+            behavior: 'smooth'
+          });
+        }
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -95,8 +189,15 @@ export default function RequestForm() {
       };
 
       if (selectedFile) {
+        if (selectedFile.size > 8 * 1024 * 1024) {
+          setServerError('Selected file is too large (> 8MB). Please choose a compressed photo or PDF under 8MB.');
+          setIsSubmitting(false);
+          return;
+        }
+        const attachment = await processFileAttachment(selectedFile);
+        payload.attachment = attachment;
         payload.attachedFileName = selectedFile.name;
-        payload.attachedFileSize = `${(selectedFile.size / 1024).toFixed(1)} KB`;
+        payload.attachedFileSize = attachment.sizeKb;
       }
 
       const res = await fetch('/api/contact', {
@@ -119,7 +220,7 @@ export default function RequestForm() {
 
   if (isSuccess) {
     return (
-      <div className="-mx-4 sm:mx-0 bg-white rounded-none sm:rounded-3xl shadow-[0_12px_36px_rgba(10,25,41,0.06)] border-y sm:border border-slate-200/90 overflow-hidden relative">
+      <div ref={successRef} className="-mx-4 sm:mx-0 bg-white rounded-none sm:rounded-3xl shadow-[0_12px_36px_rgba(10,25,41,0.06)] border-y sm:border border-slate-200/90 overflow-hidden relative">
         <div className="h-1.5 w-full bg-gradient-to-r from-navy-900 via-amber-500 to-navy-900" />
         <div className="text-center py-16 px-6 sm:px-10">
           <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-emerald-100">
