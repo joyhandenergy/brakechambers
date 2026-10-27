@@ -49,8 +49,8 @@ export const allBlogPostsQuery = groq`*[_type == "post"] | order(publishedAt des
   "publishDate": publishedAt,
   readTime,
   excerpt,
-  "imageUrl": coalesce(mainImage.asset->url, imageUrl, "/images/pageheaders/brc_blog.jpg"),
-  "featuredImageUrl": coalesce(mainImage.asset->url, imageUrl, "/images/pageheaders/brc_blog.jpg"),
+  "imageUrl": coalesce(imageUrl, mainImage.asset->url, "/images/pageheaders/brc_blog.jpg"),
+  "featuredImageUrl": coalesce(imageUrl, mainImage.asset->url, "/images/pageheaders/brc_blog.jpg"),
   body,
   "content": contentHtml,
   "metaTitle": seo.metaTitle,
@@ -65,8 +65,8 @@ export const singleBlogPostQuery = groq`*[_type == "post" && (slug.current == $s
   "publishDate": publishedAt,
   readTime,
   excerpt,
-  "imageUrl": coalesce(mainImage.asset->url, imageUrl, "/images/pageheaders/brc_blog.jpg"),
-  "featuredImageUrl": coalesce(mainImage.asset->url, imageUrl, "/images/pageheaders/brc_blog.jpg"),
+  "imageUrl": coalesce(imageUrl, mainImage.asset->url, "/images/pageheaders/brc_blog.jpg"),
+  "featuredImageUrl": coalesce(imageUrl, mainImage.asset->url, "/images/pageheaders/brc_blog.jpg"),
   body,
   "content": contentHtml,
   "metaTitle": seo.metaTitle,
@@ -105,14 +105,6 @@ function sanitizeChinese<T>(data: T): T {
   return data;
 }
 
-export function withWatermark(url?: string): string {
-  if (!url || typeof url !== 'string') return url || '';
-  if (url.includes('cdn.sanity.io')) {
-    return `/api/watermark?url=${encodeURIComponent(url)}`;
-  }
-  return url;
-}
-
 import { BRAKE_CHAMBERS } from '@/lib/data';
 
 export async function getProducts(): Promise<BrakeChamber[]> {
@@ -130,12 +122,9 @@ export async function getProducts(): Promise<BrakeChamber[]> {
           return url;
         });
 
-        // If images are uploaded in Sanity Studio, put them first and route through the watermark processor
-        const rawUploaded = p.uploadedImages || [];
-        const watermarkedUploaded = rawUploaded.map((url: string) => withWatermark(url));
-
-        const galleryUrls = watermarkedUploaded.length > 0
-          ? [...watermarkedUploaded, ...normalizedGallery]
+        // If images are uploaded in Sanity Studio, put them first
+        const galleryUrls = p.uploadedImages && p.uploadedImages.length > 0
+          ? [...p.uploadedImages, ...normalizedGallery]
           : (normalizedGallery.length > 0 ? normalizedGallery : ['/productsImage/brc-t16-single-brake-1.jpg']);
 
         const fallbackChamber = BRAKE_CHAMBERS.find(b => b.slug === p.slug);
@@ -188,26 +177,22 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
   try {
     const sanityPosts = await client.fetch(allBlogPostsQuery, {}, { next: { revalidate: 60 } });
     if (sanityPosts && sanityPosts.length > 0) {
-      return sanityPosts.map((p: any) => {
-        const rawImg = p.featuredImageUrl || p.imageUrl || '/images/pageheaders/brc_blog.jpg';
-        const watermarkedImg = withWatermark(rawImg);
-        return {
-          slug: p.slug,
-          title: p.title,
-          excerpt: p.excerpt || '',
-          body: p.body || null,
-          content: p.content || '',
-          featuredImageUrl: watermarkedImg,
-          imageUrl: watermarkedImg,
-          publishDate: p.publishDate || p.publishedAt || '',
-          date: p.publishDate || p.publishedAt || '',
-          category: resolveBlogCategory(p.category, p.slug),
-          readTime: p.readTime || '5 min read',
-          metaTitle: p.metaTitle,
-          metaDescription: p.metaDescription,
-          tags: p.tags || [],
-        };
-      });
+      return sanityPosts.map((p: any) => ({
+        slug: p.slug,
+        title: p.title,
+        excerpt: p.excerpt || '',
+        body: p.body || null,
+        content: p.content || '',
+        featuredImageUrl: p.featuredImageUrl || p.imageUrl || '/images/pageheaders/brc_blog.jpg',
+        imageUrl: p.imageUrl || p.featuredImageUrl || '/images/pageheaders/brc_blog.jpg',
+        publishDate: p.publishDate || p.publishedAt || '',
+        date: p.publishDate || p.publishedAt || '',
+        category: resolveBlogCategory(p.category, p.slug),
+        readTime: p.readTime || '5 min read',
+        metaTitle: p.metaTitle,
+        metaDescription: p.metaDescription,
+        tags: p.tags || [],
+      }));
     }
   } catch (err) {
     console.error('Failed to fetch blog posts from Sanity, using fallback:', err);
@@ -236,16 +221,14 @@ export async function getBlogPostBySlug(slug: string, canonicalSlug?: string): P
   try {
     const post = await client.fetch(singleBlogPostQuery, { slug, canonicalSlug: cSlug }, { next: { revalidate: 60 } });
     if (post) {
-      const rawImg = post.featuredImageUrl || post.imageUrl || '/images/pageheaders/brc_blog.jpg';
-      const watermarkedImg = withWatermark(rawImg);
       return {
         slug: post.slug,
         title: post.title,
         excerpt: post.excerpt || '',
         body: post.body || null,
         content: post.content || '',
-        featuredImageUrl: watermarkedImg,
-        imageUrl: watermarkedImg,
+        featuredImageUrl: post.featuredImageUrl || post.imageUrl || '/images/pageheaders/brc_blog.jpg',
+        imageUrl: post.imageUrl || post.featuredImageUrl || '/images/pageheaders/brc_blog.jpg',
         publishDate: post.publishDate || post.publishedAt || '',
         date: post.publishDate || post.publishedAt || '',
         category: resolveBlogCategory(post.category, post.slug),
