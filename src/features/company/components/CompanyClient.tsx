@@ -147,8 +147,8 @@ export default function CompanyClient() {
 
             {/* Leadership Header */}
             <div className="text-center max-w-3xl mx-auto pt-10 border-t border-slate-200">
-              <h3 className="text-3xl font-black text-navy-900 mb-4 tracking-tight">Leadership Team</h3>
-              <p className="text-slate-600 text-[15px] md:text-base leading-[1.6] font-normal">Driven by experts in commercial vehicle braking systems, metallurgy, and lean manufacturing.</p>
+              <h3 className="text-3xl font-black text-navy-900 mb-4 tracking-tight">Leadership &amp; Core Team</h3>
+              <p className="text-slate-600 text-[15px] md:text-base leading-[1.6] font-normal">Driven by experts in commercial vehicle braking systems, precision manufacturing, quality control, and global customer support.</p>
             </div>
 
             {/* Leadership Cards */}
@@ -173,10 +173,34 @@ export default function CompanyClient() {
                   img: '/images/company/brc-mr-xu-aluminum-die-casting-master.jpg'
                 },
                 {
-                  name: 'Junlin',
+                  name: 'Joy',
+                  role: 'QC & Components Expert',
+                  bio: 'Oversees incoming component inspection and end-of-line testing, ensuring every diaphragm, spring, and housing meets BRC quality benchmarks.',
+                  img: '/images/company/brc--joy-qc-and-component-expert.jpg'
+                },
+                {
+                  name: 'Chowdhury',
+                  role: 'Sales Manager',
+                  bio: 'Drives BRC’s international sales strategy, building long-term partnerships with distributors and importers across global markets.',
+                  img: '/images/company/brc-chowdhury-sales-manager.jpg'
+                },
+                {
+                  name: 'Osita',
+                  role: 'Digital Marketing Manager',
+                  bio: 'Leads BRC’s global digital presence, connecting fleet operators and distributors with the right brake solutions online.',
+                  img: '/images/company/brc-osita-digital%20marketer.jpg'
+                },
+                {
+                  name: 'Joe',
                   role: 'IT Engineer',
                   bio: 'Leads digital infrastructure and facility automation, keeping BRC at the cutting edge of modern industrial tech.',
-                  img: '/images/company/brc--junlin-it-engineer.jpg'
+                  img: '/images/company/brc-joe-it-engineer.jpg'
+                },
+                {
+                  name: 'Joey',
+                  role: 'Sales Representative',
+                  bio: 'Supports distributors and fleet buyers worldwide with fast quotations, OEM cross-references, and responsive order follow-up.',
+                  img: '/images/company/brc--joey-sales-representative.jpg'
                 }
               ].map((leader, idx) => (
                 <motion.div
@@ -188,7 +212,7 @@ export default function CompanyClient() {
                   className="bg-white rounded-[1.5rem] p-3 sm:p-4 border border-slate-100 shadow-sm hover:shadow-xl transition-all hover:border-amber-500 hover:-translate-y-1 text-center flex flex-col items-center group h-full justify-start"
                 >
                   <div className="w-full aspect-square mx-auto bg-slate-200 rounded-xl mb-4 sm:mb-5 overflow-hidden relative shadow-inner shrink-0">
-                    <img src={leader.img} alt={leader.name} className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
+                    <img src={leader.img} alt={`${leader.name}, ${leader.role} at BRC Brake Chambers`} className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105" />
                   </div>
                   <div className="px-2 pb-2">
                     <h3 className="text-lg font-bold text-navy-900 mb-1">{leader.name}</h3>

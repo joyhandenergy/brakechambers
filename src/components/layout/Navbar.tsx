@@ -183,16 +183,18 @@ export default function Navbar() {
             {/* Right side controls */}
             <div className="flex items-center gap-2.5 md:gap-4 flex-shrink-0">
 
-              {/* Cart Button */}
+              {/* Cart / Request Quote Button */}
               <Link
                 href={`/quote`}
-                aria-label={`Request Quote${mounted && cartCount > 0 ? ` (${cartCount} items)` : ''}`}
-                className={`${mounted && cartCount > 0 ? 'flex' : 'hidden'} lg:flex relative items-center justify-center md:px-5 md:py-2.5 w-10 h-10 md:w-auto md:h-auto md:bg-navy-900 md:hover:bg-navy-800 text-navy-950 md:text-white rounded-full font-black transition-all md:shadow-lg group md:gap-2.5`}
+                aria-label={`Get Quote${mounted && cartCount > 0 ? ` (${cartCount} items)` : ''}`}
+                className={`${mounted && cartCount > 0 ? 'flex' : 'hidden'} md:flex relative items-center justify-center w-11 h-11 md:w-auto md:h-auto md:px-5 md:py-3 lg:px-6 lg:py-3.5 xl:px-7 xl:py-3.5 bg-navy-950 hover:bg-navy-900 text-white rounded-full font-black transition-all duration-200 shadow-md hover:shadow-xl hover:scale-105 active:scale-95 group gap-2 md:gap-2.5 lg:gap-3 flex-shrink-0`}
               >
-                <ShoppingBag className="h-6 w-6 md:h-5 md:w-5" aria-hidden="true" />
-                <span className="hidden md:inline text-[12px] uppercase tracking-widest">Request Quote</span>
+                <ShoppingBag className="w-5 h-5 shrink-0" aria-hidden="true" />
+                <span className="hidden md:inline text-xs lg:text-[13px] xl:text-sm font-black uppercase tracking-wider whitespace-nowrap">
+                  Get Quote
+                </span>
                 {mounted && cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 md:-top-1.5 md:-right-1.5 bg-navy-950 md:bg-white text-white md:text-navy-950 text-[10px] font-extrabold w-4 h-4 md:w-5 md:h-5 rounded-full flex items-center justify-center shadow-sm md:border-2 md:border-navy-950">
+                  <span className="absolute -top-1 -right-1 md:-top-1.5 md:-right-1.5 bg-white text-navy-950 text-[10px] md:text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md border-2 border-navy-950">
                     {cartCount}
                   </span>
                 )}

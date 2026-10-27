@@ -112,7 +112,7 @@ export default function MobileMenu({
 
                 <div className="mt-6 flex flex-col gap-3">
                   <Link href={`/quote`} onClick={() => setTimeout(() => setIsOpen(false), 150)} className={`p-4 font-extrabold rounded-xl transition-colors flex items-center justify-center gap-2 bg-amber-500 text-navy-950 hover:bg-amber-400 text-[13px] uppercase tracking-widest shadow-lg shadow-amber-500/20`}>
-                    <ShoppingBag className="w-4 h-4" /> Request Quote {mounted && cartCount > 0 && <span className="bg-navy-950 text-white text-xs px-2 py-0.5 rounded-full ml-1">{cartCount}</span>}
+                    <ShoppingBag className="w-4 h-4" /> Get Quote {mounted && cartCount > 0 && <span className="bg-navy-950 text-white text-xs px-2 py-0.5 rounded-full ml-1">{cartCount}</span>}
                   </Link>
                   <Link href={`/distributors`} onClick={() => setTimeout(() => setIsOpen(false), 150)} className={`p-4 font-extrabold rounded-xl transition-colors flex items-center justify-center gap-2 bg-navy-900 text-white hover:bg-navy-800 text-[13px] uppercase tracking-widest border border-navy-700`}>
                     <User className="w-4 h-4" /> Distributors
