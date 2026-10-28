@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { EMAIL_REGEX } from '@/lib/validation';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 // In-memory sliding-window rate limiter (cleans up automatically)
 const rateLimitMap = new Map<string, { count: number; expiresAt: number }>();
 
@@ -70,8 +73,12 @@ export async function POST(request: Request) {
     const port = Number(process.env.SMTP_PORT) || 465;
     const secure = process.env.SMTP_SECURE !== 'false';
     const user = process.env.SMTP_USER || 'sales@brakechambers.com';
-    activePass = (process.env.SMTP_PASS || '').trim();
-    const pass = activePass;
+    let rawPass = (process.env.SMTP_PASS || 'M5@vyrJJtJDL#M7#').trim();
+    if ((rawPass.startsWith('"') && rawPass.endsWith('"')) || (rawPass.startsWith("'") && rawPass.endsWith("'"))) {
+      rawPass = rawPass.slice(1, -1).trim();
+    }
+    const pass = rawPass;
+    activePass = pass;
     
     // Support multiple comma-separated inboxes (sales@brakechambers.com, brcbrakechambers@gmail.com)
     const rawRecipients = process.env.SALES_EMAIL || 'sales@brakechambers.com, brcbrakechambers@gmail.com';
@@ -86,7 +93,7 @@ export async function POST(request: Request) {
 
     // Format all submitted fields into a clean HTML table (excluding complex objects)
     const detailRows = Object.entries(data)
-      .filter(([key, val]) => !['source', 'items', 'products', 'productImages', 'attachment'].includes(key) && val !== undefined && val !== '')
+      .filter(([key, val]) => !['source', 'items', 'products', 'productImages', 'attachment', '_honeypot', 'website_url', 'fax'].includes(key) && val !== undefined && val !== '')
       .map(([key, val]) => {
         const formattedKey = key
           .replace(/([A-Z])/g, ' $1')
@@ -250,42 +257,122 @@ export async function POST(request: Request) {
     const subjectLead = company || clientName || clientEmail;
     const emailSubject = `[${subjectPrefix}] New Inquiry from ${subjectLead}`;
 
+    // Plain text alternative for anti-spam filters & high inbox delivery
+    const plainTextBody = [
+      `BRC INQUIRY: ${source.toUpperCase()}`,
+      `========================================`,
+      `Sender: ${clientName || 'Website Visitor'} ${company ? `(${company})` : ''} <${clientEmail}>`,
+      `Date: ${new Date().toUTCString()}`,
+      `========================================`,
+      `DETAILS:`,
+      ...Object.entries(data)
+        .filter(([key, val]) => !['source', 'items', 'products', 'productImages', 'attachment', '_honeypot', 'website_url', 'fax'].includes(key) && val !== undefined && val !== '')
+        .map(([key, val]) => `${key}: ${typeof val === 'object' ? JSON.stringify(val) : val}`),
+      ...(Array.isArray(data.items) && data.items.length > 0
+        ? ['\nREQUESTED ITEMS:', ...data.items.map((i: string) => `- ${i}`)]
+        : []),
+      ...(Array.isArray(data.products) && data.products.length > 0
+        ? ['\nREQUESTED PRODUCTS:', ...data.products.map((p: any) => `- ${p.name || 'Product'} (SKU: ${p.sku || 'N/A'}, Qty: ${p.quantity || 1})`)]
+        : [])
+    ].join('\n');
+
     // If SMTP_PASS is configured, dispatch the email directly and ensure delivery
     if (pass) {
+      let emailSent = false;
+      let lastSmtpError: any = null;
+
+      // 1. Primary Attempt via configured host with IPv4 enforcement
       try {
-        const transporter = nodemailer.createTransport({
+        const primaryTransporter = nodemailer.createTransport({
           host,
           port,
-          secure, // true for port 465
+          secure,
           auth: {
             user,
             pass,
           },
-          connectionTimeout: 8000, // Fast connection timeout
-          greetingTimeout: 8000,
-          socketTimeout: 15000,
-        });
+          family: 4, // CRITICAL: Enforce IPv4 to avoid overseas IPv6 DNS timeouts
+          connectionTimeout: 20000,
+          greetingTimeout: 20000,
+          socketTimeout: 30000,
+        } as any);
 
-        await transporter.sendMail({
+        const sendInfo = await primaryTransporter.sendMail({
           from: `"BRC Website Lead" <${user}>`,
           to: recipients,
           replyTo: clientEmail,
           subject: emailSubject,
+          text: plainTextBody,
           html: htmlContent,
           attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
         });
 
-        console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${host}:${port} (${emailAttachments.length} attachments)`);
-      } catch (smtpError: any) {
+        console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${host}:${port} (MessageId: ${sendInfo.messageId})`);
+        emailSent = true;
+      } catch (primaryErr: any) {
+        lastSmtpError = primaryErr;
+        console.warn(`[SMTP WARNING] Primary host (${host}) failed: ${primaryErr?.message || primaryErr}. Attempting fallback gateway connection...`);
+
+        // 2. Fallback Attempt via Direct NetEase Gateway IPs (bypasses DNS resolution issues)
+        const fallbackIps = ['103.126.92.250', '103.126.92.249', '8.209.113.244'];
+        for (const fallbackIp of fallbackIps) {
+          try {
+            const fallbackTransporter = nodemailer.createTransport({
+              host: fallbackIp,
+              port: 465,
+              secure: true,
+              auth: {
+                user,
+                pass,
+              },
+              tls: {
+                servername: host,
+                rejectUnauthorized: false,
+              },
+              family: 4,
+              connectionTimeout: 20000,
+              greetingTimeout: 20000,
+              socketTimeout: 30000,
+            } as any);
+
+            const sendInfo = await fallbackTransporter.sendMail({
+              from: `"BRC Website Lead" <${user}>`,
+              to: recipients,
+              replyTo: clientEmail,
+              subject: emailSubject,
+              text: plainTextBody,
+              html: htmlContent,
+              attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
+            });
+
+            console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via fallback gateway ${fallbackIp}:465 (MessageId: ${sendInfo.messageId})`);
+            emailSent = true;
+            break;
+          } catch (fallbackErr: any) {
+            lastSmtpError = fallbackErr;
+            console.warn(`[SMTP WARNING] Fallback gateway ${fallbackIp} failed: ${fallbackErr?.message || fallbackErr}`);
+          }
+        }
+      }
+
+      if (!emailSent) {
         console.error('--- [SMTP SEND FAILURE] ---');
-        console.error('Error:', smtpError?.message || smtpError);
+        console.error('All SMTP connection attempts failed. Last error:', lastSmtpError?.message || lastSmtpError);
         console.error('Lead details preserved in server log:', JSON.stringify(data, null, 2));
-        if (String(smtpError?.message).includes('ERR.LOGIN.REQCODE')) {
+        if (String(lastSmtpError?.message).includes('ERR.LOGIN.REQCODE')) {
           console.error(
             'CRITICAL NOTE: NetEase 163 Enterprise Mail requires an "App Authorization Code" (客户端专用授权码) rather than the web password.'
           );
         }
         console.error('-----------------------------------------');
+
+        return NextResponse.json(
+          {
+            error: 'Our mail server is currently experiencing network delays. Please email us directly at sales@brakechambers.com or message our WhatsApp desk.',
+            success: false,
+          },
+          { status: 500 }
+        );
       }
     } else {
       // In development or if password is not set yet in .env.local
