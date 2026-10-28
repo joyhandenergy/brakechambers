@@ -281,77 +281,48 @@ export async function POST(request: Request) {
       let emailSent = false;
       let lastSmtpError: any = null;
 
-      // 1. Primary Attempt via configured host with IPv4 enforcement
-      try {
-        const primaryTransporter = nodemailer.createTransport({
-          host,
-          port,
-          secure,
-          auth: {
-            user,
-            pass,
-          },
-          family: 4, // CRITICAL: Enforce IPv4 to avoid overseas IPv6 DNS timeouts
-          connectionTimeout: 20000,
-          greetingTimeout: 20000,
-          socketTimeout: 30000,
-        } as any);
+      // NetEase Enterprise Mail Gateways (Direct IPs avoid the 30s IPv6 DNS lookup hang on overseas networks)
+      const smtpTargets = [
+        { host: '103.126.92.250', servername: host }, // Official NetEase HK/Overseas Gateway 1 (Fastest)
+        { host: '103.126.92.249', servername: host }, // Official NetEase HK/Overseas Gateway 2
+        { host, servername: host },                   // Standard Hostname Fallback
+      ];
 
-        const sendInfo = await primaryTransporter.sendMail({
-          from: `"BRC Website Lead" <${user}>`,
-          to: recipients,
-          replyTo: clientEmail,
-          subject: emailSubject,
-          text: plainTextBody,
-          html: htmlContent,
-          attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
-        });
+      for (const target of smtpTargets) {
+        try {
+          const transporter = nodemailer.createTransport({
+            host: target.host,
+            port,
+            secure,
+            tls: {
+              servername: target.servername,
+              rejectUnauthorized: false,
+            },
+            auth: {
+              user,
+              pass,
+            },
+            connectionTimeout: 8000,
+            greetingTimeout: 8000,
+            socketTimeout: 12000,
+          } as any);
 
-        console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${host}:${port} (MessageId: ${sendInfo.messageId})`);
-        emailSent = true;
-      } catch (primaryErr: any) {
-        lastSmtpError = primaryErr;
-        console.warn(`[SMTP WARNING] Primary host (${host}) failed: ${primaryErr?.message || primaryErr}. Attempting fallback gateway connection...`);
+          const sendInfo = await transporter.sendMail({
+            from: `"BRC Website Lead" <${user}>`,
+            to: recipients,
+            replyTo: clientEmail,
+            subject: emailSubject,
+            text: plainTextBody,
+            html: htmlContent,
+            attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
+          });
 
-        // 2. Fallback Attempt via Direct NetEase Gateway IPs (bypasses DNS resolution issues)
-        const fallbackIps = ['103.126.92.250', '103.126.92.249', '8.209.113.244'];
-        for (const fallbackIp of fallbackIps) {
-          try {
-            const fallbackTransporter = nodemailer.createTransport({
-              host: fallbackIp,
-              port: 465,
-              secure: true,
-              auth: {
-                user,
-                pass,
-              },
-              tls: {
-                servername: host,
-                rejectUnauthorized: false,
-              },
-              family: 4,
-              connectionTimeout: 20000,
-              greetingTimeout: 20000,
-              socketTimeout: 30000,
-            } as any);
-
-            const sendInfo = await fallbackTransporter.sendMail({
-              from: `"BRC Website Lead" <${user}>`,
-              to: recipients,
-              replyTo: clientEmail,
-              subject: emailSubject,
-              text: plainTextBody,
-              html: htmlContent,
-              attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
-            });
-
-            console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via fallback gateway ${fallbackIp}:465 (MessageId: ${sendInfo.messageId})`);
-            emailSent = true;
-            break;
-          } catch (fallbackErr: any) {
-            lastSmtpError = fallbackErr;
-            console.warn(`[SMTP WARNING] Fallback gateway ${fallbackIp} failed: ${fallbackErr?.message || fallbackErr}`);
-          }
+          console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${target.host}:${port} in ~5s (MessageId: ${sendInfo.messageId})`);
+          emailSent = true;
+          break;
+        } catch (targetErr: any) {
+          lastSmtpError = targetErr;
+          console.warn(`[SMTP NOTICE] Gateway ${target.host} encountered an error: ${targetErr?.message || targetErr}. Trying next gateway...`);
         }
       }
 
