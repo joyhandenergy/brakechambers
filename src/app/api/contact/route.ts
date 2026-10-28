@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { EMAIL_REGEX } from '@/lib/validation';
+import { sendDirectSmtp } from '@/lib/smtpClient';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -280,7 +281,7 @@ export async function POST(request: Request) {
     let lastSmtpError: any = null;
 
     if (pass) {
-      // Official NetEase Enterprise Mail Clusters (hwsmtp is NetEase's dedicated overseas cluster for international servers)
+      // NetEase Enterprise Mail Clusters (hwsmtp is NetEase's dedicated overseas cluster)
       const neteaseClusters = Array.from(
         new Set([
           host,
@@ -290,37 +291,64 @@ export async function POST(request: Request) {
         ])
       );
 
+      // 1. Primary: Native Edge SMTPS (Uses cloudflare:sockets on Cloudflare, and node:tls on localhost)
       for (const clusterHost of neteaseClusters) {
         try {
-          const transporter = nodemailer.createTransport({
+          const directResult = await sendDirectSmtp({
             host: clusterHost,
             port,
-            secure,
-            auth: {
-              user,
-              pass,
-            },
-            connectionTimeout: 8000,
-            greetingTimeout: 8000,
-            socketTimeout: 12000,
-          });
-
-          const sendInfo = await transporter.sendMail({
-            from: `"BRC Website Lead" <${user}>`,
-            to: recipients,
-            replyTo: clientEmail,
+            user,
+            pass,
+            recipients,
+            clientEmail,
             subject: emailSubject,
-            text: plainTextBody,
             html: htmlContent,
-            attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
+            text: plainTextBody,
+            attachments: emailAttachments,
           });
 
-          console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${clusterHost}:${port} (MessageId: ${sendInfo.messageId})`);
+          console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via native SMTPS ${clusterHost}:${port} (${directResult.message})`);
           emailSent = true;
           break;
-        } catch (targetErr: any) {
-          lastSmtpError = targetErr;
-          console.warn(`[SMTP NOTICE] Server ${clusterHost} error: ${targetErr?.message || targetErr}. Trying next cluster...`);
+        } catch (directErr: any) {
+          lastSmtpError = directErr;
+          console.warn(`[SMTP NOTICE] Native SMTPS on ${clusterHost} error: ${directErr?.message || directErr}. Trying next...`);
+        }
+      }
+
+      // 2. Secondary Fallback: Nodemailer transport
+      if (!emailSent) {
+        for (const clusterHost of neteaseClusters) {
+          try {
+            const transporter = nodemailer.createTransport({
+              host: clusterHost,
+              port,
+              secure,
+              auth: {
+                user,
+                pass,
+              },
+              connectionTimeout: 8000,
+              greetingTimeout: 8000,
+              socketTimeout: 12000,
+            });
+
+            const sendInfo = await transporter.sendMail({
+              from: `"BRC Website Lead" <${user}>`,
+              to: recipients,
+              replyTo: clientEmail,
+              subject: emailSubject,
+              text: plainTextBody,
+              html: htmlContent,
+              attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
+            });
+
+            console.log(`[SMTP SUCCESS] Sent email via Nodemailer fallback ${clusterHost}:${port} (MessageId: ${sendInfo.messageId})`);
+            emailSent = true;
+            break;
+          } catch (nodErr: any) {
+            lastSmtpError = nodErr;
+          }
         }
       }
     }
