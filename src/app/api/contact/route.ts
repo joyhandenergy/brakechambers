@@ -296,7 +296,6 @@ export async function POST(request: Request) {
             secure,
             tls: {
               servername: target.servername,
-              rejectUnauthorized: false,
             },
             auth: {
               user,
