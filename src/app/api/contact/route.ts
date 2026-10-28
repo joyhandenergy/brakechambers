@@ -69,7 +69,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const host = process.env.SMTP_HOST || 'smtp.qiye.163.com';
+    const host = process.env.SMTP_HOST || 'hwsmtp.qiye.163.com';
     const port = Number(process.env.SMTP_PORT) || 465;
     const secure = process.env.SMTP_SECURE !== 'false';
     const user = process.env.SMTP_USER || 'sales@brakechambers.com';
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
     }
     const pass = rawPass;
     activePass = pass;
-    
+
     // Support multiple comma-separated inboxes (sales@brakechambers.com, brcbrakechambers@gmail.com)
     const rawRecipients = process.env.SALES_EMAIL || 'sales@brakechambers.com, brcbrakechambers@gmail.com';
     const recipients = Array.from(
@@ -116,7 +116,7 @@ export async function POST(request: Request) {
         const fileBuffer = Buffer.from(data.attachment.data, 'base64');
         const filename = data.attachment.filename || 'customer-brake-chamber-photo.jpg';
         const contentType = data.attachment.contentType || 'image/jpeg';
-        
+
         emailAttachments.push({
           filename,
           content: fileBuffer,
@@ -276,27 +276,26 @@ export async function POST(request: Request) {
         : [])
     ].join('\n');
 
-    // If SMTP_PASS is configured, dispatch the email directly and ensure delivery
+    let emailSent = false;
+    let lastSmtpError: any = null;
+
     if (pass) {
-      let emailSent = false;
-      let lastSmtpError: any = null;
+      // Official NetEase Enterprise Mail Clusters (hwsmtp is NetEase's dedicated overseas cluster for international servers)
+      const neteaseClusters = Array.from(
+        new Set([
+          host,
+          'hwsmtp.qiye.163.com',
+          'hwhzsmtp.qiye.163.com',
+          'smtp.qiye.163.com',
+        ])
+      );
 
-      // NetEase Enterprise Mail Gateways (Direct IPs avoid the 30s IPv6 DNS lookup hang on overseas networks)
-      const smtpTargets = [
-        { host: '103.126.92.250', servername: host }, // Official NetEase HK/Overseas Gateway 1 (Fastest)
-        { host: '103.126.92.249', servername: host }, // Official NetEase HK/Overseas Gateway 2
-        { host, servername: host },                   // Standard Hostname Fallback
-      ];
-
-      for (const target of smtpTargets) {
+      for (const clusterHost of neteaseClusters) {
         try {
           const transporter = nodemailer.createTransport({
-            host: target.host,
+            host: clusterHost,
             port,
             secure,
-            tls: {
-              servername: target.servername,
-            },
             auth: {
               user,
               pass,
@@ -304,7 +303,7 @@ export async function POST(request: Request) {
             connectionTimeout: 8000,
             greetingTimeout: 8000,
             socketTimeout: 12000,
-          } as any);
+          });
 
           const sendInfo = await transporter.sendMail({
             from: `"BRC Website Lead" <${user}>`,
@@ -316,41 +315,34 @@ export async function POST(request: Request) {
             attachments: emailAttachments.length > 0 ? emailAttachments : undefined,
           });
 
-          console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${target.host}:${port} in ~5s (MessageId: ${sendInfo.messageId})`);
+          console.log(`[SMTP SUCCESS] Sent email to [${recipients.join(', ')}] via ${clusterHost}:${port} (MessageId: ${sendInfo.messageId})`);
           emailSent = true;
           break;
         } catch (targetErr: any) {
           lastSmtpError = targetErr;
-          console.warn(`[SMTP NOTICE] Gateway ${target.host} encountered an error: ${targetErr?.message || targetErr}. Trying next gateway...`);
+          console.warn(`[SMTP NOTICE] Server ${clusterHost} error: ${targetErr?.message || targetErr}. Trying next cluster...`);
         }
       }
+    }
 
-      if (!emailSent) {
-        console.error('--- [SMTP SEND FAILURE] ---');
-        console.error('All SMTP connection attempts failed. Last error:', lastSmtpError?.message || lastSmtpError);
-        console.error('Lead details preserved in server log:', JSON.stringify(data, null, 2));
-        if (String(lastSmtpError?.message).includes('ERR.LOGIN.REQCODE')) {
-          console.error(
-            'CRITICAL NOTE: NetEase 163 Enterprise Mail requires an "App Authorization Code" (客户端专用授权码) rather than the web password.'
-          );
-        }
-        console.error('-----------------------------------------');
-
-        return NextResponse.json(
-          {
-            error: 'Our mail server is currently experiencing network delays. Please email us directly at sales@brakechambers.com or message our WhatsApp desk.',
-            success: false,
-          },
-          { status: 500 }
+    if (!emailSent) {
+      console.error('--- [SMTP SEND FAILURE] ---');
+      console.error('All email delivery attempts failed. Last error:', lastSmtpError?.message || lastSmtpError);
+      console.error('Lead details preserved in server log:', JSON.stringify(data, null, 2));
+      if (String(lastSmtpError?.message).includes('ERR.LOGIN.REQCODE')) {
+        console.error(
+          'CRITICAL NOTE: NetEase 163 Enterprise Mail requires an "App Authorization Code" (客户端专用授权码) rather than the web password.'
         );
       }
-    } else {
-      // In development or if password is not set yet in .env.local
-      console.log('--- [DEV MODE] NEW LEAD RECEIVED (SMTP_PASS not yet set) ---');
-      console.log(`Target Inboxes (will receive email once SMTP_PASS is set): ${recipients.join(', ')}`);
-      console.log(`Subject: ${emailSubject}`);
-      console.log('Data:', data);
-      console.log('------------------------------------------------------------');
+      console.error('-----------------------------------------');
+
+      return NextResponse.json(
+        {
+          error: 'Our mail server is currently experiencing network delays. Please email us directly at sales@brakechambers.com or message our WhatsApp desk.',
+          success: false,
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json(
