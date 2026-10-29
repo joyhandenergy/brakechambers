@@ -279,7 +279,72 @@ export async function POST(request: Request) {
     let emailSent = false;
     let lastSmtpError: any = null;
 
-    if (pass) {
+    // 1. Primary: Resend HTTPS REST API (Zero socket timeouts, 100% reliable on Cloudflare Workers / Serverless)
+    const resendApiKey = (process.env.RESEND_API_KEY || '').trim();
+    if (resendApiKey) {
+      try {
+        const resendFrom = (process.env.RESEND_FROM || '').trim() || 'BRC Website Lead <sales@brakechambers.com>';
+        const baseResendPayload = {
+          from: resendFrom,
+          reply_to: clientEmail,
+          subject: emailSubject,
+          html: htmlContent,
+          text: plainTextBody,
+          attachments: (data.attachment && typeof data.attachment === 'object' && data.attachment.data)
+            ? [{ filename: data.attachment.filename || 'customer-photo.jpg', content: data.attachment.data }]
+            : undefined,
+        };
+
+        // First attempt: Send to all configured recipients
+        let resendRes = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${resendApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...baseResendPayload,
+            to: recipients,
+          }),
+        });
+
+        let resendData = await resendRes.json();
+
+        // If domain is not yet verified on Resend, Resend restricts to account owner's email
+        if (!resendRes.ok && String(resendData?.message).includes('only send testing emails')) {
+          console.warn('[RESEND NOTICE] Domain not yet verified; delivering to verified account email (brcbrakechambers@gmail.com)');
+          const verifiedFallback = recipients.filter((r) => r.includes('gmail.com') || r.includes('brcbrakechambers'));
+          if (verifiedFallback.length > 0) {
+            resendRes = await fetch('https://api.resend.com/emails', {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${resendApiKey}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                ...baseResendPayload,
+                to: verifiedFallback,
+              }),
+            });
+            resendData = await resendRes.json();
+          }
+        }
+
+        if (resendRes.ok) {
+          console.log(`[RESEND SUCCESS] Sent email (Id: ${resendData.id})`);
+          emailSent = true;
+        } else {
+          console.error('[RESEND API ERROR]', resendData);
+          lastSmtpError = new Error(resendData.message || JSON.stringify(resendData));
+        }
+      } catch (resendErr: any) {
+        console.error('[RESEND FETCH ERROR]', resendErr);
+        lastSmtpError = resendErr;
+      }
+    }
+
+    // 2. Secondary Fallback: SMTP / NetEase
+    if (!emailSent && pass) {
       // NetEase Enterprise Mail Clusters (hwsmtp is NetEase's dedicated overseas cluster)
       const neteaseClusters = Array.from(
         new Set([
