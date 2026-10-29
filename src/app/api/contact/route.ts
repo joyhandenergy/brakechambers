@@ -280,7 +280,18 @@ export async function POST(request: Request) {
     let lastSmtpError: any = null;
 
     // 1. Primary: Resend HTTPS REST API (Zero socket timeouts, 100% reliable on Cloudflare Workers / Serverless)
-    const resendApiKey = (process.env.RESEND_API_KEY || '').trim();
+    let resendApiKey = (process.env.RESEND_API_KEY || '').trim();
+
+    // Check Cloudflare native environment bindings if process.env is unpopulated
+    if (!resendApiKey) {
+      try {
+        // @ts-ignore
+        const cf = await import(/* webpackIgnore: true */ 'cloudflare:workers');
+        if (cf?.env?.RESEND_API_KEY) {
+          resendApiKey = String(cf.env.RESEND_API_KEY).trim();
+        }
+      } catch (_) {}
+    }
     if (resendApiKey) {
       try {
         const resendFrom = (process.env.RESEND_FROM || '').trim() || 'BRC Website Lead <sales@brakechambers.com>';
@@ -403,7 +414,7 @@ export async function POST(request: Request) {
 
       return NextResponse.json(
         {
-          error: lastSmtpError?.message || 'Our mail server is currently experiencing network delays. Please email us directly at sales@brakechambers.com or message our WhatsApp desk.',
+          error: lastSmtpError?.message || (!resendApiKey ? 'Configuration notice: RESEND_API_KEY environment variable is not set in Cloudflare.' : 'Our mail server is currently experiencing network delays. Please email us directly at sales@brakechambers.com or message our WhatsApp desk.'),
           success: false,
         },
         { status: 500 }
