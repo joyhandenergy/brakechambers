@@ -403,7 +403,7 @@ export async function POST(request: Request) {
 
       return NextResponse.json(
         {
-          error: 'Our mail server is currently experiencing network delays. Please email us directly at sales@brakechambers.com or message our WhatsApp desk.',
+          error: lastSmtpError?.message || 'Our mail server is currently experiencing network delays. Please email us directly at sales@brakechambers.com or message our WhatsApp desk.',
           success: false,
         },
         { status: 500 }
