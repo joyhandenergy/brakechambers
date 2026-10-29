@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { ShieldCheck, Ruler, FileText, Download, AlertTriangle, CheckCircle2, Settings, Wrench, ChevronRight, FileCog, ShieldAlert, AlertOctagon, Info } from 'lucide-react';
+import { ShieldCheck, Ruler, FileText, Boxes, ArrowRight, AlertTriangle, CheckCircle2, Settings, Wrench, ChevronRight, FileCog, ShieldAlert, AlertOctagon, Info } from 'lucide-react';
 import PageHeader from '@/components/layout/PageHeader';
 import BreadcrumbSchema from '@/components/layout/BreadcrumbSchema';
 import GlobalFAQAccordion from '@/components/ui/GlobalFAQAccordion';
@@ -11,37 +11,107 @@ import Card from '@/components/ui/Card';
 import SectionHeader from '@/components/ui/SectionHeader';
 
 import { client } from '@/sanity/lib/client';
+import { TECHNICAL_RESOURCES_DATA, SEO_DATA } from '@/lib/technicalResourcesData';
+
+const RESOURCE_PRODUCT_CTA: Record<
+  string,
+  { title: string; subtitle: string; href: string; buttonText: string }
+> = {
+  'size-charts': {
+    title: 'Need Replacement Brake Chambers?',
+    subtitle: 'Type 12 Through Type 36 Direct-Fit Replacements',
+    href: '/products',
+    buttonText: 'Browse Catalog',
+  },
+  'stroke-length': {
+    title: 'Need Standard or Long-Stroke Chambers?',
+    subtitle: 'Direct-Fit Spring Brakes & Air Actuators',
+    href: '/spring-brake-chambers',
+    buttonText: 'View Spring Brakes',
+  },
+  'installation': {
+    title: 'Ready for Your Next Replacement?',
+    subtitle: 'Factory-Direct Commercial Brake Chambers',
+    href: '/products',
+    buttonText: 'Browse Products',
+  },
+  'identification': {
+    title: 'Identified Your Brake Chamber?',
+    subtitle: 'Find Your Exact Fit in Our Full Commercial Catalog',
+    href: '/products',
+    buttonText: 'View Product Catalog',
+  },
+  'selection-guides': {
+    title: 'Order Factory-Direct Brake Chambers',
+    subtitle: 'Linehaul, Severe-Duty & Heavy-Haul Actuators',
+    href: '/products',
+    buttonText: 'Browse All Chambers',
+  },
+  'caging': {
+    title: 'Replacing a Failed Spring Brake Assembly?',
+    subtitle: 'Type 20/24, 24/30 & 30/30 Assemblies in Stock',
+    href: '/spring-brake-chambers',
+    buttonText: 'View Spring Brakes',
+  },
+};
 
 export async function generateMetadata(props: { params: Promise<{ resourceSlug: string }> }): Promise<Metadata> {
   const params = await props.params;
   const { resourceSlug } = params;
   
-  const data = await client.fetch(
-    `*[_type == "technicalResource" && slug.current == $slug][0]`,
-    { slug: resourceSlug }
-  );
+  let data: any = null;
+  try {
+    data = await client.fetch(
+      `*[_type == "technicalResource" && slug.current == $slug][0]`,
+      { slug: resourceSlug }
+    );
+  } catch (e) {
+    // Sanity error fallback
+  }
 
-  if (!data) return { title: 'Resource Not Found' };
+  const fallbackData = TECHNICAL_RESOURCES_DATA[resourceSlug];
+  const seo = SEO_DATA[resourceSlug];
+
+  if (!data && !fallbackData) return { title: 'Resource Not Found' };
+
+  const title = data?.seo?.metaTitle || seo?.metaTitle || `${data?.title || fallbackData?.title} | Technical Resources | BRC`;
+  const description = data?.seo?.metaDescription || seo?.metaDescription || data?.description || fallbackData?.description;
+  const keywords = data?.seo?.keywords || (seo?.keywords ? seo.keywords.split(', ') : undefined);
 
   return {
-    title: data.seo?.metaTitle || `${data.title} | Technical Resources | BRC`,
-    description: data.seo?.metaDescription || data.description,
-    keywords: data.seo?.keywords,
+    title,
+    description,
+    keywords,
     alternates: {
       canonical: `https://www.brakechambers.com/technical-resources/${resourceSlug}`,
     },
     openGraph: {
-      title: data.seo?.metaTitle || `${data.title} | BRC Engineering`,
-      description: data.seo?.metaDescription || data.description,
+      title,
+      description,
       url: `https://www.brakechambers.com/technical-resources/${resourceSlug}`,
+      siteName: 'BRC Brake Chambers',
+      images: [
+        {
+          url: 'https://www.brakechambers.com/images/brc_brakechamber_aftermarket.jpg',
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
       type: 'article',
     },
   };
 }
 
 export async function generateStaticParams() {
-  const slugs = await client.fetch(`*[_type == "technicalResource"].slug.current`);
-  return slugs.map((slug: string) => ({
+  let slugs: string[] = [];
+  try {
+    slugs = await client.fetch(`*[_type == "technicalResource"].slug.current`);
+  } catch (e) {
+    // fallback
+  }
+  const allSlugs = new Set([...slugs, ...Object.keys(TECHNICAL_RESOURCES_DATA)]);
+  return Array.from(allSlugs).map((slug: string) => ({
     resourceSlug: slug,
   }));
 }
@@ -50,22 +120,53 @@ export default async function TechnicalResourcePage(props: { params: Promise<{ r
   const params = await props.params;
   const { resourceSlug } = params;
   
-  const data = await client.fetch(
-    `*[_type == "technicalResource" && slug.current == $slug][0]`,
-    { slug: resourceSlug },
-    { next: { revalidate: 60 } }
-  );
+  let data: any = null;
+  try {
+    data = await client.fetch(
+      `*[_type == "technicalResource" && slug.current == $slug][0]`,
+      { slug: resourceSlug },
+      { next: { revalidate: 60 } }
+    );
+  } catch (e) {
+    // fallback
+  }
+
+  if (!data) {
+    data = TECHNICAL_RESOURCES_DATA[resourceSlug];
+  }
 
   if (!data) {
     notFound();
   }
 
   // Fetch all for sidebar
-  const allResources = await client.fetch(
-    `*[_type == "technicalResource"] | order(category asc, title asc) { title, category, "slug": slug.current }`,
-    {},
-    { next: { revalidate: 60 } }
-  );
+  let allResources: any[] = [];
+  try {
+    allResources = await client.fetch(
+      `*[_type == "technicalResource"] | order(category asc, title asc) { title, category, "slug": slug.current }`,
+      {},
+      { next: { revalidate: 60 } }
+    );
+  } catch (e) {
+    // fallback
+  }
+
+  if (!allResources || allResources.length === 0) {
+    allResources = Object.entries(TECHNICAL_RESOURCES_DATA).map(([slug, item]: [string, any]) => ({
+      title: item.title,
+      category: item.category,
+      slug
+    }));
+  }
+
+  const seo = data.seo || SEO_DATA[resourceSlug];
+
+  const productCta = RESOURCE_PRODUCT_CTA[resourceSlug] || {
+    title: 'Source Factory-Direct Brake Chambers',
+    subtitle: 'OEM-Grade Spring Brakes, Service Chambers & Actuators',
+    href: '/products',
+    buttonText: 'Browse Catalog',
+  };
 
   // Group all technical resources by category for the sidebar navigation
   const groupedResources = allResources.reduce((acc: any, item: any) => {
@@ -75,8 +176,6 @@ export default async function TechnicalResourcePage(props: { params: Promise<{ r
     acc[item.category].push(item);
     return acc;
   }, {} as Record<string, any[]>);
-
-  const seo = data.seo;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -259,35 +358,36 @@ export default async function TechnicalResourcePage(props: { params: Promise<{ r
                 </div>
               </div>
 
-              {/* Premium Download CTA */}
-              {data.download && (
-                <div className="group bg-gradient-to-br from-navy-900 via-navy-800 to-navy-950 rounded-none sm:rounded-[2rem] p-8 lg:p-10 shadow-2xl border-y sm:border border-navy-700 hover:border-amber-500/50 text-white flex flex-col sm:flex-row items-center justify-between gap-8 relative overflow-hidden transition-all duration-500 hover:shadow-amber-500/10 -mx-4 sm:mx-0">
-                  {/* Background Patterns */}
-                  <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent z-0 pointer-events-none"></div>
-                  <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[100px] -mr-40 -mt-40 z-0 transition-transform duration-700 group-hover:scale-110"></div>
-                  <div className="absolute inset-0 bg-[url('/patterns/grid-pattern.svg')] opacity-[0.03] z-0 pointer-events-none"></div>
+              {/* Product Catalog Link CTA */}
+              <div className="group bg-gradient-to-br from-navy-900 via-navy-800 to-navy-950 rounded-none sm:rounded-[2rem] p-8 lg:p-10 shadow-2xl border-y sm:border border-navy-700 hover:border-amber-500/50 text-white flex flex-col sm:flex-row items-center justify-between gap-8 relative overflow-hidden transition-all duration-500 hover:shadow-amber-500/10 -mx-4 sm:mx-0">
+                {/* Background Patterns */}
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent z-0 pointer-events-none"></div>
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[100px] -mr-40 -mt-40 z-0 transition-transform duration-700 group-hover:scale-110"></div>
+                <div className="absolute inset-0 bg-[url('/patterns/grid-pattern.svg')] opacity-[0.03] z-0 pointer-events-none"></div>
 
-                  <div className="relative z-10 text-center sm:text-left flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
-                    <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-amber-500/10 group-hover:border-amber-500/30 transition-all duration-500 shadow-inner">
-                      <FileText className="w-8 h-8 text-amber-500" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl lg:text-3xl font-black mb-2 tracking-tight text-white group-hover:text-amber-400 transition-colors duration-300">Download Offline Copy</h3>
-                      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2 text-navy-200">
-                        <span className="font-medium text-base">{data.download.name}</span>
-                        <span className="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-navy-600"></span>
-                        <span className="text-amber-500/90 font-bold">{data.download.size}</span>
-                      </div>
-                    </div>
+                <div className="relative z-10 text-center sm:text-left flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+                  <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-amber-500/10 group-hover:border-amber-500/30 transition-all duration-500 shadow-inner">
+                    <Boxes className="w-8 h-8 text-amber-500" aria-hidden="true" />
                   </div>
-
-                  <a href="#" className="relative z-10 shrink-0 w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-navy-950 font-black px-8 py-4 sm:py-5 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 hover:-translate-y-1 shadow-xl shadow-amber-500/20 uppercase tracking-widest text-sm group/btn overflow-hidden">
-                    <span className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out"></span>
-                    <Download className="w-5 h-5 relative z-10 group-hover/btn:-mt-1 transition-all duration-300" aria-hidden="true" />
-                    <span className="relative z-10">Download PDF</span>
-                  </a>
+                  <div>
+                    <h3 className="text-2xl lg:text-3xl font-black mb-2 tracking-tight text-white">
+                      {productCta.title}
+                    </h3>
+                    <p className="text-navy-200 font-medium text-base">
+                      {productCta.subtitle}
+                    </p>
+                  </div>
                 </div>
-              )}
+
+                <Link
+                  href={productCta.href}
+                  className="relative z-10 shrink-0 w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-navy-950 font-black px-8 py-4 sm:py-5 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 hover:-translate-y-1 shadow-xl shadow-amber-500/20 uppercase tracking-widest text-sm group/btn overflow-hidden"
+                >
+                  <span className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out"></span>
+                  <ArrowRight className="w-5 h-5 relative z-10 group-hover/btn:translate-x-1 transition-all duration-300" aria-hidden="true" />
+                  <span className="relative z-10">{productCta.buttonText}</span>
+                </Link>
+              </div>
             </div>
 
             {/* Sidebar */}

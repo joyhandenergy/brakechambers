@@ -92,6 +92,21 @@ export async function generateMetadata(
     keywords: [`${brandInfo.name} ${categoryNameForSeo || 'Brake Chambers'}`, `${brandInfo.name} Cross Reference`, `${brandInfo.name} Interchange`, 'Direct Replacement', 'Aftermarket Air Brakes', 'Wholesale'],
     alternates: {
       canonical: `https://www.brakechambers.com/oem-cross-reference/${originalSlug}`
+    },
+    openGraph: {
+      title: `${titlePrefix} Cross Reference & Replacements | BRC`,
+      description: `Find exact aftermarket equivalents for ${brandInfo.name} ${categoryNameForSeo ? categoryNameForSeo.toLowerCase() : 'air brake chambers'}. View cross-reference data, interchange part numbers, and factory-direct pricing.`,
+      url: `https://www.brakechambers.com/oem-cross-reference/${originalSlug}`,
+      siteName: 'BRC Brake Chambers',
+      images: [
+        {
+          url: 'https://www.brakechambers.com/images/logo-brc.png',
+          width: 800,
+          height: 800,
+          alt: `${brandInfo.name} Brake Chamber Cross Reference`,
+        },
+      ],
+      type: 'website',
     }
   };
 }
@@ -299,7 +314,7 @@ export default async function OEMBrandPage(
                   {oemPartLinks.map(([partSlug, partData]) => (
                     <Link
                       key={partSlug}
-                      href={`/${partData.categoryPath}/${brandSlug}-${partSlug}`}
+                      href={`/oem-cross-reference/${brandSlug}/${partSlug}`}
                       className="bg-white border border-slate-200 hover:border-amber-400 hover:shadow-md p-4 rounded-xl text-center transition-all group"
                     >
                       <div className="font-mono font-bold text-navy-900 group-hover:text-amber-600">{partData.partNumber}</div>

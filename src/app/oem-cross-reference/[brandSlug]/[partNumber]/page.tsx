@@ -37,6 +37,24 @@ export async function generateMetadata(
     title: `${normalizedBrand} ${partNumber} Equivalent | BRC Brake Chambers`,
     description: `Direct 1:1 replacement for ${normalizedBrand} ${partNumber}. Verified fit, form, and function for heavy-duty commercial vehicle air brake systems.`,
     keywords: [`${partNumber} replacement`, `${normalizedBrand} ${partNumber}`, 'Cross Reference', 'Direct Replacement', 'Aftermarket'],
+    alternates: {
+      canonical: `https://www.brakechambers.com/oem-cross-reference/${params.brandSlug}/${params.partNumber}`,
+    },
+    openGraph: {
+      title: `${normalizedBrand} ${partNumber} Equivalent | BRC Brake Chambers`,
+      description: `Direct 1:1 replacement for ${normalizedBrand} ${partNumber}. Verified fit, form, and function for heavy-duty commercial vehicle air brake systems.`,
+      url: `https://www.brakechambers.com/oem-cross-reference/${params.brandSlug}/${params.partNumber}`,
+      siteName: 'BRC Brake Chambers',
+      images: [
+        {
+          url: 'https://www.brakechambers.com/images/logo-brc.png',
+          width: 800,
+          height: 800,
+          alt: `${normalizedBrand} ${partNumber} Replacement Brake Chamber`,
+        },
+      ],
+      type: 'website',
+    },
   };
 }
 

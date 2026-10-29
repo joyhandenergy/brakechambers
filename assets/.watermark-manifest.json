@@ -150,8 +150,8 @@
       "outHash": "1969e8d5e6d90410ff4503d787371e0a1f858242"
     },
     "images/home/hero_truck_image_1.png": {
-      "cleanHash": "243366c1956aa3536dfcb6e7886794a5c36aedaa",
-      "outHash": "0d98c1baf3f4db188ba8b4dab4b26fedeff2b3c1"
+      "cleanHash": "0f0b945342ab28a92dcc536533ebdbf589b5b500",
+      "outHash": "4a910ae366d50260fc1b247917c50b26eea97f6a"
     },
     "images/home/hero_truck_image_2.jpg": {
       "cleanHash": "a44c9fdaa403922b5468fb226be836d4f95baec8",
@@ -330,16 +330,16 @@
       "outHash": "5703263ecd932fdc629d19970d984faa2105e901"
     },
     "images/shiping/brc_brakchamber_export_packaging_standard.jpg": {
-      "cleanHash": "659eaf8d471f73bbc663adb36b73f195961cdda9",
-      "outHash": "e514222a9e9a2bd1f9b65bcabe5df43edb12845f"
+      "cleanHash": "f74086fca9cb323dd4f5c3ea3c1f65f5ff3d34ba",
+      "outHash": "028f5a769335a9b79e25d9fff8ede9c6e52fcb17"
     },
     "images/shiping/brc_brakechamber_fcl_and_lcl.jpg": {
       "cleanHash": "992c8f39852847f4c6f3d4cc12986217fe5c2c98",
       "outHash": "df2fab2be36d7ab1ff61215012cea08c2fcb32d7"
     },
     "images/shiping/brc_brakechambers_shipping_exw_fob.jpg": {
-      "cleanHash": "63aa98166ba0d47dd8617c0b93edeec668b3a530",
-      "outHash": "c4d3c649d85be95598188be462cccaefb8ee0f27"
+      "cleanHash": "0ee47ed22916c6a028b40cde079c5107013eed3c",
+      "outHash": "7d2235ccbf552b20f6054546f51abddcc4d84797"
     },
     "productsImage/brc-hino-he-rear-brake-12-drawing.jpg": {
       "cleanHash": "6d15d89cc0bd3cb9c5aa75ce041d55750366151b",
@@ -502,8 +502,8 @@
       "outHash": "d94cde7b258522a6aeac71288fe9b4b5fed1004e"
     },
     "productsImage/spring_brake_schematic.png": {
-      "cleanHash": "8dd189e30d2a5b064ddc8710c24eeb56bfa8afdf",
-      "outHash": "02ed40faef82d09b752180a31f7eda4bcb451013"
+      "cleanHash": "b4b95a1c2ab0ccfb0b430e8d9ea826b6d4ceea9c",
+      "outHash": "459e7300f0b2d02c4c1f8c5c8800bb6992c5ab85"
     }
   }
 }

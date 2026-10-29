@@ -27,9 +27,39 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function ProductsPage() {
+import { getProducts } from '@/sanity/queries';
+
+export default async function ProductsPage() {
+  const products = await getProducts();
+  const itemListJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    'name': 'BRC Commercial Brake Chambers & Actuators',
+    'description': 'Full catalog of OEM-quality spring brake chambers, service chambers, and air disc actuators.',
+    'url': 'https://www.brakechambers.com/products',
+    'numberOfItems': products.length,
+    'itemListElement': products.slice(0, 30).map((p, index) => {
+      let categoryPrefix = 'products';
+      if (p.category === 'Spring Brake') categoryPrefix = 'spring-brake-chambers';
+      else if (p.category === 'Service Brake') categoryPrefix = 'service-brake-chambers';
+      else if (p.category === 'Air Disc Actuator') categoryPrefix = 'air-disc-brake-actuators';
+      else if (p.category === 'Parts & Kits') categoryPrefix = 'parts-and-kits';
+
+      return {
+        '@type': 'ListItem',
+        'position': index + 1,
+        'name': p.name,
+        'url': `https://www.brakechambers.com/${categoryPrefix}/${p.slug}`
+      };
+    })
+  };
+
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+      />
       <ProductsClient />
       <BreadcrumbSchema items={[{ name: 'Products' }]} />
     </main>

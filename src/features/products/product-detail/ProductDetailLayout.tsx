@@ -39,8 +39,53 @@ export default function ProductDetailLayout({
     }, 400);
   };
 
+  const productDescriptionText = typeof product.description === 'string'
+    ? product.description.replace(/<[^>]+>/g, '').trim()
+    : `${product.name} manufactured by BRC. High quality commercial brake chamber tested to IATF 16949 standards.`;
+
+  const productImages = (product.galleryUrls && product.galleryUrls.length > 0)
+    ? product.galleryUrls.map((img: string) => img.startsWith('http') ? img : `https://www.brakechambers.com${img.startsWith('/') ? '' : '/'}${img}`)
+    : ['https://www.brakechambers.com/images/logo-brc.png'];
+
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    'name': product.name,
+    'image': productImages,
+    'description': productDescriptionText,
+    'sku': product.slug,
+    'mpn': product.modelDesignation || product.slug,
+    'brand': {
+      '@type': 'Brand',
+      'name': 'BRC Brake Chambers'
+    },
+    'manufacturer': {
+      '@type': 'Organization',
+      'name': 'BRC Brake Chambers',
+      'url': 'https://www.brakechambers.com'
+    },
+    'category': product.category || categoryName,
+    'offers': {
+      '@type': 'Offer',
+      'url': `https://www.brakechambers.com/${categoryPath}/${product.slug}`,
+      'priceCurrency': 'USD',
+      'price': product.priceUSD ? String(product.priceUSD) : '29.99',
+      'priceValidUntil': '2028-12-31',
+      'itemCondition': 'https://schema.org/NewCondition',
+      'availability': 'https://schema.org/InStock',
+      'seller': {
+        '@type': 'Organization',
+        'name': 'BRC Brake Chambers'
+      }
+    }
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <div className="container mx-auto px-4 lg:px-8 py-8 max-w-[1920px]">
         <Breadcrumb items={[{ label: categoryName, href: `/${categoryPath}` }, { label: product.name }]} />
 

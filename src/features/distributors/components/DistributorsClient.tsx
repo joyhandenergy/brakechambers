@@ -207,7 +207,7 @@ export default function DistributorsClient() {
                 theme="light"
                 accentColor="navy"
                 plainText={true}
-                asH1={true}
+                asH1={false}
                 className="!mb-8"
               />
 

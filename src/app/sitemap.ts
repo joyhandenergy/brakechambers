@@ -187,14 +187,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
   });
 
-  // Direct product slug routes: also include canonical `/${product.slug}`
-  const directProductRoutes = products.map((product) => ({
-    url: `${baseUrl}/${product.slug}`,
-    lastModified: product.publishedAt ? new Date(product.publishedAt) : new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
-  }));
-
   // Blog Posts from Sanity (or fallback)
   const blogRoutes = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
@@ -213,7 +205,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...technicalResources,
     ...applicationRoutes,
     ...productRoutes,
-    ...directProductRoutes,
     ...blogRoutes,
   ];
 }

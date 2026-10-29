@@ -81,6 +81,46 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const prevPost = postIndex > 0 ? allPosts[postIndex - 1] : null;
   const nextPost = postIndex < allPosts.length - 1 ? allPosts[postIndex + 1] : null;
 
-  return <BlogPostClient post={post} prevPost={prevPost} nextPost={nextPost} />;
+  const articleImageUrl = post.imageUrl
+    ? (post.imageUrl.startsWith('http') ? post.imageUrl : `https://www.brakechambers.com${post.imageUrl}`)
+    : 'https://www.brakechambers.com/images/pageheaders/brc_blog.jpg';
+
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    'headline': post.title,
+    'description': post.metaDescription || post.excerpt,
+    'image': [articleImageUrl],
+    'datePublished': post.publishDate || '2024-01-01',
+    'dateModified': post.publishDate || '2024-01-01',
+    'author': {
+      '@type': 'Organization',
+      'name': 'BRC Brake Chambers Engineering Team',
+      'url': 'https://www.brakechambers.com'
+    },
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'BRC Brake Chambers',
+      'url': 'https://www.brakechambers.com',
+      'logo': {
+        '@type': 'ImageObject',
+        'url': 'https://www.brakechambers.com/images/logo-brc.png'
+      }
+    },
+    'mainEntityOfPage': {
+      '@type': 'WebPage',
+      '@id': `https://www.brakechambers.com/blog/${canonicalSlug}`
+    }
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <BlogPostClient post={post} prevPost={prevPost} nextPost={nextPost} />
+    </>
+  );
 }
 

@@ -10,7 +10,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/studio/', '/api/'],
+        disallow: ['/studio/', '/api/', '/distributor/login'],
       },
       {
         userAgent: [
@@ -24,7 +24,7 @@ export default function robots(): MetadataRoute.Robots {
           'YandexBot',
         ],
         allow: '/',
-        disallow: ['/studio/', '/api/'],
+        disallow: ['/studio/', '/api/', '/distributor/login'],
       },
       {
         userAgent: [
@@ -37,7 +37,7 @@ export default function robots(): MetadataRoute.Robots {
           'Applebot-Extended',
         ],
         allow: ['/', '/llms.txt', '/llms-full.txt'],
-        disallow: ['/studio/', '/api/'],
+        disallow: ['/studio/', '/api/', '/distributor/login'],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

@@ -91,8 +91,32 @@ export default function ProductListingLayout({
 
 
 
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    'name': title,
+    'description': description,
+    'numberOfItems': products.length,
+    'itemListElement': products.slice(0, 30).map((p, index) => {
+      const categorySegment = baseCategory === 'all'
+        ? (p.category === 'Spring Brake' ? 'spring-brake-chambers' : p.category === 'Service Brake' ? 'service-brake-chambers' : p.category === 'Air Disc Actuator' ? 'air-disc-brake-actuators' : 'parts-and-kits')
+        : baseCategory;
+
+      return {
+        '@type': 'ListItem',
+        'position': index + 1,
+        'name': p.name,
+        'url': `https://www.brakechambers.com/${categorySegment}/${p.slug}`
+      };
+    })
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
       <PageHeader
         title={title}
         description={description}

@@ -285,7 +285,7 @@ export async function POST(request: Request) {
     // Check Cloudflare native environment bindings if process.env is unpopulated
     if (!resendApiKey) {
       try {
-        // @ts-ignore
+        // @ts-expect-error - Cloudflare Workers dynamic runtime module
         const cf = await import(/* webpackIgnore: true */ 'cloudflare:workers');
         if (cf?.env?.RESEND_API_KEY) {
           resendApiKey = String(cf.env.RESEND_API_KEY).trim();

@@ -180,7 +180,8 @@ export default function ContactClient() {
       observer.observe(el);
       return () => observer.disconnect();
     } else {
-      setIsMapLoaded(true);
+      const timer = setTimeout(() => setIsMapLoaded(true), 0);
+      return () => clearTimeout(timer);
     }
   }, []);
   const faqs = [
