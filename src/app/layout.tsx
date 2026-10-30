@@ -6,6 +6,7 @@ import Footer from '@/components/layout/Footer';
 import WhatsAppWidget from '@/components/layout/WhatsAppWidget';
 import CookieConsent from '@/components/layout/CookieConsent';
 import SplashScreen from '@/components/layout/SplashScreen';
+import EventModal from '@/components/layout/EventModal';
 import GlobalSearchModal from '@/components/ui/GlobalSearchModal';
 import Script from 'next/script';
 import NextTopLoader from 'nextjs-toploader';
@@ -138,6 +139,7 @@ export default async function RootLayout({
         <GlobalSearchModal products={products} />
         <WhatsAppWidget />
         <CookieConsent />
+        <EventModal />
         <Footer />
       </body>
     </html>

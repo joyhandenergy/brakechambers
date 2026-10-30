@@ -45,6 +45,9 @@ const EXCLUDE = [
   /apple-touch-icon/i,
   /^icon-\d+/i,
   /^icon\./i,
+  /aapex/i,
+  /event/i,
+  /expo/i,
 ];
 
 /** Watermark appearance settings */
