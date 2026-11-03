@@ -65,14 +65,11 @@ export const metadata: Metadata = {
   },
 };
 
-import { getProducts } from '@/sanity/queries';
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const products = await getProducts();
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -136,7 +133,7 @@ export default async function RootLayout({
         <main className="flex-grow">
           {children}
         </main>
-        <GlobalSearchModal products={products} />
+        <GlobalSearchModal />
         <WhatsAppWidget />
         <CookieConsent />
         <EventModal />

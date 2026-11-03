@@ -3,7 +3,7 @@ import DistributorsClient from '@/features/distributors/components/DistributorsC
 
 import { getPageSeo } from '@/sanity/queries';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSeo('/distributors');

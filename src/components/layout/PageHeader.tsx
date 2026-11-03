@@ -33,6 +33,8 @@ export default function PageHeader({ badge, badgeIcon: BadgeIcon, title, descrip
             unoptimized={activeImage.startsWith('http')}
             className={`object-cover opacity-40 ${fullColorBackground ? '' : ' '}`}
             priority
+            fetchPriority="high"
+            quality={75}
           />
         )}
         {/* Dark Gradient Overlay to ensure text readability */}

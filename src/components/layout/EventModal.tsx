@@ -136,7 +136,7 @@ export default function EventModal() {
                   alt="Meet BRC Brake Chambers at AAPEX 2026 Las Vegas - Booth 19710 (Nov 3-5)"
                   width={980}
                   height={980}
-                  priority
+                  sizes="(max-width: 640px) 90vw, 420px"
                   className="w-full h-auto object-contain block rounded-xl sm:rounded-2xl"
                 />
               </a>
@@ -203,6 +203,7 @@ export default function EventModal() {
                     alt="AAPEX 2026 Las Vegas Booth 19710"
                     width={980}
                     height={980}
+                    sizes="208px"
                     className="w-full h-auto object-cover object-top transition-transform duration-300 group-hover:scale-105"
                   />
                   

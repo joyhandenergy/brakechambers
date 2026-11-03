@@ -161,7 +161,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0 min-w-0 group">
               <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-navy-900 flex items-center justify-center shadow-lg flex-shrink-0 group-hover:scale-105 transition-transform">
-                <img src="/images/logo-brc.png" alt="BRC" className="h-7 md:h-8 w-auto object-contain brightness-0 invert" />
+                <img src="/images/logo-brc.png" alt="BRC" width={32} height={32} className="h-7 md:h-8 w-auto object-contain brightness-0 invert" />
               </div>
               <div className="flex flex-col leading-none">
                 <span className="font-heading font-extrabold text-xl md:text-2xl text-navy-950 tracking-tight">BRC</span>
@@ -230,7 +230,7 @@ export default function Navbar() {
       />
 
       {/* Secondary Navigation (Desktop Only) - DYNAMIC MEGA MENUS */}
-      <div className={`hidden lg:block relative z-40 transition-colors duration-300 ${isScrolled ? 'bg-navy-900 border-t border-navy-800 border-b-2 border-[#FFB000] shadow-md' : 'bg-slate-50 border-y border-navy-100 shadow-sm'}`}>
+      <div className={`hidden lg:block relative z-40 transition-colors duration-300 ${isScrolled ? 'bg-navy-900 border-t border-navy-800 border-b-2 border-[#FFB000] shadow-md' : 'bg-slate-50 border-t border-b-2 border-navy-100 shadow-sm'}`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1920px]">
           <nav className={`flex items-center gap-6 lg:gap-8 h-12 text-sm font-semibold transition-colors duration-300 ${isScrolled ? 'text-navy-100' : 'text-navy-700'}`}>
 

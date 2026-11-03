@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ArrowRight, ShieldCheck, Settings, Cpu, Zap,
   Mail, CheckCircle, FileText, Wrench, Globe2, ChevronRight, Phone, Search, PlayCircle
@@ -82,13 +83,19 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
         {HERO_SLIDES.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+            className={`absolute inset-0 bg-navy-950 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100 z-10' : index === 0 ? 'opacity-100 z-[1]' : 'opacity-0 z-0'}`}
           >
             {/* Background Image styling matching Application Detail pages */}
-            <img
+            <Image
+              fill
+              sizes="100vw"
+              quality={75}
+              priority={index === 0}
+              fetchPriority={index === 0 ? "high" : "low"}
+              loading={index === 0 ? undefined : "lazy"}
               src={slide.image}
               alt="Heavy-Duty Commercial Brake Chamber Manufacturing Facility"
-              className="absolute inset-0 w-full h-full object-cover object-[25%_center] md:object-center opacity-85 scale-100 md:scale-105 animate-[slow-pan_20s_ease-in-out_infinite_alternate]"
+              className={`absolute inset-0 w-full h-full object-cover object-[25%_center] md:object-center opacity-85 scale-100 md:scale-105 animate-[slow-pan_20s_ease-in-out_infinite_alternate] ${index !== 0 && !mounted ? 'hidden' : ''}`}
               style={{ animationPlayState: index === currentSlide ? 'running' : 'paused' }}
             />
             {/* Image Overlay Gradient matching Application Detail pages */}
@@ -115,7 +122,7 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
             {HERO_SLIDES.map((slide, index) => (
               <div
                 key={slide.id}
-                className={`col-start-1 row-start-1 flex flex-col justify-start transition-all duration-700 ease-out ${index === currentSlide
+                className={`col-start-1 row-start-1 flex flex-col justify-start transition-[opacity,transform] duration-700 ease-out ${index === currentSlide
                   ? 'opacity-100 translate-y-0 z-10 visible'
                   : 'opacity-0 translate-y-8 z-0 invisible pointer-events-none'
                   }`}
@@ -215,7 +222,7 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
                 </div>
                 <div className="w-full sm:w-48 h-48 sm:h-48 flex-shrink-0 relative mt-4 sm:mt-0 flex items-center justify-center">
                   <div className="w-full h-full animate-[spin_60s_linear_infinite] [animation-delay:-0s] group-hover:[animation-play-state:paused] flex items-center justify-center">
-                    <img src="/images/home/compination-spring-brake.png" alt="Spring Brake Chamber" className="w-[115%] sm:w-[130%] h-[115%] sm:h-[130%] max-w-none object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500" />
+                    <img loading="lazy" decoding="async" width={250} height={250} src="/images/home/compination-spring-brake.png" alt="Spring Brake Chamber" className="w-[115%] sm:w-[130%] h-[115%] sm:h-[130%] max-w-none object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500" />
                   </div>
                 </div>
               </div>
@@ -242,7 +249,7 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
                 </div>
                 <div className="w-full sm:w-48 h-48 sm:h-48 flex-shrink-0 relative mt-4 sm:mt-0 flex items-center justify-center">
                   <div className="w-full h-full animate-[spin_60s_linear_infinite] [animation-delay:-15s] group-hover:[animation-play-state:paused] flex items-center justify-center">
-                    <img src="/images/home/service-brake-chamber.png" alt="Service Brake Chamber" className="w-auto h-[60%] sm:w-[110%] sm:h-[110%] max-w-none object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500" />
+                    <img loading="lazy" decoding="async" width={250} height={250} src="/images/home/service-brake-chamber.png" alt="Service Brake Chamber" className="w-auto h-[60%] sm:w-[110%] sm:h-[110%] max-w-none object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500" />
                   </div>
                 </div>
               </div>
@@ -269,7 +276,7 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
                 </div>
                 <div className="w-full sm:w-48 h-48 sm:h-48 flex-shrink-0 relative mt-4 sm:mt-0 flex items-center justify-center">
                   <div className="w-full h-full animate-[spin_60s_linear_infinite] [animation-delay:-30s] group-hover:[animation-play-state:paused] flex items-center justify-center">
-                    <img src="/images/home/air-disc-brake-chambers.png" alt="Air Disc Brake Chamber" className="w-[70%] sm:w-[75%] h-[70%] sm:h-[75%] object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500" />
+                    <img loading="lazy" decoding="async" width={250} height={250} src="/images/home/air-disc-brake-chambers.png" alt="Air Disc Brake Chamber" className="w-[70%] sm:w-[75%] h-[70%] sm:h-[75%] object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500" />
                   </div>
                 </div>
               </div>
@@ -296,7 +303,7 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
                 </div>
                 <div className="w-full sm:w-48 h-48 sm:h-48 flex-shrink-0 relative mt-4 sm:mt-0 flex items-center justify-center">
                   <div className="w-full h-full animate-[spin_60s_linear_infinite] [animation-delay:-45s] group-hover:[animation-play-state:paused] flex items-center justify-center">
-                    <img src="/images/home/piggy-accessory.png" alt="Piggyback & Accessories" className="w-[70%] h-[70%] sm:w-[100%] sm:h-[100%] max-w-none object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500" />
+                    <img loading="lazy" decoding="async" width={250} height={250} src="/images/home/piggy-accessory.png" alt="Piggyback & Accessories" className="w-[70%] h-[70%] sm:w-[100%] sm:h-[100%] max-w-none object-contain drop-shadow-xl group-hover:scale-110 transition-transform duration-500" />
                   </div>
                 </div>
               </div>
@@ -318,13 +325,13 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
             {/* Image Grid / Factory Floor */}
             <div className="w-full lg:w-1/2 grid grid-cols-2 gap-5">
               <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="col-span-2 rounded-2xl overflow-hidden h-80 sm:h-96 md:h-[420px] shadow-lg">
-                <img src="/images/home/brc-brake-chamber-assembly.jpg?v=3" alt="BRC Brake Chamber Assembly Line Workers" className="w-full h-full object-cover object-[center_15%] hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" decoding="async" src="/images/home/brc-brake-chamber-assembly.jpg?v=3" alt="BRC Brake Chamber Assembly Line Workers" className="w-full h-full object-cover object-[center_15%] hover:scale-105 transition-transform duration-700" />
               </motion.div>
               <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="rounded-2xl overflow-hidden h-40 md:h-48 shadow-lg">
-                <img src="/images/home/brc_quality_control_factory_worker.jpg?v=3" alt="Quality Control Testing" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" decoding="async" src="/images/home/brc_quality_control_factory_worker.jpg?v=3" alt="Quality Control Testing" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
               </motion.div>
               <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="rounded-2xl overflow-hidden h-40 md:h-48 shadow-lg">
-                <img src="/images/home/brc_quality_factory_punching_machine.jpg" alt="Factory Punching Machine" className="w-full h-full object-cover object-[center_35%] hover:scale-105 transition-transform duration-700" />
+                <img loading="lazy" decoding="async" src="/images/home/brc_quality_factory_punching_machine.jpg" alt="Factory Punching Machine" className="w-full h-full object-cover object-[center_35%] hover:scale-105 transition-transform duration-700" />
               </motion.div>
             </div>
 
@@ -427,7 +434,7 @@ export default function HomeClient({ blogPosts }: HomeClientProps) {
       {/* 5. R&D and Innovation Highlight */}
       <section className="relative overflow-hidden bg-navy-950 py-16 md:py-24 flex items-center border-t border-navy-800 group">
         <div className="absolute inset-0 overflow-hidden">
-          <img src="/images/brc-truck-background.jpg?v=3" alt="Commercial Truck" className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-[10s]" />
+          <img loading="lazy" decoding="async" src="/images/brc-truck-background.jpg?v=3" alt="Commercial Truck" className="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-[10s]" />
           <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/75 to-transparent"></div>
           {/* Accent gradient bar */}
           <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-amber-400 to-amber-600 shadow-[0_0_30px_rgba(245,158,11,0.6)]"></div>

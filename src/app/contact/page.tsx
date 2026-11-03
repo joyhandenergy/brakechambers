@@ -3,7 +3,7 @@ import BreadcrumbSchema from '@/components/layout/BreadcrumbSchema';
 import ContactClient from '@/features/contact/components/ContactClient';
 import { getPageSeo } from '@/sanity/queries';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateMetadata() {
   const seo = await getPageSeo('/contact');

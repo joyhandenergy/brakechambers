@@ -4,7 +4,7 @@ import Script from 'next/script';
 import HomeClient from '@/features/home/components/HomeClient';
 import { getBlogPosts, getPageSeo } from '@/sanity/queries';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSeo('/');

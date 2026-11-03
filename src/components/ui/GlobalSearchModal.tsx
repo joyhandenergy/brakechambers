@@ -5,13 +5,14 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, Package, ShieldCheck, ArrowRight } from 'lucide-react';
 import { useSearchModalStore } from '@/store/search';
+import { BRAKE_CHAMBERS } from '@/lib/data';
 import type { BrakeChamber } from '@/types';
 
 interface GlobalSearchModalProps {
-  products: BrakeChamber[];
+  products?: BrakeChamber[];
 }
 
-export default function GlobalSearchModal({ products }: GlobalSearchModalProps) {
+export default function GlobalSearchModal({ products = BRAKE_CHAMBERS }: GlobalSearchModalProps) {
   const router = useRouter();
   const { isOpen, closeSearch } = useSearchModalStore();
   const [query, setQuery] = useState('');

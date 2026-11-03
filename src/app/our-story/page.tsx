@@ -4,7 +4,7 @@ import CompanyClient from '@/features/company/components/CompanyClient';
 import { Metadata } from 'next';
 import { getPageSeo } from '@/sanity/queries';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSeo('/our-story');

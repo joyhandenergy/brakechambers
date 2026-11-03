@@ -17,18 +17,18 @@ export default function SplashScreen() {
       }
     } catch {}
 
-    // Set a timer for the splash screen fade out
+    // Set a timer for the splash screen fade out (kept brief to avoid penalizing Core Web Vitals LCP)
     const fadeTimer = setTimeout(() => {
       setIsFadingOut(true);
       try {
         sessionStorage.setItem('hasSeenSplash', 'true');
       } catch {}
-    }, 1100);
+    }, 100);
 
     // Set a timer to completely unmount after transition
     const removeTimer = setTimeout(() => {
       setIsRemoved(true);
-    }, 1600);
+    }, 400);
 
     return () => {
       clearTimeout(fadeTimer);
@@ -43,8 +43,8 @@ export default function SplashScreen() {
       id="splash-container"
       aria-hidden="true"
       suppressHydrationWarning
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white overflow-hidden global-splash-screen transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-        isFadingOut ? 'opacity-0 -translate-y-5 blur-[5px] pointer-events-none' : 'opacity-100 translate-y-0 blur-none'
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white overflow-hidden global-splash-screen pointer-events-none transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        isFadingOut ? 'opacity-0 -translate-y-3' : 'opacity-100 translate-y-0'
       }`}
     >
       {/* Creative Animation Container */}
@@ -73,6 +73,8 @@ export default function SplashScreen() {
           <img 
             src="/images/logo-brc.png" 
             alt="BRC Logo" 
+            width={48}
+            height={48}
             className="w-12 h-auto object-contain"
           />
         </div>

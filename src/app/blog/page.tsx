@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import BlogClient from '@/features/blog/components/BlogClient';
 import { getBlogPosts, getPageSeo } from '@/sanity/queries';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSeo('/blog');

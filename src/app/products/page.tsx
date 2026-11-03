@@ -4,7 +4,7 @@ import BreadcrumbSchema from '@/components/layout/BreadcrumbSchema';
 import ProductsClient from '@/features/products/components/ProductsClient';
 import { getPageSeo } from '@/sanity/queries';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const seo = await getPageSeo('/products');

@@ -109,7 +109,7 @@ import { BRAKE_CHAMBERS } from '@/lib/data';
 
 export async function getProducts(): Promise<BrakeChamber[]> {
   try {
-    const products = await client.fetch(allProductsQuery, {}, { next: { revalidate: 60 } });
+    const products = await client.fetch(allProductsQuery, {}, { next: { revalidate: 3600 } });
     if (products && Array.isArray(products) && products.length > 0) {
       const sanitized = sanitizeChinese(products);
       return sanitized.map((p: any) => {
@@ -175,7 +175,7 @@ export function resolveBlogCategory(category?: string, slug?: string): string {
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    const sanityPosts = await client.fetch(allBlogPostsQuery, {}, { next: { revalidate: 60 } });
+    const sanityPosts = await client.fetch(allBlogPostsQuery, {}, { next: { revalidate: 3600 } });
     if (sanityPosts && sanityPosts.length > 0) {
       return sanityPosts.map((p: any) => ({
         slug: p.slug,
@@ -219,7 +219,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 export async function getBlogPostBySlug(slug: string, canonicalSlug?: string): Promise<BlogPost | null> {
   const cSlug = canonicalSlug || slug;
   try {
-    const post = await client.fetch(singleBlogPostQuery, { slug, canonicalSlug: cSlug }, { next: { revalidate: 60 } });
+    const post = await client.fetch(singleBlogPostQuery, { slug, canonicalSlug: cSlug }, { next: { revalidate: 3600 } });
     if (post) {
       return {
         slug: post.slug,
@@ -263,7 +263,7 @@ export async function getBlogPostBySlug(slug: string, canonicalSlug?: string): P
 }
 
 export async function getPages() {
-  return await client.fetch(allPagesQuery, {}, { next: { revalidate: 60 } });
+  return await client.fetch(allPagesQuery, {}, { next: { revalidate: 3600 } });
 }
 
 export interface PageSeoResult {
@@ -291,7 +291,7 @@ export async function getPageSeo(path: string): Promise<PageSeoResult | null> {
         }
       }`,
       { path: normalizedPath, altPath },
-      { next: { revalidate: 60 } }
+      { next: { revalidate: 3600 } }
     );
 
     if (page?.seo?.metaTitle || page?.seo?.metaDescription) {
