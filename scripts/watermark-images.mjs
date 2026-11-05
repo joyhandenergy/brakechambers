@@ -48,6 +48,8 @@ const EXCLUDE = [
   /aapex/i,
   /event/i,
   /expo/i,
+  /^hero_truck_image_1\./i,
+  /^brc_brakechambers_shipping_exw_fob\./i,
 ];
 
 /** Watermark appearance settings */

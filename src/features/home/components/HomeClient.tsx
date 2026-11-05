@@ -25,7 +25,7 @@ const HERO_SLIDES = [
     description: "Source direct from our large-scale IATF 16949-aligned facility in Zhejiang, China. Eliminate middleman markups on premium aftermarket brake chambers for trucks, trailers, and commercial fleets worldwide.",
     cta1: { text: "Get Factory Pricing", link: "/quote" },
     cta2: { text: "Request Free Samples", link: "/contact" },
-    image: "/images/home/hero_truck_image_1.png",
+    image: "/images/home/hero_truck_image_1.jpg",
     gradient: "from-navy-950 via-navy-950/90 to-transparent",
     glow: "bg-amber-500"
   },

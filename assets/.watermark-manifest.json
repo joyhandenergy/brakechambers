@@ -29,9 +29,13 @@
       "cleanHash": "9081cf6e167dca7658dcfd1663c5b39886c3c49e",
       "outHash": "679faea1ef63c4f6cb5ce7c2e799c53e5e0f406b"
     },
+    "images/aapex-2026-v19710.jpg": {
+      "cleanHash": "9cc131a9ec28a1d119a77f83b291263fc55a72df",
+      "outHash": "9cc131a9ec28a1d119a77f83b291263fc55a72df"
+    },
     "images/aapex-2026.jpg": {
-      "cleanHash": "80b6632b9f8f3e128c68371ad4d39488449d46b1",
-      "outHash": "80b6632b9f8f3e128c68371ad4d39488449d46b1"
+      "cleanHash": "9cc131a9ec28a1d119a77f83b291263fc55a72df",
+      "outHash": "9cc131a9ec28a1d119a77f83b291263fc55a72df"
     },
     "images/applications/brc-commercial-trailer.jpg": {
       "cleanHash": "2bf10ff43ae2c4876a6d98fedd19b986b4e4bc60",
@@ -153,17 +157,17 @@
       "cleanHash": "84c7b0880238277847a1e638d24f3ce930bc91fa",
       "outHash": "1969e8d5e6d90410ff4503d787371e0a1f858242"
     },
-    "images/home/hero_truck_image_1.png": {
-      "cleanHash": "0f0b945342ab28a92dcc536533ebdbf589b5b500",
-      "outHash": "4a910ae366d50260fc1b247917c50b26eea97f6a"
+    "images/home/hero_truck_image_1.jpg": {
+      "cleanHash": "9a924c7373202b45a3101cc35541a3c5aa65c506",
+      "outHash": "9a924c7373202b45a3101cc35541a3c5aa65c506"
     },
     "images/home/hero_truck_image_2.jpg": {
-      "cleanHash": "a44c9fdaa403922b5468fb226be836d4f95baec8",
-      "outHash": "34559432c5723b8e736b7113e1d1eebe60e8a7f4"
+      "cleanHash": "55fcd7a6b80c17595b082bcd8b9b3fe096072ccb",
+      "outHash": "f969eb454ca0162371a46cd44a2c8e6013b248aa"
     },
     "images/home/hero_truck_image_3.jpg": {
-      "cleanHash": "75892d98354dba664570972469a54b7dc348a8c9",
-      "outHash": "9d6126b23eac189c665eb56bd7de19daffb8f839"
+      "cleanHash": "cedcbaf0aace1866e4173e3b813b0e14f27d705d",
+      "outHash": "602454625102d04a5491f065ce464707a6210c4e"
     },
     "images/home/piggy-accessory.png": {
       "cleanHash": "46a0f0ad124c7ff9f076092f54ade50cb01063a4",
@@ -334,16 +338,16 @@
       "outHash": "5703263ecd932fdc629d19970d984faa2105e901"
     },
     "images/shiping/brc_brakchamber_export_packaging_standard.jpg": {
-      "cleanHash": "f74086fca9cb323dd4f5c3ea3c1f65f5ff3d34ba",
-      "outHash": "028f5a769335a9b79e25d9fff8ede9c6e52fcb17"
+      "cleanHash": "f4f4f962b923fe999d2688b2d0dbf851c2bd196f",
+      "outHash": "f4f4f962b923fe999d2688b2d0dbf851c2bd196f"
     },
     "images/shiping/brc_brakechamber_fcl_and_lcl.jpg": {
-      "cleanHash": "992c8f39852847f4c6f3d4cc12986217fe5c2c98",
-      "outHash": "df2fab2be36d7ab1ff61215012cea08c2fcb32d7"
+      "cleanHash": "d821ce8c733ef569c54351fd5a5de05ad8b4e140",
+      "outHash": "d128e9a93b272882fcb76361a4b5b8359fb796ab"
     },
     "images/shiping/brc_brakechambers_shipping_exw_fob.jpg": {
-      "cleanHash": "0ee47ed22916c6a028b40cde079c5107013eed3c",
-      "outHash": "7d2235ccbf552b20f6054546f51abddcc4d84797"
+      "cleanHash": "ef83a09b3a05a4ac728f4cef7755db16cc390268",
+      "outHash": "ef83a09b3a05a4ac728f4cef7755db16cc390268"
     },
     "productsImage/brc-hino-he-rear-brake-12-drawing.jpg": {
       "cleanHash": "6d15d89cc0bd3cb9c5aa75ce041d55750366151b",

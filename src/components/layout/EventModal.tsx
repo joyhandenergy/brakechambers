@@ -23,18 +23,18 @@ export default function EventModal() {
     setMounted(true);
 
     try {
-      const badgeDismissed = sessionStorage.getItem('brc_aapex_badge_dismissed');
+      const badgeDismissed = sessionStorage.getItem('brc_aapex_badge_dismissed_v2');
       if (!badgeDismissed) {
         setShowBadge(true);
       }
 
-      const hasSeenThisSession = sessionStorage.getItem('brc_aapex_modal_seen');
+      const hasSeenThisSession = sessionStorage.getItem('brc_aapex_modal_seen_v2');
 
       // Initial visit: show full pop-up once after a gentle 2.5s delay
       if (!hasSeenThisSession) {
         const timer = setTimeout(() => {
           setIsOpen(true);
-          sessionStorage.setItem('brc_aapex_modal_seen', 'true');
+          sessionStorage.setItem('brc_aapex_modal_seen_v2', 'true');
         }, 2500);
 
         return () => clearTimeout(timer);
@@ -48,7 +48,7 @@ export default function EventModal() {
   const closeModal = useCallback(() => {
     setIsOpen(false);
     try {
-      sessionStorage.setItem('brc_aapex_modal_seen', 'true');
+      sessionStorage.setItem('brc_aapex_modal_seen_v2', 'true');
     } catch {}
   }, []);
 
@@ -56,7 +56,7 @@ export default function EventModal() {
     e.stopPropagation();
     setShowBadge(false);
     try {
-      sessionStorage.setItem('brc_aapex_badge_dismissed', 'true');
+      sessionStorage.setItem('brc_aapex_badge_dismissed_v2', 'true');
     } catch {}
   }, []);
 
@@ -76,7 +76,7 @@ export default function EventModal() {
 
   // Pre-filled WhatsApp link
   const whatsappUrl = `https://wa.me/85253629718?text=${encodeURIComponent(
-    "Hello BRC! I'm attending AAPEX 2026 in Las Vegas and would like to meet at Booth #19710."
+    "Hello BRC! I'm attending AAPEX 2026 in Las Vegas and would like to meet at Booth #V19710."
   )}`;
 
   return (
@@ -132,10 +132,10 @@ export default function EventModal() {
                 title="Click to chat with us on WhatsApp (+852 53629718)"
               >
                 <Image
-                  src="/images/aapex-2026.jpg"
-                  alt="Meet BRC Brake Chambers at AAPEX 2026 Las Vegas - Booth 19710 (Nov 3-5)"
-                  width={980}
-                  height={980}
+                  src="/images/aapex-2026-v19710.jpg"
+                  alt="Meet BRC Brake Chambers at AAPEX 2026 Las Vegas - Booth V19710 (Nov 3-5)"
+                  width={780}
+                  height={780}
                   sizes="(max-width: 640px) 90vw, 420px"
                   className="w-full h-auto object-contain block rounded-xl sm:rounded-2xl"
                 />
@@ -199,10 +199,10 @@ export default function EventModal() {
                 {/* Shows the top half of the flyer image: BRC logo, Las Vegas, AAPEX 2026, Booth #19710 */}
                 <div className="relative w-full h-20 sm:h-24 overflow-hidden bg-navy-950">
                   <Image
-                    src="/images/aapex-2026.jpg"
-                    alt="AAPEX 2026 Las Vegas Booth 19710"
-                    width={980}
-                    height={980}
+                    src="/images/aapex-2026-v19710.jpg"
+                    alt="AAPEX 2026 Las Vegas Booth V19710"
+                    width={780}
+                    height={780}
                     sizes="208px"
                     className="w-full h-auto object-cover object-top transition-transform duration-300 group-hover:scale-105"
                   />
