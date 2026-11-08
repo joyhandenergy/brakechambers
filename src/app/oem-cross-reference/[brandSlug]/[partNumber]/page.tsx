@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getProducts } from '@/sanity/queries';
@@ -18,6 +19,11 @@ export async function generateStaticParams() {
         const brandSlug = oem.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const partNumber = oem.partNumber.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         params.push({ brandSlug, partNumber });
+        if (brandSlug === 'generic-unbranded') {
+          params.push({ brandSlug: 'oem-interchange', partNumber });
+        } else if (brandSlug === 'oem-interchange') {
+          params.push({ brandSlug: 'generic-unbranded', partNumber });
+        }
       });
     }
   });
@@ -30,19 +36,32 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const BRAKE_CHAMBERS = await getProducts();
   const params = await props.params;
-  const normalizedBrand = params.brandSlug.toUpperCase();
+  const isGeneric = 
+    params.brandSlug.includes('generic') || 
+    params.brandSlug.includes('unbranded') || 
+    params.brandSlug.includes('oem-interchange');
+
+  const normalizedBrand = isGeneric ? 'OEM' : params.brandSlug.toUpperCase();
   const partNumber = params.partNumber.toUpperCase();
 
+  const title = isGeneric
+    ? `OEM Part # ${partNumber} Brake Chamber Equivalent | BRC Direct Replacement`
+    : `${normalizedBrand} ${partNumber} Brake Chamber Equivalent | BRC Aftermarket`;
+
+  const description = isGeneric
+    ? `Direct 1:1 aftermarket replacement for OEM brake chamber part # ${partNumber}. Verified fit, form, and function for heavy-duty commercial vehicle air brake systems.`
+    : `Direct 1:1 replacement for ${normalizedBrand} ${partNumber} air brake chamber. Verified fit, form, and function for commercial vehicle air brakes.`;
+
   return {
-    title: `${normalizedBrand} ${partNumber} Equivalent | BRC Brake Chambers`,
-    description: `Direct 1:1 replacement for ${normalizedBrand} ${partNumber}. Verified fit, form, and function for heavy-duty commercial vehicle air brake systems.`,
-    keywords: [`${partNumber} replacement`, `${normalizedBrand} ${partNumber}`, 'Cross Reference', 'Direct Replacement', 'Aftermarket'],
+    title,
+    description,
+    keywords: [`${partNumber} brake chamber`, `${partNumber} replacement`, `${partNumber} cross reference`, 'OEM Interchange', 'Direct Replacement', 'Aftermarket Brake Chamber'],
     alternates: {
       canonical: `https://www.brakechambers.com/oem-cross-reference/${params.brandSlug}/${params.partNumber}`,
     },
     openGraph: {
-      title: `${normalizedBrand} ${partNumber} Equivalent | BRC Brake Chambers`,
-      description: `Direct 1:1 replacement for ${normalizedBrand} ${partNumber}. Verified fit, form, and function for heavy-duty commercial vehicle air brake systems.`,
+      title,
+      description,
       url: `https://www.brakechambers.com/oem-cross-reference/${params.brandSlug}/${params.partNumber}`,
       siteName: 'BRC Brake Chambers',
       images: [
@@ -50,7 +69,7 @@ export async function generateMetadata(
           url: 'https://www.brakechambers.com/images/logo-brc.png',
           width: 800,
           height: 800,
-          alt: `${normalizedBrand} ${partNumber} Replacement Brake Chamber`,
+          alt: `Part ${partNumber} Replacement Brake Chamber`,
         },
       ],
       type: 'website',
@@ -64,17 +83,27 @@ export default async function OEMPartNumberPage(
   const BRAKE_CHAMBERS = await getProducts();
   const params = await props.params;
   
-  // Find the matching BRC chamber based on brandSlug and partNumber
+  // Find the matching BRC chamber based on brandSlug and partNumber (with fuzzy punctuation tolerance)
   let matchedChamber = null;
   let oemOriginalBrand = '';
   let oemOriginalPart = '';
+
+  const cleanReqPart = params.partNumber.replace(/[^a-z0-9]/gi, '').toLowerCase();
 
   for (const chamber of BRAKE_CHAMBERS) {
     if (chamber.oemPartNumbers) {
       const match = chamber.oemPartNumbers.find(oem => {
         const oBrandSlug = oem.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const oPartNum = oem.partNumber.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-        return oBrandSlug === params.brandSlug && oPartNum === params.partNumber;
+        const cleanDbPart = oem.partNumber.replace(/[^a-z0-9]/gi, '').toLowerCase();
+
+        const brandMatches = 
+          oBrandSlug === params.brandSlug ||
+          ((params.brandSlug === 'generic-unbranded' || params.brandSlug === 'oem-interchange') && 
+           (oBrandSlug === 'oem-interchange' || oBrandSlug === 'generic-unbranded'));
+
+        const partMatches = oPartNum === params.partNumber || cleanDbPart === cleanReqPart;
+        return brandMatches && partMatches;
       });
       
       if (match) {
@@ -86,23 +115,107 @@ export default async function OEMPartNumberPage(
     }
   }
 
+  // Fallback: match by part number across any brand if not found above
+  if (!matchedChamber) {
+    for (const chamber of BRAKE_CHAMBERS) {
+      if (chamber.oemPartNumbers) {
+        const match = chamber.oemPartNumbers.find(oem => {
+          const oPartNum = oem.partNumber.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+          const cleanDbPart = oem.partNumber.replace(/[^a-z0-9]/gi, '').toLowerCase();
+          return oPartNum === params.partNumber || cleanDbPart === cleanReqPart;
+        });
+        if (match) {
+          matchedChamber = chamber;
+          oemOriginalBrand = match.brand;
+          oemOriginalPart = match.partNumber;
+          break;
+        }
+      }
+    }
+  }
+
+  // Also check hiddenSearchTags if not found in oemPartNumbers
+  if (!matchedChamber) {
+    for (const chamber of BRAKE_CHAMBERS) {
+      if (chamber.hiddenSearchTags && chamber.hiddenSearchTags.length > 0) {
+        const tagMatch = chamber.hiddenSearchTags.find((tag: string) => {
+          const cleanTag = tag.replace(/[^a-z0-9]/gi, '').toLowerCase();
+          return cleanTag === cleanReqPart;
+        });
+        if (tagMatch) {
+          matchedChamber = chamber;
+          oemOriginalBrand = chamber.crossReferenceBrands?.[0] || 'OEM Interchange';
+          oemOriginalPart = tagMatch;
+          break;
+        }
+      }
+    }
+  }
+
   if (!matchedChamber) {
     notFound();
   }
+
+  const isGeneric = 
+    !oemOriginalBrand || 
+    oemOriginalBrand.toLowerCase().includes('generic') || 
+    oemOriginalBrand.toLowerCase().includes('unbranded') ||
+    oemOriginalBrand.toLowerCase() === 'oem interchange' ||
+    params.brandSlug === 'generic-unbranded' ||
+    params.brandSlug === 'oem-interchange';
 
   const categoryPath = matchedChamber.category === 'Spring Brake' ? 'spring-brake-chambers' : 
                        matchedChamber.category === 'Service Brake' ? 'service-brake-chambers' : 'air-disc-brake-actuators';
 
   return (
     <div className="bg-slate-50 min-h-screen pb-16">
+      <Script
+        id={`oem-replacement-schema-${params.brandSlug}-${params.partNumber}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": `${matchedChamber.name} (Direct Replacement for OEM ${oemOriginalPart})`,
+            "image": [
+              (matchedChamber.imageUrl || '/productsImage/brc-t16-single-brake-1.jpg').startsWith('http')
+                ? (matchedChamber.imageUrl || '/productsImage/brc-t16-single-brake-1.jpg')
+                : `https://www.brakechambers.com${matchedChamber.imageUrl || '/productsImage/brc-t16-single-brake-1.jpg'}`
+            ],
+            "description": `Direct 1:1 aftermarket replacement for OEM brake chamber part number ${oemOriginalPart}. Guaranteed fit, form, and function.`,
+            "mpn": oemOriginalPart,
+            "sku": matchedChamber.slug,
+            "brand": {
+              "@type": "Brand",
+              "name": "BRC Brake Chambers"
+            },
+            "offers": {
+              "@type": "Offer",
+              "url": `https://www.brakechambers.com/oem-cross-reference/${params.brandSlug}/${params.partNumber}`,
+              "priceCurrency": "USD",
+              "price": matchedChamber.priceUSD || "45.00",
+              "availability": "https://schema.org/InStock",
+              "seller": {
+                "@type": "Organization",
+                "name": "BRC Brake Chambers"
+              }
+            }
+          })
+        }}
+      />
       <PageHeader 
         badge="Direct Replacement"
-        title={`${oemOriginalBrand} ${oemOriginalPart} Equivalent`}
-        description={`Found an exact 1:1 direct aftermarket replacement for ${oemOriginalBrand} part number ${oemOriginalPart}. No modifications required.`}
+        title={isGeneric ? `OEM Part # ${oemOriginalPart} Brake Chamber Equivalent` : `${oemOriginalBrand} ${oemOriginalPart} Brake Chamber Equivalent`}
+        description={isGeneric
+          ? `Found an exact 1:1 direct aftermarket replacement for OEM brake chamber part number ${oemOriginalPart}. Direct fit for ${matchedChamber.name.split('(')[0].trim()} with zero bracket modifications required.`
+          : `Found an exact 1:1 direct aftermarket replacement for ${oemOriginalBrand} brake chamber part number ${oemOriginalPart}. Direct fit for ${matchedChamber.name.split('(')[0].trim()} with zero bracket modifications required.`
+        }
         breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'OEM Cross-Reference', href: '/oem-cross-reference' },
-          { label: oemOriginalBrand, href: `/oem-cross-reference/${params.brandSlug}` },
+          ...(isGeneric
+            ? [{ label: 'Interchange Database', href: '/oem-cross-reference/database' }]
+            : [{ label: oemOriginalBrand, href: `/oem-cross-reference/${params.brandSlug}` }]),
           { label: oemOriginalPart }
         ]}
       />
@@ -117,7 +230,9 @@ export default async function OEMPartNumberPage(
             </div>
             <div>
               <h2 className="text-emerald-950 font-bold text-lg sm:text-xl tracking-tight !mb-0.5">100% Compatibility Match Verified</h2>
-              <p className="text-emerald-800 text-sm font-medium">We found the exact BRC factory-direct equivalent for your {oemOriginalBrand} part.</p>
+              <p className="text-emerald-800 text-sm font-medium">
+                We found the exact BRC factory-direct equivalent for {isGeneric ? `OEM part #${oemOriginalPart}` : `your ${oemOriginalBrand} part`}.
+              </p>
             </div>
           </div>
           <div className="flex items-center text-sm font-bold text-emerald-900 border border-emerald-200 bg-white/90 px-4 py-2.5 rounded-xl shrink-0 shadow-sm">
@@ -137,7 +252,9 @@ export default async function OEMPartNumberPage(
                 <div className="flex-1 w-full bg-white rounded-2xl p-6 border border-slate-200 text-center relative overflow-hidden shadow-sm">
                   <div className="absolute top-0 left-0 w-full h-1.5 bg-slate-400"></div>
                   <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">Original Part</div>
-                  <div className="font-black text-xl sm:text-2xl text-navy-900 mb-1">{oemOriginalBrand}</div>
+                  <div className="font-black text-xl sm:text-2xl text-navy-900 mb-1">
+                    {isGeneric ? 'OEM Interchange' : oemOriginalBrand}
+                  </div>
                   <div className="font-mono text-slate-700 font-bold bg-slate-100 py-1 px-3 rounded-lg inline-block text-sm border border-slate-200/80">{oemOriginalPart}</div>
                 </div>
 
@@ -222,7 +339,7 @@ export default async function OEMPartNumberPage(
                   <h4 className="font-bold text-navy-900 !mb-0">Form, Fit & Function Guaranteed</h4>
                 </div>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  This BRC chamber provides a precision 1:1 mechanical and pneumatic replacement for the <strong className="text-navy-900">{oemOriginalBrand} {oemOriginalPart}</strong>, guaranteeing factory pushrod alignment, mounting stud centerlines, and calibrated release timing. 100% direct fit with zero bracket modifications required.
+                  This BRC chamber provides a precision 1:1 mechanical and pneumatic replacement for {isGeneric ? <>OEM Part # <strong className="text-navy-900">{oemOriginalPart}</strong></> : <><strong className="text-navy-900">{oemOriginalBrand} {oemOriginalPart}</strong></>}, guaranteeing factory pushrod alignment, mounting stud centerlines, and calibrated release timing. 100% direct fit with zero bracket modifications required.
                 </p>
               </div>
 
@@ -262,7 +379,7 @@ export default async function OEMPartNumberPage(
                      <p className="text-sm text-slate-300 leading-relaxed"><strong className="!text-white block mb-0.5">Global Logistics</strong> We handle everything from EXW to CIF. Most parts ship same-day globally.</p>
                    </li>
                  </ul>
-                 <Link href={`/quote?part=${encodeURIComponent(oemOriginalPart)}&brand=${encodeURIComponent(oemOriginalBrand)}`} className="block w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-navy-950 text-center rounded-xl text-sm font-black uppercase tracking-widest transition-all shadow-lg shadow-amber-500/20">
+                 <Link href={`/quote?part=${encodeURIComponent(oemOriginalPart)}&brand=${encodeURIComponent(isGeneric ? 'OEM' : oemOriginalBrand)}`} className="block w-full py-3.5 bg-amber-500 hover:bg-amber-400 text-navy-950 text-center rounded-xl text-sm font-black uppercase tracking-widest transition-all shadow-lg shadow-amber-500/20">
                    Request Bulk Pricing
                  </Link>
                </div>
@@ -277,14 +394,16 @@ export default async function OEMPartNumberPage(
         <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-200 pb-4 gap-2">
           <div>
             <div className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-1">Catalog Interchange</div>
-            <h3 className="text-2xl font-bold text-navy-900 !mb-0">More {oemOriginalBrand} Cross-References</h3>
+            <h3 className="text-2xl font-bold text-navy-900 !mb-0">
+              {isGeneric ? 'More Verified OEM Cross-References' : `More ${oemOriginalBrand} Cross-References`}
+            </h3>
           </div>
-          <Link href={`/oem-cross-reference/${params.brandSlug}`} className="text-amber-600 hover:text-amber-700 font-bold text-sm inline-flex items-center gap-1 group">
-            Browse All {oemOriginalBrand} Parts <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <Link href={isGeneric ? '/oem-cross-reference/database' : `/oem-cross-reference/${params.brandSlug}`} className="text-amber-600 hover:text-amber-700 font-bold text-sm inline-flex items-center gap-1 group">
+            {isGeneric ? 'Browse Full Interchange Database' : `Browse All ${oemOriginalBrand} Parts`} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>
-      <CrossReferenceMarquee filterBrand={oemOriginalBrand} maxItems={15} />
+      <CrossReferenceMarquee filterBrand={isGeneric ? undefined : oemOriginalBrand} maxItems={15} />
     </div>
   );
 }

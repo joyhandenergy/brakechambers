@@ -5,7 +5,7 @@ import BreadcrumbSchema from '@/components/layout/BreadcrumbSchema';
 import OEMCrossReferenceClient from '@/features/oem/components/OEMCrossReferenceClient';
 
 
-import { getPageSeo } from '@/sanity/queries';
+import { getPageSeo, getProducts } from '@/sanity/queries';
 
 export const revalidate = 60;
 
@@ -30,10 +30,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function OEMCrossReference() {
+export default async function OEMCrossReference() {
+  const products = await getProducts();
+
   return (
     <>
-      <OEMCrossReferenceClient />
+      <OEMCrossReferenceClient products={products} />
 
 
       {/* JSON-LD Schema */}

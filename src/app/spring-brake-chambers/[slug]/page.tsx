@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getProducts, getPageSeo } from '@/sanity/queries';
 import { SPRING_BRAKES_META } from '@/lib/categoryMeta';
+import { findProductBySlug, getAllSlugsForProduct } from '@/lib/slugMapping';
 import ProductListingLayout from '@/features/products/components/ProductListingLayout';
 import ProductDetailLayout from '@/features/products/product-detail/ProductDetailLayout';
 
@@ -11,8 +12,13 @@ export const revalidate = 60;
 export async function generateStaticParams() {
   const BRAKE_CHAMBERS = await getProducts();
   const categories = Object.keys(SPRING_BRAKES_META).map((slug) => ({ slug }));
-  const products = BRAKE_CHAMBERS.filter(p => p.category === 'Spring Brake').map(p => ({ slug: p.slug }));
-  return [...categories, ...products];
+  const springProducts = BRAKE_CHAMBERS.filter(p => p.category === 'Spring Brake');
+  const productSlugs = new Set<string>();
+  springProducts.forEach(p => {
+    getAllSlugsForProduct(p.slug).forEach(s => productSlugs.add(s));
+    if (p.aliases) p.aliases.forEach(a => productSlugs.add(a));
+  });
+  return [...categories, ...Array.from(productSlugs).map(slug => ({ slug }))];
 }
 
 export async function generateMetadata(
@@ -43,7 +49,7 @@ export async function generateMetadata(
     };
   }
 
-  const product = BRAKE_CHAMBERS.find(p => p.slug === slug && p.category === 'Spring Brake');
+  const product = findProductBySlug(BRAKE_CHAMBERS, slug, 'Spring Brake');
   if (product) {
     const title = product.seo?.metaTitle || `${product.name} | BRC Manufacturer`;
     const description = product.seo?.metaDescription || `Wholesale ${product.name}. Factory direct pricing.`;
@@ -116,7 +122,7 @@ export default async function SpringBrakesSlugPage(
   }
 
   // 2. Is it a specific product?
-  const product = BRAKE_CHAMBERS.find(p => p.slug === slug && p.category === 'Spring Brake');
+  const product = findProductBySlug(BRAKE_CHAMBERS, slug, 'Spring Brake');
   if (product) {
     return (
       <ProductDetailLayout 

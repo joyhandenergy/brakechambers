@@ -106,6 +106,7 @@ function sanitizeChinese<T>(data: T): T {
 }
 
 import { BRAKE_CHAMBERS } from '@/lib/data';
+import { LOCAL_TO_SANITY_SLUG, SANITY_TO_LOCAL_SLUG, matchProductSlug } from '@/lib/slugMapping';
 
 export async function getProducts(): Promise<BrakeChamber[]> {
   try {
@@ -127,7 +128,13 @@ export async function getProducts(): Promise<BrakeChamber[]> {
           ? [...p.uploadedImages, ...normalizedGallery]
           : (normalizedGallery.length > 0 ? normalizedGallery : ['/productsImage/brc-t16-single-brake-1.jpg']);
 
-        const fallbackChamber = BRAKE_CHAMBERS.find(b => b.slug === p.slug);
+        const fallbackChamber = BRAKE_CHAMBERS.find(b =>
+          b.slug === p.slug ||
+          LOCAL_TO_SANITY_SLUG[b.slug] === p.slug ||
+          SANITY_TO_LOCAL_SLUG[p.slug] === b.slug ||
+          b.name.trim().toLowerCase() === p.name?.trim().toLowerCase()
+        );
+
         const oemPartNumbers = (p.oemPartNumbers && p.oemPartNumbers.length > 0)
           ? p.oemPartNumbers
           : fallbackChamber?.oemPartNumbers;
@@ -138,8 +145,16 @@ export async function getProducts(): Promise<BrakeChamber[]> {
           ? p.crossReferenceBrands
           : fallbackChamber?.crossReferenceBrands;
 
+        const aliases = Array.from(new Set([
+          p.slug,
+          fallbackChamber?.slug,
+          SANITY_TO_LOCAL_SLUG[p.slug],
+          LOCAL_TO_SANITY_SLUG[p.slug]
+        ].filter(Boolean) as string[]));
+
         return {
           ...p,
+          aliases,
           oemPartNumbers: oemPartNumbers || [],
           hiddenSearchTags: hiddenSearchTags || [],
           crossReferenceBrands: crossReferenceBrands || fallbackChamber?.crossReferenceBrands || [],
@@ -151,7 +166,10 @@ export async function getProducts(): Promise<BrakeChamber[]> {
   } catch (err) {
     console.warn('Sanity getProducts fetch failed or timed out, using fallback:', err);
   }
-  return BRAKE_CHAMBERS;
+  return BRAKE_CHAMBERS.map(b => ({
+    ...b,
+    aliases: Array.from(new Set([b.slug, LOCAL_TO_SANITY_SLUG[b.slug]].filter(Boolean) as string[]))
+  }));
 }
 
 export function resolveBlogCategory(category?: string, slug?: string): string {

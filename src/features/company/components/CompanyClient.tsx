@@ -65,7 +65,7 @@ export default function CompanyClient() {
               className="w-full lg:w-1/2 relative"
             >
               <div className="relative h-[400px] sm:h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-100">
-                <Image src="/images/brc_brakechamber_building.jpg" alt="BRC Manufacturing Building" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-all duration-700 hover:scale-105" />
+                <Image src="/images/brc_brakechamber_building_1.jpg" alt="BRC Manufacturing Building" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover object-top transition-all duration-700 hover:scale-105" />
                 {/* Subtle vignette gradient only at bottom edge */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy-950/60 to-transparent h-28 pointer-events-none"></div>
 

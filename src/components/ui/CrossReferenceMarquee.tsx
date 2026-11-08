@@ -29,10 +29,14 @@ export default function CrossReferenceMarquee({ filterBrand, maxItems = 15 }: Cr
       'Air Disc Actuator': 'air-disc-brake-actuators'
     };
 
+    const effectiveFilter = filterBrand && !filterBrand.toLowerCase().includes('generic') && !filterBrand.toLowerCase().includes('unbranded')
+      ? filterBrand.toLowerCase()
+      : null;
+
     BRAKE_CHAMBERS.forEach(chamber => {
       if (chamber.oemPartNumbers) {
         chamber.oemPartNumbers.forEach(oem => {
-          if (!filterBrand || oem.brand.toLowerCase() === filterBrand.toLowerCase()) {
+          if (!effectiveFilter || oem.brand.toLowerCase() === effectiveFilter) {
             allMatches.push({
               oemBrand: oem.brand,
               oemPart: oem.partNumber,
@@ -81,7 +85,11 @@ export default function CrossReferenceMarquee({ filterBrand, maxItems = 15 }: Cr
                     </p>
                     <div className="flex items-baseline gap-2">
                       <span className="font-black text-navy-900 text-[22px] tracking-tight truncate">{match.oemPart}</span>
-                      <span className="font-semibold text-slate-500 text-sm truncate">{match.oemBrand}</span>
+                      <span className="font-semibold text-slate-500 text-sm truncate">
+                        {match.oemBrand && !match.oemBrand.toLowerCase().includes('generic') && !match.oemBrand.toLowerCase().includes('unbranded')
+                          ? match.oemBrand
+                          : 'OEM Interchange'}
+                      </span>
                     </div>
                   </div>
 
@@ -137,7 +145,11 @@ export default function CrossReferenceMarquee({ filterBrand, maxItems = 15 }: Cr
                     </p>
                     <div className="flex items-baseline gap-2">
                       <span className="font-black text-navy-900 text-[22px] tracking-tight truncate">{match.oemPart}</span>
-                      <span className="font-semibold text-slate-500 text-sm truncate">{match.oemBrand}</span>
+                      <span className="font-semibold text-slate-500 text-sm truncate">
+                        {match.oemBrand && !match.oemBrand.toLowerCase().includes('generic') && !match.oemBrand.toLowerCase().includes('unbranded')
+                          ? match.oemBrand
+                          : 'OEM Interchange'}
+                      </span>
                     </div>
                   </div>
 

@@ -11,7 +11,7 @@ export default function ProductListCard({ product, categoryPath }: { product: Br
       {/* Left: Image (Flexible height, fixed width on desktop) */}
       <div className="w-[100px] sm:w-36 md:w-40 aspect-square sm:aspect-auto sm:min-h-full flex-shrink-0 relative bg-white flex items-center justify-center p-2 sm:p-4 border-r border-slate-100">
         <Image 
-          src={product.galleryUrls[0]} 
+          src={product.galleryUrls?.[0] || '/productsImage/brc-t16-single-brake-1.jpg'} 
           alt={product.name}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
@@ -52,11 +52,15 @@ export default function ProductListCard({ product, categoryPath }: { product: Br
                   Replaces OEM:
                 </span>
                 <div className="flex overflow-hidden gap-2">
-                  {product.oemPartNumbers.slice(0, 2).map((oem: any, idx: number) => (
-                    <span key={idx} className="text-[10px] sm:text-[11px] font-mono font-semibold text-navy-800 bg-white px-1.5 py-0.5 border border-slate-200 rounded shadow-sm whitespace-nowrap">
-                      {oem.brand} {oem.partNumber}
-                    </span>
-                  ))}
+                  {product.oemPartNumbers.slice(0, 2).map((oem: any, idx: number) => {
+                    const isGeneric = !oem.brand || oem.brand.toLowerCase().includes('generic') || oem.brand.toLowerCase().includes('unbranded');
+                    const label = isGeneric ? oem.partNumber : (oem.brand === 'OEM Interchange' ? `OEM: ${oem.partNumber}` : `${oem.brand}: ${oem.partNumber}`);
+                    return (
+                      <span key={idx} className="text-[10px] sm:text-[11px] font-mono font-semibold text-navy-800 bg-white px-1.5 py-0.5 border border-slate-200 rounded shadow-sm whitespace-nowrap">
+                        {label}
+                      </span>
+                    );
+                  })}
                   {product.oemPartNumbers.length > 2 && (
                     <span className="text-[9px] sm:text-[10px] font-bold text-slate-400 self-center uppercase whitespace-nowrap">
                       +{product.oemPartNumbers.length - 2} More

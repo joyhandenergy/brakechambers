@@ -8,6 +8,7 @@ import CookieConsent from '@/components/layout/CookieConsent';
 import SplashScreen from '@/components/layout/SplashScreen';
 import EventModal from '@/components/layout/EventModal';
 import GlobalSearchModal from '@/components/ui/GlobalSearchModal';
+import { getProducts } from '@/sanity/queries';
 import Script from 'next/script';
 import NextTopLoader from 'nextjs-toploader';
 
@@ -65,11 +66,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const products = await getProducts();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -79,7 +82,7 @@ export default function RootLayout({
         <link rel="icon" href="/icon-192.png" sizes="192x192" type="image/png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="preconnect" href="https://translate.googleapis.com" crossOrigin="anonymous" />
-        <script id="splash-check" dangerouslySetInnerHTML={{ __html: `
+        <Script id="splash-check" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: `
           try {
             if (sessionStorage.getItem('hasSeenSplash')) {
               document.documentElement.classList.add('hide-splash');
@@ -133,7 +136,7 @@ export default function RootLayout({
         <main className="flex-grow">
           {children}
         </main>
-        <GlobalSearchModal />
+        <GlobalSearchModal products={products} />
         <WhatsAppWidget />
         <CookieConsent />
         <EventModal />

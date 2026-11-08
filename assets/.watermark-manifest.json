@@ -65,6 +65,14 @@
       "cleanHash": "aa45ddf6d5ddab0ac7158d7f2cf90f574463b150",
       "outHash": "248572acbfe4cdc971b6cfe243f070b2d98571a4"
     },
+    "images/brc_brakechamber_building_1.jpg": {
+      "cleanHash": "eadc1a41eeb2e31b1bd557f326b826a01be109fb",
+      "outHash": "d2ba7970a17e97d1d9a83569404940423f876f5b"
+    },
+    "images/brc_brakechamber_building_2.jpg": {
+      "cleanHash": "4e81868bc7ef2f87ac0fa330bce7f8c319e296f7",
+      "outHash": "257a469e25f29bc090cedfbabf11e672067bd4d6"
+    },
     "images/brc_brakechamber_building.jpg": {
       "cleanHash": "37dc021a66a32017fd04c44e6941a487c556c060",
       "outHash": "eec7742c827ef52e87781d81f4439107ef02545b"

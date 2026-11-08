@@ -406,8 +406,8 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['S03055A', 'T2024HLM', '20/24 Brake Cylinder', 'Double Diaphragm Brake Chamber'],
     galleryUrls: ['/productsImage/brc-t2424-short-rod-spring-brake-6.jpg', '/productsImage/brc-t2424-short-rod-spring-brake-6-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: 'S03055A', notes: 'Original No Variant A' },
-      { brand: 'Generic/Unbranded', partNumber: 'T2024HLM', notes: 'Original No Variant B' }
+      { brand: 'OEM Interchange', partNumber: 'S03055A', notes: 'Original No Variant A' },
+      { brand: 'OEM Interchange', partNumber: 'T2024HLM', notes: 'Original No Variant B' }
     ]
   }),
   createChamber('t2424-short', 'Type 24/24 Short-Rod Double Diaphragm Spring Brake Chamber', 'Type 24/24', 'Spring Brake', 'Standard', 48.00, {
@@ -426,8 +426,8 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['S03037F', 'T2424HLM', '24/24 Emergency Air Pot', 'Double Diaphragm Brake Chamber'],
     galleryUrls: ['/productsImage/brc-t2424-short-rod-spring-brake-6.jpg', '/productsImage/brc-t2424-short-rod-spring-brake-6-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: 'S03037F', notes: 'Original No Variant A' },
-      { brand: 'Generic/Unbranded', partNumber: 'T2424HLM', notes: 'Original No Variant B' }
+      { brand: 'OEM Interchange', partNumber: 'S03037F', notes: 'Original No Variant A' },
+      { brand: 'OEM Interchange', partNumber: 'T2424HLM', notes: 'Original No Variant B' }
     ]
   }),
   createChamber('t2424-mgm-spring', 'Type 24/24 Double Diaphragm Spring Brake Chamber (MGM Style)', 'Type 24/24', 'Spring Brake', 'Standard', 45.00, {
@@ -543,7 +543,7 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['925.384.001.0', '9253840010', '1624ShortStrokeSpring', 'Short Stroke Spring Brake', 'Metric Stub Rod Maxibrake'],
     galleryUrls: ['/productsImage/brc-t1624-short-stroke-spring-brake-8-v2.jpg', '/productsImage/brc-t1624-short-stroke-spring-brake-8-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '925.384.001.0', notes: 'Direct Match' }
+      { brand: 'Wabco', partNumber: '925.384.001.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t2024-short-stroke-spring', 'Type 20/24 Short-Stroke Double Diaphragm Spring Brake Chamber (15mm Pushrod)', 'Type 20/24', 'Spring Brake', 'Standard', 45.00, {
@@ -561,7 +561,7 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['925.380.002.0', '9253800020', '2024ShortStrokeSpring', 'Short Stroke Spring Brake', 'SR8 Spherical Double Diaphragm'],
     galleryUrls: ['/productsImage/brc-t1624-short-stroke-spring-brake-8-v2.jpg', '/productsImage/brc-t1624-short-stroke-spring-brake-8-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '925.380.002.0', notes: 'Direct Match' }
+      { brand: 'Wabco', partNumber: '925.380.002.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t2024-japanese-flange-spring', 'Type 20/24 Japanese Style 4-Bolt Flange Double Diaphragm Spring Brake', 'Type 20/24', 'Spring Brake', 'Standard', 48.00, {
@@ -674,7 +674,7 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['300.100.02', 'Boss Mount Brake Chamber', 'T9-A Brake Cylinder'],
     galleryUrls: ['/productsImage/brc-t12b-boss-mount-brake-11.jpg', '/productsImage/brc-t12b-boss-mount-brake-11--drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '300.100.02', notes: 'Direct Match' }
+      { brand: 'OEM Interchange', partNumber: '300.100.02', notes: 'Direct Match' }
     ]
   }),
   createChamber('t12b-boss', 'Type 12-B Boss-Mounted Single Diaphragm Brake Chamber', 'Type 12', 'Service Brake', 'Standard', 24.00, {
@@ -851,10 +851,11 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     yokeClevisGapWidth: '14.5 mm',
     inletPortThreadSize: '2-M16×1.5',
     bodyLength: '250 mm',
-    hiddenSearchTags: ['890.400.349.0', 'Heavy Duty Combination Chamber', 'Metric Maxibrake Pot'],
+    hiddenSearchTags: ['890.400.349.0', '8904003490', '890.400.348.0', '8904003480', 'Heavy Duty Combination Chamber', 'Metric Maxibrake Pot'],
     galleryUrls: ['/productsImage/brc-t2430-metric-hd-spring-brake-15-v3.jpg', '/productsImage/brc-t2430-metric-hd-spring-brake-15-drawing-v3.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '890.400.349.0', notes: 'Direct Match' }
+      { brand: 'OEM Interchange', partNumber: '890.400.349.0', notes: 'Direct Match' },
+      { brand: 'OEM Interchange', partNumber: '890.400.348.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t2430-metric-pd', 'Type 24/30 Metric Heavy-Duty Piston-Diaphragm Brake Chamber', 'Type 24/30', 'Spring Brake', 'Standard', 52.00, {
@@ -870,10 +871,11 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     yokeClevisGapWidth: '14.5 mm',
     inletPortThreadSize: '2-M16×1.5',
     bodyLength: '250 mm',
-    hiddenSearchTags: ['890.400.351.0', 'Heavy Duty Combination Chamber'],
+    hiddenSearchTags: ['890.400.351.0', '8904003510', '890.400.350.0', '8904003500', 'Heavy Duty Combination Chamber'],
     galleryUrls: ['/productsImage/brc-t2430-metric-hd-spring-brake-15-v3.jpg', '/productsImage/brc-t2430-metric-hd-spring-brake-15-drawing-v3.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '890.400.351.0', notes: 'Direct Match' }
+      { brand: 'OEM Interchange', partNumber: '890.400.351.0', notes: 'Direct Match' },
+      { brand: 'OEM Interchange', partNumber: '890.400.350.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t3030-metric-pd', 'Type 30/30 Metric Heavy-Duty Piston-Diaphragm Brake Chamber', 'Type 30/30', 'Spring Brake', 'Standard', 55.00, {
@@ -889,10 +891,11 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     yokeClevisGapWidth: '14.5 mm',
     inletPortThreadSize: '2-M16×1.5',
     bodyLength: '250 mm',
-    hiddenSearchTags: ['890.400.353.0', 'Heavy Duty Combination Chamber', 'T30/30 Piston Diaphragm Cylinder'],
+    hiddenSearchTags: ['890.400.353.0', '8904003530', '890.400.352.0', '8904003520', 'Heavy Duty Combination Chamber', 'T30/30 Piston Diaphragm Cylinder'],
     galleryUrls: ['/productsImage/brc-t2430-metric-hd-spring-brake-15-v3.jpg', '/productsImage/brc-t2430-metric-hd-spring-brake-15-drawing-v3.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '890.400.353.0', notes: 'Direct Match' }
+      { brand: 'OEM Interchange', partNumber: '890.400.353.0', notes: 'Direct Match' },
+      { brand: 'OEM Interchange', partNumber: '890.400.352.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t2024-voss', 'Type 20/24 WABCO Style Metric Piston-Diaphragm Brake Chamber (VOSS Port)', 'Type 20/24', 'Spring Brake', 'Standard', 48.00, {
@@ -967,7 +970,7 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['925.464.459.0', 'Short Stroke Piston Diaphragm Chamber', '15mm Stub Rod Actuator'],
     galleryUrls: ['/productsImage/brc-t2416-short-stroke-spring-17-v2.jpg', '/productsImage/brc-t2416-short-stroke-spring-17-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '925.464.459.0', notes: 'Direct Match' }
+      { brand: 'Wabco', partNumber: '925.464.459.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t2416-short-pd', 'Type 24/16 Short-Stroke Piston-Diaphragm Brake Chamber (15mm Pushrod)', 'Type 24/16', 'Spring Brake', 'Standard', 48.00, {
@@ -985,7 +988,7 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['925.461.299.0', 'Short Stroke Piston Diaphragm Chamber'],
     galleryUrls: ['/productsImage/brc-t2416-short-stroke-spring-17-v2.jpg', '/productsImage/brc-t2416-short-stroke-spring-17-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '925.461.299.0', notes: 'Direct Match' }
+      { brand: 'Wabco', partNumber: '925.461.299.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t1424-short-pd-combo', 'Type 14/24 Short-Stroke Piston-Diaphragm Brake Chamber (15mm Pushrod)', 'Type 14/24', 'Spring Brake', 'Standard', 42.00, {
@@ -1003,7 +1006,7 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['925.468.010.0', 'Short Stroke Piston Diaphragm Chamber', '15mm Stub Rod Maxibrake'],
     galleryUrls: ['/productsImage/brc-t2424-short-stroke-combo-18.jpg', '/productsImage/brc-t2424-short-stroke-combo-18-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '925.468.010.0', notes: 'Direct Match' }
+      { brand: 'Wabco', partNumber: '925.468.010.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t1624-short-pd-combo', 'Type 16/24 Short-Stroke Piston-Diaphragm Brake Chamber (15mm Pushrod)', 'Type 16/24', 'Spring Brake', 'Standard', 44.00, {
@@ -1021,7 +1024,7 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['925.484.020.0', 'Short Stroke Piston Diaphragm Chamber'],
     galleryUrls: ['/productsImage/brc-t2424-short-stroke-combo-18.jpg', '/productsImage/brc-t2424-short-stroke-combo-18-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '925.484.020.0', notes: 'Direct Match' }
+      { brand: 'Wabco', partNumber: '925.484.020.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t2024-short-pd-combo', 'Type 20/24 Short-Stroke Piston-Diaphragm Brake Chamber (15mm Pushrod)', 'Type 20/24', 'Spring Brake', 'Standard', 46.00, {
@@ -1039,7 +1042,7 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['925.480.019.0', 'Short Stroke Piston Diaphragm Chamber'],
     galleryUrls: ['/productsImage/brc-t2424-short-stroke-combo-18.jpg', '/productsImage/brc-t2424-short-stroke-combo-18-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '925.480.019.0', notes: 'Direct Match' }
+      { brand: 'Wabco', partNumber: '925.480.019.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t2424-short-pd-combo', 'Type 24/24 Short-Stroke Piston-Diaphragm Brake Chamber (15mm Pushrod)', 'Type 24/24', 'Spring Brake', 'Standard', 48.00, {
@@ -1057,7 +1060,7 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['925.481.209.0', 'Short Stroke Piston Diaphragm Chamber', '925.481.209.0 Actuator'],
     galleryUrls: ['/productsImage/brc-t2424-short-stroke-combo-18.jpg', '/productsImage/brc-t2424-short-stroke-combo-18-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '925.481.209.0', notes: 'Direct Match' }
+      { brand: 'Wabco', partNumber: '925.481.209.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t2430-short-pd-combo', 'Type 24/30 Short-Stroke Piston-Diaphragm Brake Chamber (15mm Pushrod)', 'Type 24/30', 'Spring Brake', 'Standard', 50.00, {
@@ -1075,7 +1078,7 @@ export const BRAKE_CHAMBERS: BrakeChamber[] = [
     hiddenSearchTags: ['925.481.069.0', 'Short Stroke Piston Diaphragm Chamber', 'SR8 Spherical Brake Cylinder'],
     galleryUrls: ['/productsImage/brc-t2424-short-stroke-combo-18.jpg', '/productsImage/brc-t2424-short-stroke-combo-18-drawing.jpg'],
     oemPartNumbers: [
-      { brand: 'Generic/Unbranded', partNumber: '925.481.069.0', notes: 'Direct Match' }
+      { brand: 'Wabco', partNumber: '925.481.069.0', notes: 'Direct Match' }
     ]
   }),
   createChamber('t2424-fuso193', 'Type 24/24 FUSO-193 4-Bolt Flange Piston-Diaphragm Brake Chamber', 'Type 24/24', 'Spring Brake', 'Standard', 65.00, {

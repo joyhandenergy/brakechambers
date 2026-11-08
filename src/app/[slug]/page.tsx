@@ -1,6 +1,7 @@
 import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getProducts } from '@/sanity/queries';
+import { findProductBySlug } from '@/lib/slugMapping';
 
 export const dynamicParams = true;
 
@@ -21,7 +22,7 @@ export async function generateMetadata(
   const params = await props.params;
   const { slug } = params;
   
-  const product = BRAKE_CHAMBERS.find(p => p.slug === slug);
+  const product = findProductBySlug(BRAKE_CHAMBERS, slug);
 
   if (product) {
     const categoryPath = getCategoryPath(product.category);
@@ -55,7 +56,7 @@ export default async function ProductRootPage(
   const params = await props.params;
   const { slug } = params;
 
-  const product = BRAKE_CHAMBERS.find(p => p.slug === slug);
+  const product = findProductBySlug(BRAKE_CHAMBERS, slug);
 
   if (product) {
     const categoryPath = getCategoryPath(product.category);

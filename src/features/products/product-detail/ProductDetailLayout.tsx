@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Script from 'next/script';
 import { ShieldCheck, Truck, Download, ChevronRight, Check, ShoppingCart } from 'lucide-react';
 import { useCartStore } from '@/store/cart';
 import Breadcrumb from '@/components/layout/Breadcrumb';
@@ -82,7 +83,8 @@ export default function ProductDetailLayout({
 
   return (
     <>
-      <script
+      <Script
+        id={`product-schema-${product.slug || 'detail'}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
       />
@@ -95,7 +97,7 @@ export default function ProductDetailLayout({
           <div className="w-full lg:w-1/2 min-w-0 p-5 lg:p-12 bg-gradient-to-b from-[#F8FAFC] to-white flex flex-col items-center justify-start border-b lg:border-b-0 lg:border-r border-navy-50">
             <div className="relative w-full max-w-lg aspect-square lg:aspect-square bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden p-4 mb-6 group transition-all duration-300 hover:shadow-md hover:border-slate-200">
               <Image
-                src={product.galleryUrls?.[activeImage] || product.galleryUrls?.[0]}
+                src={product.galleryUrls?.[activeImage] || product.galleryUrls?.[0] || product.imageUrl || '/productsImage/brc-t16-single-brake-1.jpg'}
                 alt={activeImage === 0 ? `${product.name} - Commercial Air Brake Chamber Photo` : `${product.name} - Technical Dimensions and Schematic Drawing`}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"

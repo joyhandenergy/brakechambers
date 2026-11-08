@@ -25,19 +25,30 @@ export default function OEMSearchForm({ products }: OEMSearchFormProps) {
 
     setTimeout(() => {
       const cleanQuery = query.trim().toUpperCase();
+      const qAlphaNum = cleanQuery.replace(/[^A-Z0-9]/g, '');
       let foundOem: { brand: string, partNumber: string, matchType: string } | null = null;
       let brcProduct = null;
 
       for (const c of products) {
         if (!c.oemPartNumbers) continue;
-        const oemMatch = c.oemPartNumbers.find(oem => oem.partNumber.toUpperCase() === cleanQuery);
+        const oemMatch = c.oemPartNumbers.find(oem => {
+          const partAlphaNum = (oem.partNumber || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+          return oem.partNumber.toUpperCase() === cleanQuery || (qAlphaNum.length >= 3 && partAlphaNum === qAlphaNum);
+        });
         if (oemMatch) {
           foundOem = { brand: oemMatch.brand, partNumber: oemMatch.partNumber, matchType: 'Exact' };
           brcProduct = c;
           break;
         }
 
-        const oemPartialMatch = c.oemPartNumbers.find(oem => oem.partNumber.toUpperCase().includes(cleanQuery) || cleanQuery.includes(oem.partNumber.toUpperCase()));
+        const oemPartialMatch = c.oemPartNumbers.find(oem => {
+          const partAlphaNum = (oem.partNumber || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+          return (
+            oem.partNumber.toUpperCase().includes(cleanQuery) || 
+            cleanQuery.includes(oem.partNumber.toUpperCase()) ||
+            (qAlphaNum.length >= 3 && (partAlphaNum.includes(qAlphaNum) || qAlphaNum.includes(partAlphaNum)))
+          );
+        });
         if (oemPartialMatch) {
           foundOem = { brand: oemPartialMatch.brand, partNumber: oemPartialMatch.partNumber, matchType: 'Equivalent' };
           brcProduct = c;
@@ -45,15 +56,34 @@ export default function OEMSearchForm({ products }: OEMSearchFormProps) {
         }
       }
 
+      // Check hiddenSearchTags if not directly found in OEM array
+      if (!foundOem) {
+        for (const c of products) {
+          if (c.hiddenSearchTags && c.hiddenSearchTags.length > 0) {
+            const matchedTag = c.hiddenSearchTags.find((tag: string) => {
+              const tagAlphaNum = tag.toUpperCase().replace(/[^A-Z0-9]/g, '');
+              return tag.toUpperCase() === cleanQuery || (qAlphaNum.length >= 3 && tagAlphaNum === qAlphaNum);
+            });
+            if (matchedTag) {
+              const displayBrand = c.crossReferenceBrands?.[0] || 'OEM Interchange';
+              foundOem = { brand: displayBrand, partNumber: matchedTag, matchType: 'Exact' };
+              brcProduct = c;
+              break;
+            }
+          }
+        }
+      }
+
       if (brcProduct && foundOem) {
-        const oBrandSlug = foundOem.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        const isGeneric = !foundOem.brand || foundOem.brand.toLowerCase().includes('generic') || foundOem.brand.toLowerCase().includes('unbranded');
+        const oBrandSlug = isGeneric ? 'oem-interchange' : foundOem.brand.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const oPartNum = foundOem.partNumber.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         router.push(`/oem-cross-reference/${oBrandSlug}/${oPartNum}`);
       } else {
         setResult({ found: false });
         setIsSearching(false);
       }
-    }, 800);
+    }, 400);
   };
 
   return (

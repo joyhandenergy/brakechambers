@@ -16,7 +16,29 @@ export default function GlobalSearchModal({ products = BRAKE_CHAMBERS }: GlobalS
   const router = useRouter();
   const { isOpen, closeSearch } = useSearchModalStore();
   const [query, setQuery] = useState('');
+  const [productList, setProductList] = useState<BrakeChamber[]>(products);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Synchronize state when products prop updates
+  useEffect(() => {
+    if (products && products.length > 0) {
+      setProductList(products);
+    } else {
+      // Fallback background fetch if prop was empty
+      let isMounted = true;
+      fetch('/api/products')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (isMounted && Array.isArray(data) && data.length > 0) {
+            setProductList(data);
+          }
+        })
+        .catch(() => {});
+      return () => {
+        isMounted = false;
+      };
+    }
+  }, [products]);
 
   const handleClose = React.useCallback(() => {
     setQuery('');
@@ -63,7 +85,7 @@ export default function GlobalSearchModal({ products = BRAKE_CHAMBERS }: GlobalS
     const catalog: Array<{ type: string; item: any }> = [];
     const oem: Array<{ type: string; item: any; matchedOem: { brand: string; partNumber: string } }> = [];
 
-    products.forEach(p => {
+    productList.forEach(p => {
       // Catalog matching
       const pNameLower = p.name.toLowerCase();
       const pNameClean = pNameLower.replace(/[^a-z0-9]/g, '');
@@ -71,7 +93,7 @@ export default function GlobalSearchModal({ products = BRAKE_CHAMBERS }: GlobalS
       const pModelClean = (p.modelDesignation || '').toLowerCase().replace(/[^a-z0-9]/g, '');
       const pSlugClean = (p.slug || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
-      const isCleanMatch = qClean.length >= 3 && (
+      const isCleanMatch = qClean.length >= 2 && (
         pNameClean.includes(qClean) ||
         pTypeClean.includes(qClean) ||
         pModelClean.includes(qClean) ||
@@ -88,7 +110,7 @@ export default function GlobalSearchModal({ products = BRAKE_CHAMBERS }: GlobalS
           (p.crossReferenceBrands && p.crossReferenceBrands.some((b: string) => b.toLowerCase().includes(token))) ||
           (p.hiddenSearchTags && p.hiddenSearchTags.some((tag: string) => {
             const tagLower = tag.toLowerCase();
-            return tagLower.includes(token) || (tokenClean.length >= 3 && tag.toLowerCase().replace(/[^a-z0-9]/g, '').includes(tokenClean));
+            return tagLower.includes(token) || (tokenClean.length >= 2 && tag.toLowerCase().replace(/[^a-z0-9]/g, '').includes(tokenClean));
           }));
       });
 
@@ -105,21 +127,35 @@ export default function GlobalSearchModal({ products = BRAKE_CHAMBERS }: GlobalS
       // OEM matching
       if (p.oemPartNumbers) {
         p.oemPartNumbers.forEach(o => {
-          const oPartLower = o.partNumber.toLowerCase();
-          const oBrandLower = o.brand.toLowerCase();
+          const oPartLower = (o.partNumber || '').toLowerCase();
+          const oBrandLower = (o.brand || '').toLowerCase();
           const oPartClean = oPartLower.replace(/[^a-z0-9]/g, '');
 
           const isOemMatch = 
-            (qClean.length >= 3 && oPartClean.includes(qClean)) ||
+            (qClean.length >= 2 && (oPartClean.includes(qClean) || qClean.includes(oPartClean))) ||
             tokens.every(token => {
               const tokenClean = token.replace(/[^a-z0-9]/g, '');
               return oPartLower.includes(token) ||
                 oBrandLower.includes(token) ||
-                (tokenClean.length >= 3 && oPartClean.includes(tokenClean));
+                (tokenClean.length >= 2 && oPartClean.includes(tokenClean));
             });
 
           if (isOemMatch) {
             oem.push({ type, item: p, matchedOem: o });
+          }
+        });
+      }
+
+      // Also match hiddenSearchTags for part numbers
+      if (p.hiddenSearchTags && p.hiddenSearchTags.length > 0) {
+        p.hiddenSearchTags.forEach((tag: string) => {
+          const tagClean = tag.toLowerCase().replace(/[^a-z0-9]/g, '');
+          if (qClean.length >= 3 && (tagClean === qClean || (tagClean.length >= 5 && tagClean.includes(qClean)))) {
+            const isAlreadyAdded = oem.some(res => res.matchedOem.partNumber.replace(/[^a-z0-9]/gi, '') === tagClean);
+            if (!isAlreadyAdded) {
+              const displayBrand = p.crossReferenceBrands?.[0] || 'OEM Interchange';
+              oem.push({ type, item: p, matchedOem: { brand: displayBrand, partNumber: tag } });
+            }
           }
         });
       }
@@ -129,7 +165,7 @@ export default function GlobalSearchModal({ products = BRAKE_CHAMBERS }: GlobalS
     const uniqueOem = Array.from(new Map(oem.map(item => [item.matchedOem.partNumber + item.item.slug, item])).values());
 
     return { catalog, oem: uniqueOem };
-  }, [query, products]);
+  }, [query, productList]);
 
   const handleSelect = (type: string, slug: string) => {
     router.push(`/${type}/${slug}`);
@@ -137,7 +173,8 @@ export default function GlobalSearchModal({ products = BRAKE_CHAMBERS }: GlobalS
   };
 
   const handleOemSelect = (brand: string, partNumber: string) => {
-    const oBrandSlug = brand.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const isGeneric = !brand || brand.toLowerCase().includes('generic') || brand.toLowerCase().includes('unbranded');
+    const oBrandSlug = isGeneric ? 'oem-interchange' : brand.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     const oPartNum = partNumber.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     router.push(`/oem-cross-reference/${oBrandSlug}/${oPartNum}`);
     handleClose();
@@ -278,7 +315,11 @@ export default function GlobalSearchModal({ products = BRAKE_CHAMBERS }: GlobalS
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <p className="text-sm font-bold text-navy-900 truncate group-hover:text-amber-600 font-mono">
-                                    <span className="text-slate-500 font-sans font-medium text-xs mr-2">{result.matchedOem.brand}</span>
+                                    <span className="text-slate-500 font-sans font-medium text-xs mr-2">
+                                      {result.matchedOem.brand && !result.matchedOem.brand.toLowerCase().includes('generic') && !result.matchedOem.brand.toLowerCase().includes('unbranded')
+                                        ? result.matchedOem.brand
+                                        : 'OEM Part #'}
+                                    </span>
                                     {result.matchedOem.partNumber}
                                   </p>
                                 </div>

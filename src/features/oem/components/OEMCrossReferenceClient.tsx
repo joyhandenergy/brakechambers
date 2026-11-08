@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '@/lib/animations';
 import OEMSearchForm from '@/features/oem/components/OEMSearchForm';
 import { BRAKE_CHAMBERS } from '@/lib/data';
+import type { BrakeChamber } from '@/types';
 
 import PageHeader from '@/components/layout/PageHeader';
 import SectionHeader from '@/components/ui/SectionHeader';
@@ -13,7 +14,13 @@ import AnimatedGridBackground from '@/components/ui/AnimatedGridBackground';
 import GlobalFAQAccordion from '@/components/ui/GlobalFAQAccordion';
 import RotatingWatermark from '@/components/ui/RotatingWatermark';
 
-export default function OEMCrossReferenceClient() {
+interface OEMCrossReferenceClientProps {
+  products?: BrakeChamber[];
+}
+
+export default function OEMCrossReferenceClient({ products }: OEMCrossReferenceClientProps) {
+  const activeProducts = products && products.length > 0 ? products : BRAKE_CHAMBERS;
+
   return (
     <div className="bg-slate-50 min-h-screen font-sans overflow-x-clip">
       {/* Hero Section */}
@@ -37,7 +44,7 @@ export default function OEMCrossReferenceClient() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="w-full"
         >
-          <OEMSearchForm products={BRAKE_CHAMBERS} />
+          <OEMSearchForm products={activeProducts} />
         </motion.div>
       </section>
 

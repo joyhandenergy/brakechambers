@@ -55,7 +55,9 @@ const OEM_BRANDS: Record<string, { name: string, type: string, desc: string }> =
   'hendrickson': { name: 'Hendrickson', type: 'axle', desc: 'Direct aftermarket replacements for Hendrickson axle and suspension air brake chambers.' },
   'saf-holland': { name: 'SAF-Holland', type: 'axle', desc: 'Direct aftermarket replacements for SAF-Holland axle and suspension air brake chambers.' },
   'dana': { name: 'Dana', type: 'axle', desc: 'Direct aftermarket replacements for Dana axle air brake chambers.' },
-  'meritor-axles': { name: 'Meritor Axles', type: 'axle', desc: 'Direct aftermarket replacements for Meritor axle applications.' }
+  'meritor-axles': { name: 'Meritor Axles', type: 'axle', desc: 'Direct aftermarket replacements for Meritor axle applications.' },
+  'oem-interchange': { name: 'OEM Interchange', type: 'brand', desc: 'Direct aftermarket replacements for verified OEM commercial air brake part numbers.' },
+  'generic-unbranded': { name: 'OEM Interchange', type: 'brand', desc: 'Direct aftermarket replacements for verified OEM commercial air brake part numbers.' }
 };
 
 export async function generateMetadata(

@@ -16,6 +16,7 @@ export type ChamberCategory = 'Spring Brake' | 'Service Brake' | 'Air Disc Actua
 
 export interface BrakeChamber {
   slug: string;
+  aliases?: string[];
   name: string;
   brandSlug: string;
   category: ChamberCategory;

@@ -90,6 +90,7 @@ const brandList = [
   { title: 'Hino', value: 'Hino' },
   { title: 'Nissan UD', value: 'Nissan UD' },
   { title: 'Mitsubishi Fuso', value: 'Mitsubishi Fuso' },
+  { title: 'OEM Interchange', value: 'OEM Interchange' },
   { title: 'Generic/Unbranded', value: 'Generic/Unbranded' },
 ];
 
